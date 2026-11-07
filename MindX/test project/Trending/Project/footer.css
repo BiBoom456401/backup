@@ -1,0 +1,46 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+
+footer{
+    text-align:center;
+    padding:25px;
+    font-size:18px;
+    display: block;
+    width:  100%;
+    bottom: 0;
+    position: absolute;
+    margin: 0 0;
+    padding-top: 20px;
+}
+
+.footer_content{
+    width: 100%;
+    display:  flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10; 
+}
+
+.ul{
+    list-style: none;
+    width: 50%;
+    margin-left: 20%;
+}
+
+.content{
+    box-sizing: border-box;
+    width: 30%;
+    list-style: none;
+}
+
+h3{
+    left: 100%;
+}
+
+img {
+    width: 80%;
+    height: 80%;
+}

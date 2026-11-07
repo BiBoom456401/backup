@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="glass-panel p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-5">
+                        <div class="bg-primary bg-opacity-20 p-3 rounded-4 me-3">
+                            <i class="fas fa-people-group text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-900 mb-0" th:text="${team.id == null ? 'Tạo Đội Bóng' : 'Chỉnh Sửa Đội Bóng'}"></h3>
+                            <p class="text-muted mb-0">Cập nhật thông tin đội bóng theo giao diện hiện có</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${errorMessage}" class="alert alert-danger mb-4" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/teams/save}" th:object="${team}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label">Tên đội</label>
+                                <input type="text" th:field="*{name}" class="form-control" placeholder="Nhập tên đội bóng" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Logo URL</label>
+                                <input type="text" th:field="*{logoUrl}" class="form-control" placeholder="https://...">
+                            </div>
+
+                            <div class="col-12" th:if="${team.logoUrl != null and !#strings.isEmpty(team.logoUrl)}">
+                                <label class="form-label">Xem trước logo</label>
+                                <div class="glass-panel p-3 d-inline-block">
+                                    <img th:src="${team.logoUrl}" alt="Logo đội" class="rounded-3" style="width: 96px; height: 96px; object-fit: cover;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-3">
+                            <button type="submit" class="btn btn-modern btn-primary-modern px-5">
+                                <i class="fas fa-save me-2"></i> Lưu thông tin
+                            </button>
+                            <a href="/teams/my" class="btn btn-modern btn-outline-modern px-4">
+                                <i class="fas fa-times me-2"></i> Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

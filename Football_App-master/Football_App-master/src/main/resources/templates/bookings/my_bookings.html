@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-900 mb-1"><i class="fas fa-clock-rotate-left text-primary me-2"></i> Lịch sử đặt sân</h2>
+                <p class="text-muted mb-0">Theo dõi các đơn đã gửi, trạng thái duyệt và tổng chi phí từng lần đặt sân.</p>
+            </div>
+            <a href="/" class="btn btn-modern btn-outline-modern">Đặt thêm sân</a>
+        </div>
+
+        <div class="glass-panel overflow-hidden" th:if="${!#lists.isEmpty(bookings)}">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3">Sân</th>
+                            <th class="py-3">Ngày</th>
+                            <th class="py-3">Khung giờ</th>
+                            <th class="py-3">Tổng tiền</th>
+                            <th class="py-3">Trạng thái</th>
+                            <th class="py-3 pe-4">Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="booking : ${bookings}">
+                            <td class="ps-4 py-3 fw-bold" th:text="${booking.field.name}">Sân A</td>
+                            <td class="py-3" th:text="${#temporals.format(booking.bookingDate, 'dd/MM/yyyy')}">27/03/2026</td>
+                            <td class="py-3" th:text="${#temporals.format(booking.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.endTime, 'HH:mm')}">18:00 - 20:00</td>
+                            <td class="py-3 fw-bold text-secondary">
+                                <span th:text="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')}">1,000,000</span> VNĐ
+                            </td>
+                            <td class="py-3">
+                                <span class="badge status-badge"
+                                      th:classappend="${booking.status.name() == 'PENDING' ? ' status-pending' : (booking.status.name() == 'APPROVED' ? ' status-approved' : ' status-cancelled')}"
+                                      th:text="${booking.status.name() == 'PENDING' ? 'Chờ duyệt' : (booking.status.name() == 'APPROVED' ? 'Đã duyệt' : 'Đã hủy')}">Chờ duyệt</span>
+                            </td>
+                            <td class="py-3 pe-4" th:text="${booking.note != null && !booking.note.isBlank() ? booking.note : 'Không có'}">Không có</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel p-5 text-center" th:if="${#lists.isEmpty(bookings)}">
+            <h4 class="fw-bold mb-3">Bạn chưa có đơn đặt sân nào</h4>
+            <p class="text-muted mb-4">Hãy chọn sân phù hợp và gửi đơn đầu tiên, hệ thống sẽ lưu lại toàn bộ lịch sử cho bạn.</p>
+            <a href="/" class="btn btn-modern btn-primary-modern">Khám phá sân bóng</a>
+        </div>
+    </div>
+</body>
+</html>

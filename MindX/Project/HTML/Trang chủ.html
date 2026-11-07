@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="../CSS/home.css" />
+    <script
+      src="https://kit.fontawesome.com/4f2b166bb1.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,600;1,700&display=swap");
+    </style>
+  </head>
+
+  <body>
+    <div class="formpage">
+      <div id="header">
+        <a href="" class="logo">
+          <img
+            src="https://cdn.discordapp.com/attachments/1142087858572763150/1150097073564307476/Thiet_ke_chua_co_ten_1_1_1_2.png"
+          />
+        </a>
+        <div id="menu">
+          <div class="item">
+            <a href="../HTML/Trang chủ.html">Trang chủ</a>
+          </div>
+          <div class="item">
+            <a href="../HTML/home.html">Sản phẩm</a>
+          </div>
+          <div class="item">
+            <a href="#Liên hệ">Liên hệ</a>
+          </div>
+        </div>
+        <div id="actions">
+          <div class="item">
+            <ul>
+              <li style="font-size: 40px; list-style: none">
+                <a href="../HTML/DangNhap.html">Log in</a>/<a
+                  href="../HTML/DangKi.html"
+                  >Sign up</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <section>
+        <div class="content">
+          <div class="content__form">
+            <h2>Welcome!!!</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
+              velit deserunt doloribus, quibusdam dolores eveniet. Ducimus nemo
+              facilis, vitae dolorem ad quibusdam commodi quas! Consequuntur,
+              nulla? Saepe veniam exercitationem commodi?
+            </p>
+            <a href="../HTML/home.html">Get Started</a>
+          </div>
+        </div>
+        <div class="login">
+          <div class="login__form">
+            <h2>Member login</h2>
+            <form id="formLogin">
+              <div class="input-box">
+                <span class="icon">
+                  <input
+                    id="emailLogin"
+                    type="email"
+                    class="input"
+                    placeholder="Enter your email"
+                    autocomplete="off"
+                    required
+                  />
+                </span>
+              </div>
+              <div class="input-box">
+                <span class="icon">
+                  <input
+                    id="passwordLogin"
+                    type="password"
+                    class="input"
+                    placeholder="Enter your password"
+                    autocomplete="off"
+                    required
+                  />
+                </span>
+              </div>
+              <div class="remember-forgot">
+                <label> <input type="checkbox" /> Remember me</label>
+                <a href="#"> Forgot Password? </a>
+              </div>
+              <button id="button" type="submit" onclick="kiemTraDangNhap()">
+                Login Now
+              </button>
+              <div class="register-link">
+                <p>Not a member? &nbsp;</p>
+                <a href="../HTML/DangKi.html"> Sign up now</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="../JS/dangnhap.js"></script>
+  </body>
+</html>

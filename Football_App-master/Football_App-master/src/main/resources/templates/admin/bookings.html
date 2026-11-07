@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-900 mb-1"><i class="fas fa-list-check text-primary me-2"></i> Quản lý đơn đặt sân</h2>
+                <p class="text-muted mb-0">Admin duyệt hoặc hủy đơn, đồng thời hệ thống đã kiểm tra trùng lịch trước khi lưu và trước khi duyệt.</p>
+            </div>
+            <a href="/admin/fields" class="btn btn-modern btn-outline-modern">Quản lý sân</a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success mb-4" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger mb-4" th:text="${errorMessage}"></div>
+
+        <div class="glass-panel overflow-hidden" th:if="${!#lists.isEmpty(bookings)}">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3">User</th>
+                            <th class="py-3">Sân</th>
+                            <th class="py-3">Ngày</th>
+                            <th class="py-3">Khung giờ</th>
+                            <th class="py-3">Tổng tiền</th>
+                            <th class="py-3">Trạng thái</th>
+                            <th class="py-3 pe-4 text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="booking : ${bookings}">
+                            <td class="ps-4 py-3 fw-bold" th:text="${booking.user.username}">user01</td>
+                            <td class="py-3" th:text="${booking.field.name}">Sân 7A</td>
+                            <td class="py-3" th:text="${#temporals.format(booking.bookingDate, 'dd/MM/yyyy')}">27/03/2026</td>
+                            <td class="py-3" th:text="${#temporals.format(booking.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.endTime, 'HH:mm')}">18:00 - 19:00</td>
+                            <td class="py-3 fw-bold text-secondary">
+                                <span th:text="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')}">500,000</span> VNĐ
+                            </td>
+                            <td class="py-3">
+                                <span class="badge status-badge-modern"
+                                      th:classappend="${booking.status.name() == 'PENDING' ? ' status-pending' : (booking.status.name() == 'APPROVED' ? ' status-approved' : ' status-cancelled')}">
+                                    <i class="fas" th:classappend="${booking.status.name() == 'PENDING' ? ' fa-clock' : (booking.status.name() == 'APPROVED' ? ' fa-check-double' : ' fa-circle-xmark')}"></i>
+                                    <span th:text="${booking.status.name() == 'PENDING' ? 'Chờ duyệt' : (booking.status.name() == 'APPROVED' ? 'Đã duyệt' : 'Đã hủy')}">Chờ duyệt</span>
+                                </span>
+                            </td>
+                            <td class="py-3 pe-4 text-center">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a th:href="@{/admin/bookings/{id}(id=${booking.id})}" 
+                                       class="btn-icon-modern btn-icon-detail" 
+                                       title="Xem chi tiết">
+                                        <i class="fas fa-circle-info fs-5"></i>
+                                    </a>
+                                    
+                                    <form th:action="@{/admin/bookings/{id}/approve(id=${booking.id})}" method="post" 
+                                          th:if="${booking.status.name() == 'PENDING'}" 
+                                          title="Duyệt đơn">
+                                        <button type="submit" class="btn-icon-modern btn-icon-approve">
+                                            <i class="fas fa-check-circle fs-5"></i>
+                                        </button>
+                                    </form>
+                                    
+                                    <form th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}" method="post" 
+                                          th:if="${booking.status.name() != 'CANCELLED'}" 
+                                          title="Hủy đơn"
+                                          onclick="return confirm('Bạn có chắc chắn muốn hủy đơn đặt sân này?')">
+                                        <button type="submit" class="btn-icon-modern btn-icon-cancel">
+                                            <i class="fas fa-ban fs-5"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel p-5 text-center" th:if="${#lists.isEmpty(bookings)}">
+            <h4 class="fw-bold mb-3">Chưa có đơn đặt sân nào</h4>
+            <p class="text-muted mb-0">Khi user gửi đơn, danh sách duyệt sẽ hiển thị tại đây.</p>
+        </div>
+    </div>
+</body>
+</html>

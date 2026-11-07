@@ -1,0 +1,229 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Thêm Sản phẩm</title>
+    <style>
+      .form-section {
+        padding: 24px 0 40px;
+      }
+      .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .form-header {
+        background: linear-gradient(135deg, #ff3b30, #d0021b);
+        padding: 20px 24px;
+        border-radius: 14px 14px 0 0;
+        text-align: center;
+      }
+      .form-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .form-body {
+        background: #fff;
+        border-radius: 0 0 14px 14px;
+        padding: 24px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .form-group.full {
+        grid-column: 1 / -1;
+      }
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #374151;
+      }
+      .form-input,
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        font-size: 14px;
+      }
+      .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+      .form-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 12px;
+      }
+      .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .btn-submit {
+        flex: 1;
+        background: #ffd400;
+        color: #111827;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .btn-cancel {
+        flex: 1;
+        background: #f0f0f0;
+        color: #333;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        text-align: center;
+      }
+      .error-text {
+        color: #e11b22;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .preview-box {
+        margin-top: 12px;
+        border: 1px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+      }
+      .preview-box img {
+        max-width: 180px;
+        max-height: 180px;
+        object-fit: contain;
+      }
+      @media (max-width: 700px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section layout:fragment="content">
+      <section class="form-section">
+        <div class="container">
+          <div class="form-container">
+            <div class="form-header">
+              <h4>➕ Thêm sản phẩm mới</h4>
+            </div>
+            <div class="form-body">
+              <form th:action="@{/products/add}" th:object="${product}" method="post" enctype="multipart/form-data">
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label class="form-label">Tên sản phẩm</label>
+                    <input th:field="*{name}" class="form-input" placeholder="Ví dụ: iPhone 16 Pro Max" />
+                    <div class="error-text" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Lỗi</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Giá bán</label>
+                    <input th:field="*{price}" type="number" min="0" class="form-input" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Giá cũ</label>
+                    <input th:field="*{oldPrice}" type="number" min="0" class="form-input" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Phần trăm giảm</label>
+                    <input th:field="*{discountPercent}" type="number" min="0" max="99" class="form-input" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Badge</label>
+                    <input th:field="*{badge}" class="form-input" placeholder="HOT, NEW, ONLINE" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Trạng thái</label>
+                    <input th:field="*{statusText}" class="form-input" placeholder="Vừa mở bán" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Danh mục</label>
+                    <select th:field="*{category.id}" class="form-select">
+                      <option value="">Chọn Danh mục</option>
+                      <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Danh mục</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group full">
+                    <div class="form-check">
+                      <input type="checkbox" th:field="*{promo}" id="promo" />
+                      <label for="promo">🔥 Sản phẩm khuyến mãi (Flash Sale)</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Số lượng khuyến mãi</label>
+                    <input th:field="*{promoQuantity}" type="number" min="0" class="form-input" placeholder="VD: 20" />
+                    <small style="color:#6b7280;font-size:12px">Tổng suất KM (để trống nếu không giới hạn)</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Đã bán KM</label>
+                    <input th:field="*{promoSold}" type="number" min="0" class="form-input" placeholder="0" />
+                    <small style="color:#6b7280;font-size:12px">Số suất KM đã bán</small>
+                  </div>
+
+                  <div class="form-group full">
+                    <label class="form-label">Mô tả chi tiết</label>
+                    <textarea th:field="*{description}" class="form-textarea" placeholder="Nhập thông tin sản phẩm..."></textarea>
+                  </div>
+
+                  <div class="form-group full">
+                    <label class="form-label">Hình ảnh sản phẩm</label>
+                    <input type="file" name="imageFile" accept="image/*" id="imageFileAdd" class="form-input" />
+                    <div class="preview-box">
+                      <img src="/images/product-fallback.svg" alt="preview" id="previewAdd" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btn-row">
+                  <button type="submit" class="btn-submit">💾 Lưu sản phẩm</button>
+                  <a th:href="@{/products}" class="btn-cancel">Hủy bỏ</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script layout:fragment="scripts">
+      document.getElementById("imageFileAdd").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (loadEvent) {
+          document.getElementById("previewAdd").src = loadEvent.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    </script>
+  </body>
+</html>

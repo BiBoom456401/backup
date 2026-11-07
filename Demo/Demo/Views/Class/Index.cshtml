@@ -1,0 +1,48 @@
+@model IEnumerable<Demo.Models.Class>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý lớp học";
+}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-info"><i class="fas fa-users me-2"></i>Quản lý lớp học</h2>
+        <a asp-action="Create" class="btn btn-success btn-lg"><i class="fas fa-plus-circle me-2"></i>Thêm lớp học</a>
+    </div>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="fas fa-id-card"></i> Mã lớp</th>
+                        <th><i class="fas fa-users"></i> Tên lớp</th>
+                        <th><i class="fas fa-user-graduate"></i> Sĩ số</th>
+                        <th><i class="fas fa-cogs"></i> Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ClassCode</td>
+                                <td>@item.Name</td>
+                                <td>@(item.Students != null ? item.Students.Count : 0)</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">Không có lớp học nào.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

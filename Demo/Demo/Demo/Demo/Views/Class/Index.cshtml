@@ -1,0 +1,47 @@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý lớp học";
+}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-info"><i class="fas fa-users me-2"></i>Quản lý lớp học</h2>
+        <a href="#" class="btn btn-success btn-lg"><i class="fas fa-plus-circle me-2"></i>Thêm lớp học</a>
+    </div>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="fas fa-id-card"></i> Mã lớp</th>
+                        <th><i class="fas fa-users"></i> Tên lớp</th>
+                        <th><i class="fas fa-user-graduate"></i> Sĩ số</th>
+                        <th><i class="fas fa-cogs"></i> Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>L01</td>
+                        <td>Lớp 12A1</td>
+                        <td>40</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>L02</td>
+                        <td>Lớp 11B2</td>
+                        <td>35</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-center text-muted mt-4">[Dữ liệu lớp học sẽ hiển thị ở đây]</div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-900 mb-1"><i class="fas fa-receipt text-primary me-2"></i> Chi tiết đơn đặt sân</h2>
+                <p class="text-muted mb-0">Admin có thể kiểm tra đầy đủ thông tin đơn trước khi duyệt hoặc hủy.</p>
+            </div>
+            <a href="/admin/bookings" class="btn btn-modern btn-outline-modern">
+                Quay lại danh sách
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="glass-panel p-4 p-md-5">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                        <div>
+                            <div class="text-muted small mb-2">Mã đơn</div>
+                            <h3 class="fw-bold mb-0" th:text="'#' + ${booking.id}">#1</h3>
+                        </div>
+                        <span class="badge status-badge fs-6"
+                              th:classappend="${booking.status.name() == 'PENDING' ? ' status-pending' : (booking.status.name() == 'APPROVED' ? ' status-approved' : ' status-cancelled')}"
+                              th:text="${booking.status.name() == 'PENDING' ? 'Chờ duyệt' : (booking.status.name() == 'APPROVED' ? 'Đã duyệt' : 'Đã hủy')}">Chờ duyệt</span>
+                    </div>
+
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <div class="detail-label">Người đặt</div>
+                            <div class="detail-value" th:text="${booking.user.fullName != null && !booking.user.fullName.isBlank() ? booking.user.fullName : booking.user.username}">Nguyễn Văn A</div>
+                            <div class="detail-subvalue" th:text="${booking.user.username}">user01</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value" th:text="${booking.user.email}">user@email.com</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Sân</div>
+                            <div class="detail-value" th:text="${booking.field.name}">Sân 5A</div>
+                            <div class="detail-subvalue" th:text="${booking.field.type}">Sân 5</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Địa chỉ sân</div>
+                            <div class="detail-value" th:text="${booking.field.address != null && !booking.field.address.isBlank() ? booking.field.address : 'Chưa cập nhật'}">Quận 9</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Ngày đá</div>
+                            <div class="detail-value" th:text="${#temporals.format(booking.bookingDate, 'dd/MM/yyyy')}">27/03/2026</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Khung giờ</div>
+                            <div class="detail-value" th:text="${#temporals.format(booking.startTime, 'HH:mm') + ' - ' + #temporals.format(booking.endTime, 'HH:mm')}">18:00 - 19:00</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Tổng tiền</div>
+                            <div class="detail-value text-secondary">
+                                <span th:text="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')}">500,000</span> VNĐ
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Thời điểm tạo đơn</div>
+                            <div class="detail-value" th:text="${#temporals.format(booking.createdAt, 'dd/MM/yyyy HH:mm')}">27/03/2026 10:00</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="detail-label mb-2">Ghi chú của khách</div>
+                        <div class="glass-panel p-3" th:text="${booking.note != null && !booking.note.isBlank() ? booking.note : 'Không có ghi chú'}">
+                            Không có ghi chú
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-panel p-4">
+                    <h4 class="fw-bold mb-3">Hành động</h4>
+                    <p class="text-muted mb-4">Kiểm tra thông tin đơn trước khi xác nhận trạng thái cuối cùng.</p>
+
+                    <div class="d-grid gap-3">
+                        <form th:action="@{/admin/bookings/{id}/approve(id=${booking.id})}" method="post" th:if="${booking.status.name() != 'APPROVED' && booking.status.name() != 'CANCELLED'}">
+                            <button type="submit" class="btn btn-modern btn-primary-modern w-100">Duyệt đơn</button>
+                        </form>
+                        <form th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}" method="post" th:if="${booking.status.name() != 'CANCELLED'}">
+                            <button type="submit" class="btn btn-outline-danger w-100">Hủy đơn</button>
+                        </form>
+                        <a href="/admin/bookings" class="btn btn-modern btn-outline-modern w-100">Xem danh sách đơn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

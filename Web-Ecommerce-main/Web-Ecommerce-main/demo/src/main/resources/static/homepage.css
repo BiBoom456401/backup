@@ -1,0 +1,1144 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --yellow: #ffd400;
+  --yellow-deep: #f3c400;
+  --red: #b01117;
+  --red-deep: #8a0b12;
+  --white: #ffffff;
+  --black: #1a1a1a;
+  --gray-100: #f4f4f4;
+  --gray-200: #e9e9e9;
+  --gray-500: #6a6a6a;
+  --radius: 10px;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --container: 1200px;
+
+  --menu-width: 1140px;
+  --menu-padding: 18px;
+  --group-gap: 20px;
+  --item-gap: 12px;
+  --icon-size: 42px;
+  --item-radius: 12px;
+  --hover-bg: #f7f7f7;
+  --badge-hot: #ff3b30;
+  --badge-new: #1e88ff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.tgdd,
+body.tgdd-demo {
+  font-family: "Be Vietnam Pro", sans-serif;
+  background: #f7f7f7;
+  color: var(--black);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ── Header ── */
+.site-header {
+  background: var(--yellow);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.brand-text {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: lowercase;
+  color: #000;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  transform: skewX(-8deg);
+  display: inline-block;
+  text-decoration: none;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+.search input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 15px;
+  background: transparent;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.search-btn {
+  border: none;
+  background: var(--yellow-deep);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  border: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: "Be Vietnam Pro", sans-serif;
+  text-decoration: none;
+  color: inherit;
+}
+
+.action-btn.location {
+  background: #fff4b2;
+}
+
+/* ── Category Nav ── */
+.category-nav {
+  background: var(--yellow);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.category-inner {
+  position: relative;
+}
+
+.category-list {
+  list-style: none;
+  display: flex;
+  gap: 4px;
+  padding: 10px 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: center;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-item.is-open,
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.cat-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+
+/* ── Header Banner (below nav) ── */
+.header-banner {
+  background: var(--yellow);
+  padding: 16px 0 20px;
+  text-align: center;
+}
+
+.header-banner .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-banner-img {
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Mega Menu ── */
+.mega-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.mega-menu {
+  width: min(var(--menu-width), 100%);
+  background: var(--white);
+  border: 1px solid #e5e5e5;
+  border-radius: 18px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+  padding: var(--menu-padding);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--group-gap);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    visibility 0.18s;
+  pointer-events: auto;
+}
+
+.mega-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mega-title {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--item-gap);
+}
+
+.mega-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px 6px;
+  border-radius: var(--item-radius);
+  position: relative;
+  transition: background 0.15s ease;
+}
+
+.mega-item:hover {
+  background: var(--hover-bg);
+}
+
+.item-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #f1f1f1;
+  border: 1px solid #e3e3e3;
+  overflow: hidden;
+}
+
+.item-icon img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.item-label {
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+/* ── Banner Slider ── */
+.banner-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  margin-bottom: 0;
+}
+
+.banner-slider img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+}
+
+.banner-slider-wrapper {
+  padding: 16px 0 0;
+  background: linear-gradient(120deg, var(--red) 0%, var(--red-deep) 100%);
+}
+
+/* ── Hero Section ── */
+.hero {
+  background: linear-gradient(120deg, var(--red) 0%, var(--red-deep) 100%);
+  padding: 26px 0 34px;
+  position: relative;
+}
+
+.hero-wrap {
+  position: relative;
+  display: grid;
+  grid-template-columns: 160px 1fr 160px;
+  gap: 16px;
+  align-items: center;
+}
+
+.side-banner {
+  background: linear-gradient(160deg, #ff2a2a, #b00011);
+  color: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.banner-tag {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.banner-price {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.banner-sub {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.banner-cta {
+  background: #ffd400;
+  color: #000;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.banner-cta:hover {
+  background: #f3c400;
+}
+
+.hero-main {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 24px;
+  position: relative;
+  box-shadow: var(--shadow);
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.hero-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 20%,
+    rgba(255, 255, 255, 0.25),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-text {
+  color: #fff;
+}
+
+.hero-text h1 {
+  font-size: 32px;
+  margin: 8px 0;
+  letter-spacing: 0.3px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.hero-text p {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.hero-text.right {
+  text-align: right;
+  font-size: 13px;
+  color: #fff;
+}
+
+.hero-kicker {
+  background: #ffdd57;
+  color: #000;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-badges span {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #fff;
+}
+
+.hero-product {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-product img {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.25));
+}
+
+/* ── Promo Section (Flash Sale) ── */
+.promo {
+  background: #b40012;
+  padding: 24px 0 36px;
+}
+
+.promo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.promo-head h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.flash-pill {
+  background: #ffe05a;
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.countdown {
+  background: #000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.promo-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.tab {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: "Be Vietnam Pro", sans-serif;
+  transition: all 0.15s ease;
+}
+
+.tab.active {
+  background: #ff3b30;
+  color: #fff;
+}
+
+.tab:hover:not(.active) {
+  background: #e5e5e5;
+}
+
+.time-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.time-item {
+  text-align: center;
+  padding: 12px 10px;
+  border-radius: 12px;
+  background: #f3f3f3;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.time-item.active {
+  background: #ff3b30;
+  color: #fff;
+}
+
+.time-label {
+  font-size: 16px;
+}
+
+.time-sub {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.promo-products {
+  margin-top: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.promo-nav {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #ffd400;
+  background: rgba(255,255,255,0.95);
+  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  flex-shrink: 0;
+  transition: all 0.2s;
+  z-index: 10;
+  position: relative;
+}
+.promo-nav:hover {
+  background: #ffd400;
+  transform: scale(1.15);
+}
+.promo-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+.promo-page-indicator {
+  text-align: center;
+  margin-top: 12px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Product Cards ── */
+.promo-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 290px;
+  position: relative;
+  border: 1px solid #eee;
+  overflow: hidden;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.promo-card:hover,
+.normal-card:hover {
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  color: #000;
+}
+
+.badge.ai {
+  background: #ffd400;
+}
+
+.badge.new,
+.badge.mới {
+  background: #ff9f1a;
+  color: #000;
+}
+
+.badge.hot {
+  background: #ff3b30;
+  color: #fff;
+}
+
+.card-image {
+  height: 160px;
+  display: grid;
+  place-items: center;
+  margin-top: 10px;
+  background: #fff;
+}
+
+.card-image img {
+  max-height: 140px;
+  max-width: 140px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.card-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1b1b1b;
+  min-height: 36px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.card-price {
+  color: #e11b22;
+  font-weight: 700;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.card-old {
+  color: #8b8b8b;
+  font-size: 12px;
+  text-decoration: line-through;
+}
+
+.card-discount {
+  color: #e11b22;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── Promo Remaining Bar ── */
+.promo-remaining {
+  margin-top: 4px;
+}
+
+.promo-bar {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.promo-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.promo-text {
+  font-size: 11px;
+  color: #e11b22;
+  font-weight: 600;
+  display: block;
+  margin-top: 3px;
+}
+
+.promo-text.promo-sold-out {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.card-status {
+  background: #fff1c4;
+  border-radius: 999px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6d4e00;
+  margin-top: auto;
+  font-weight: 500;
+}
+
+.card-status .fire {
+  font-size: 14px;
+}
+
+/* ── Normal Product Cards ── */
+.normal-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.normal-body {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.normal-info .card-name {
+  font-size: 14px;
+  font-weight: 600;
+  min-height: auto;
+}
+
+.normal-info .card-price {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.normal-info .card-old {
+  margin-top: 4px;
+}
+
+.normal-image {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+}
+
+.normal-image img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.normal-card .card-status {
+  width: 100%;
+  justify-content: flex-start;
+  margin-top: auto;
+  padding: 8px 12px;
+}
+
+/* ── Product Section ── */
+.product-section {
+  padding: 24px 0 40px;
+  background: #fff;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.product-section .section-title {
+  margin-bottom: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.normal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ── Buttons ── */
+.btn-manage {
+  background: linear-gradient(135deg, #ffd400, #f3c400);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 212, 0, 0.3);
+}
+
+.btn-manage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 212, 0, 0.4);
+  color: #000;
+}
+
+.btn-add-product {
+  background: linear-gradient(135deg, #ff3b30, #d0021b);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(208, 2, 27, 0.3);
+}
+
+.btn-add-product:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(208, 2, 27, 0.4);
+  color: #fff;
+}
+
+/* ── Add to Cart Button (TGDD Yellow) ── */
+.add-to-cart-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #ffd400, #f3c400);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #f3c400, #e5b600);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(243, 196, 0, 0.4);
+}
+
+.add-to-cart-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Cart Notification ── */
+.cart-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: slideIn 0.3s ease;
+}
+
+.cart-notification.success {
+  border-left: 4px solid #16a34a;
+}
+
+.cart-notification.error {
+  border-left: 4px solid #dc2626;
+}
+
+.cart-notification span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.view-cart-link {
+  color: #b01117;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.view-cart-link:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ── Cart Button in Header ── */
+.cart-btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cart-btn:hover {
+  color: var(--red);
+}
+
+/* ── Footer ── */
+.tgdd-footer {
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.78);
+  padding: 32px 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.footer-grid h4 {
+  color: #ffd400;
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.footer-grid p,
+.footer-grid a {
+  display: block;
+  margin: 6px 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-grid a:hover {
+  color: #ffd400;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .promo-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-wrap {
+    grid-template-columns: 120px 1fr 120px;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-text.right {
+    text-align: center;
+  }
+
+  .mega-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .mega-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .promo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .side-banner {
+    min-height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .hero-main {
+    order: -1;
+  }
+
+  .promo-head {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .time-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .normal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .mega-wrapper {
+    position: static;
+    margin-top: 8px;
+    pointer-events: auto;
+  }
+
+  .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .mega-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .promo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

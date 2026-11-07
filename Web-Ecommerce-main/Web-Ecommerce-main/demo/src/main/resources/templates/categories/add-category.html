@@ -1,0 +1,125 @@
+<!doctype html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+    <head>
+        <title>Thêm Danh mục</title>
+        <style>
+            .form-page {
+                padding: 30px 0;
+                min-height: 70vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .form-card {
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+                width: 100%;
+                max-width: 500px;
+            }
+            .form-header {
+                background: linear-gradient(135deg, #ffd400 0%, #ffb300 100%);
+                padding: 24px 30px;
+                text-align: center;
+            }
+            .form-header h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin: 0;
+                color: #1f2937;
+            }
+            .form-body {
+                padding: 30px;
+            }
+            .form-group {
+                margin-bottom: 18px;
+            }
+            .form-group label {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                color: #374151;
+                margin-bottom: 8px;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid #d1d5db;
+                border-radius: 10px;
+                font-size: 14px;
+            }
+            .btn-row {
+                display: flex;
+                gap: 12px;
+                margin-top: 24px;
+            }
+            .btn-primary {
+                flex: 1;
+                background: #ffd400;
+                color: #111827;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 999px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+            .btn-secondary {
+                flex: 1;
+                background: #f3f4f6;
+                color: #374151;
+                text-decoration: none;
+                text-align: center;
+                padding: 12px 20px;
+                border-radius: 999px;
+                font-weight: 600;
+            }
+            .error-text {
+                color: #dc2626;
+                font-size: 12px;
+                margin-top: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <div class="container form-page">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2 th:text="${pageTitle}">Thêm danh mục mới</h2>
+                    </div>
+                    <div class="form-body">
+                        <form th:action="${formAction}" th:object="${category}" method="post">
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="form-group">
+                                <label>Tên danh mục</label>
+                                <input type="text" th:field="*{name}" placeholder="Điện thoại, Laptop, Phụ kiện..." />
+                                <div class="error-text" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Lỗi</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Icon URL</label>
+                                <input type="text" th:field="*{iconUrl}" placeholder="https://..." />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Parent ID</label>
+                                <input type="number" th:field="*{parentId}" min="1" placeholder="Để trống nếu là danh mục gốc" />
+                            </div>
+
+                            <div class="btn-row">
+                                <button type="submit" class="btn-primary">Lưu danh mục</button>
+                                <a th:href="@{/categories}" class="btn-secondary">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

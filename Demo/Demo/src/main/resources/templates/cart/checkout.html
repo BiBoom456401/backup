@@ -1,0 +1,2410 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${title} ?: 'Your Cart'">Your Cart</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content" class="container mt-3">
+    <h1>Your Cart</h1>
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Your cart is
+        empty.</div>
+    <table class="table" th:unless="${cartItems.isEmpty()}">
+        <thead class="table-light">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td>
+                <a
+                        th:href="@{/cart/remove/{productId}(productId=${item.product.id})}" class="btn btndanger btn-sm">Remove</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a th:href="@{/cart/clear}" class="btn btn-secondary">Clear Cart</a>
+        |
+        <a th:href="@{/order/checkout}" class="btn btn-primary mb-3">Check Out</a>
+    </div>
+</section>
+</body>
+</html>
+
+css cho file nayf
+
+File HTML của bạn đang dùng Bootstrap, nhưng nếu muốn CSS riêng để giao diện đẹp hơn (giỏ hàng rõ ràng, nút đẹp hơn, bảng nhìn chuyên nghiệp hơn) thì bạn có thể tạo file cart.css.
+
+1. Tạo file CSS
+Tạo file:
+
+src/main/resources/static/css/cart.css
+2. Thêm link CSS vào HTML
+Trong <head> thêm:
+
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    Ví dụ:
+
+    <head>
+        <title th:text="${title} ?: 'Your Cart'">Your Cart</title>
+
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+        <link rel="stylesheet" th:href="@{/css/cart.css}">
+    </head>
+    3. CSS cho trang Cart
+    body{
+    background-color: #f5f7fa;
+    }
+
+    h1{
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+    }
+
+    .table{
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    }
+
+    .table th{
+    text-align: center;
+    font-weight: 600;
+    }
+
+    .table td{
+    vertical-align: middle;
+    text-align: center;
+    }
+
+    .btn-danger{
+    padding: 5px 12px;
+    }
+
+    .btn-danger:hover{
+    background-color: #c82333;
+    }
+
+    .btn-secondary{
+    margin-right: 10px;
+    }
+
+    .container{
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .alert-info{
+    text-align: center;
+    font-size: 18px;
+    }
+    4. Kết quả giao diện
+    Sau khi thêm CSS:
+
+    Trang Cart có nền xám nhẹ
+
+    Bảng bo góc + có shadow
+
+    Nút Remove, Clear Cart, Checkout rõ ràng
+
+    Nội dung căn giữa gọn gàng
+
+    💡 Nếu bạn muốn mình design luôn giao diện Cart đẹp kiểu website bán hàng (có giá tiền, tổng tiền, icon, layout chuyên nghiệp) mình có thể viết full HTML + CSS chuẩn cho Thymeleaf + Spring Boot luôn.
+
+
+    css thang vo file khong can tao them
+
+    Bạn có thể viết CSS trực tiếp trong file HTML bằng thẻ <style> trong phần <head>, không cần tạo file .css riêng.
+
+    Ví dụ chỉnh lại file của bạn:
+
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+    <head>
+    <title th:text="${title} ?: 'Your Cart'">Your Cart</title>
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+     body{
+         background-color:#f5f7fa;
+     }
+
+    h1{
+        text-align:center;
+        margin-bottom:25px;
+        font-weight:600;
+    }
+
+    .table{
+        background:white;
+        border-radius:8px;
+        overflow:hidden;
+    }
+
+    .table th{
+        text-align:center;
+        font-weight:600;
+    }
+
+    .table td{
+        text-align:center;
+        vertical-align:middle;
+    }
+
+    .container{
+        background:white;
+        padding:25px;
+        border-radius:10px;
+        box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn-danger:hover{
+        background-color:#c82333;
+    }
+
+    .alert-info{
+        text-align:center;
+        font-size:18px;
+    }
+    </style>
+
+</head>
+<body>
+
+<section layout:fragment="content" class="container mt-3">
+    <h1>Your Cart</h1>
+
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">
+        Your cart is empty.
+    </div>
+
+    <table class="table" th:unless="${cartItems.isEmpty()}">
+        <thead class="table-light">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td>
+                <a th:href="@{/cart/remove/{productId}(productId=${item.product.id})}"
+                   class="btn btn-danger btn-sm">Remove</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="mt-3 text-center">
+        <a th:href="@{/cart/clear}" class="btn btn-secondary">Clear Cart</a>
+        <a th:href="@{/order/checkout}" class="btn btn-primary">Check Out</a>
+    </div>
+
+</section>
+
+</body>
+</html>
+✅ Cách này:
+
+Nhanh
+
+Không cần tạo file CSS
+
+Phù hợp bài tập hoặc demo Spring Boot + Thymeleaf.
+
+💡 Nếu bạn muốn mình làm giao diện Cart đẹp hơn (có tổng tiền, icon, layout giống Shopee/Lazada) mình có thể viết lại HTML + CSS xịn hơn nhiều cho bạn.
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Add Product</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <h1>Add New Product</h1>
+    <form th:action="@{/products/add}" th:object="${product}" method="post"
+          class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name"
+                   required>
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="text" th:field="*{price}" class="form-control" id="price"
+                   required>
+        </div>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select th:field="*{category}" class="form-control" id="category">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea th:field="*{description}" class="form-control"
+                      id="description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+        <a th:href="@{/products}" class="btn btn-link">Cancel</a>
+    </form>
+</section>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>
+
+css cho file nay
+
+Bạn có thể chèn CSS trực tiếp vào file HTML bằng thẻ <style> trong <head> để làm form Add Product đẹp và dễ nhìn hơn.
+
+                                                                    Phiên bản có CSS
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout}">
+<head>
+<title>Add Product</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<style>
+
+ body{
+     background-color:#f4f6f9;
+ }
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    font-weight:600;
+}
+
+.container{
+    max-width:600px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-label{
+    font-weight:500;
+}
+
+.form-control{
+    border-radius:6px;
+}
+
+textarea{
+    min-height:120px;
+}
+
+.btn-primary{
+    padding:8px 20px;
+    font-weight:500;
+}
+
+.btn-primary:hover{
+    background-color:#0b5ed7;
+}
+
+.btn-link{
+    text-decoration:none;
+    margin-left:10px;
+}
+
+.btn-link:hover{
+    text-decoration:underline;
+}
+
+.text-danger{
+    font-size:14px;
+    margin-top:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section layout:fragment="content" class="container mt-5">
+
+    <h1>Add New Product</h1>
+
+    <form th:action="@{/products/add}" th:object="${product}" method="post"
+          class="needs-validation" novalidate>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="text" th:field="*{price}" class="form-control" id="price" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select th:field="*{category}" class="form-control" id="category">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea th:field="*{description}" class="form-control"
+                      id="description" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Product</button>
+        <a th:href="@{/products}" class="btn btn-link">Cancel</a>
+
+    </form>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+Sau khi thêm CSS
+Giao diện sẽ:
+
+Form ở giữa màn hình
+
+Có card trắng + shadow
+
+Input bo góc đẹp
+
+Button Add Product nổi bật
+
+Form nhìn giống dashboard admin
+
+💡 Nếu bạn đang làm project Spring Boot + Thymeleaf quản lý sản phẩm, mình có thể viết luôn:
+
+Trang List Product đẹp
+
+Trang Edit Product
+
+Trang Category
+
+Trang Cart
+
+Navbar layout chung
+
+→ để toàn bộ web nhìn giống web bán hàng thật (xịn hơn bài lab rất nhiều).
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Trang chủ -  Mobile</title>
+
+    <style>
+        .banner-big a, .banner-big img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .banner-side a, .banner-side img {
+            display: block;
+            width: 100%;
+            height: 100%; /* Sẽ tự chia đều nhờ flex */
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Banner quảng cáo dài nằm ngang (giữa các section) */
+        .promo-banner {
+            width: 100%;
+            border-radius: 4px;
+            margin: 20px 0;
+            display: block;
+        }
+
+        /* Responsive Banner */
+        @media (max-width: 768px) {
+            .home-banner-section {
+                grid-template-columns: 1fr; /* Mobile về 1 cột */
+            }
+            .banner-side {
+                flex-direction: row; /* 2 ảnh nhỏ nằm ngang dưới ảnh lớn */
+            }
+        }
+    </style>
+</head>
+
+<body>
+<section layout:fragment="content">
+
+    <div class="home-banner-section">
+        <div class="banner-big">
+            <a href="#">
+                <img src="https://cdn.tgdd.vn/2024/02/banner/720-220-720x220-6.png" alt="Big Banner">
+            </a>
+        </div>
+
+    </div>
+
+    <div class="section-container mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded">
+            <h2 class="section-title m-0 text-uppercase fs-6 fw-bold">🔥 Gợi ý hôm nay</h2>
+            <a th:href="@{/products}" class="text-decoration-none" style="font-size: 13px; color: #288ad6;"><i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="product-list">
+
+            <div class="product-item" th:each="p : ${products != null ? products : #numbers.sequence(1, 10)}">
+
+                <a th:href="@{/detail/{id}(id=${p instanceof T(java.lang.Integer) ? p : p.id})}">
+
+
+                    <span class="badge-top">Giảm 15%</span>
+                    <span class="badge-installment">Trả góp 0%</span>
+
+                    <img class="product-img"
+                         th:src="${p.image != null ? p.image : 'https://cdn.tgdd.vn/Products/Images/42/305658/iphone-15-pro-max-blue-thumbnew-600x600.jpg'}"
+                         alt="Sản phẩm">
+
+                    <h3 class="product-name"
+                        th:text="${p.name != null ? p.name : 'iPhone 15 Pro Max 256GB - Chính hãng VN/A'}">
+                        Tên sản phẩm mẫu
+                    </h3>
+
+                    <div class="price-box">
+                        <span class="price-new"
+                              th:text="${p.price != null ? #numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + '₫' : '28.990.000₫'}">
+                            28.990.000₫
+                        </span>
+                        <span class="price-old">34.990.000₫</span>
+                    </div>
+
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span>(25)</span>
+                    </div>
+
+                    <div class="mt-2 text-center">
+                        <span class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <a href="#">
+        <img src="https://cdn.tgdd.vn/2024/01/banner/1200x100-1200x100-2.png" class="promo-banner" alt="Promo">
+    </a>
+
+    <div class="section-container mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded">
+            <h2 class="section-title m-0 text-uppercase fs-6 fw-bold">💻 Laptop tựu trường</h2>
+        </div>
+
+        <div class="product-list">
+            <div class="product-item" th:each="i : ${#numbers.sequence(1, 5)}">
+                <a href="#" class="text-decoration-none text-dark position-relative">
+                    <span class="badge-top">-10%</span>
+                    <img class="product-img"
+                         src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/44/335362/macbook-air-13-inch-m4-16gb-256gb-tgdd-1-638768909105991664-750x500.jpg"
+                         alt="Laptop">
+                    <h3 class="product-name">MacBook Air 15 inch M2 2023 8GB/256GB</h3>
+                    <div class="price-box">
+                        <span class="price-new">27.690.000₫</span>
+                        <span class="price-old">32.990.000₫</span>
+                    </div>
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <span>(10)</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
+css file nay
+
+File của bạn đã có CSS cho banner, nhưng chưa có CSS cho các phần product-list, product-item, price, rating… nên giao diện sẽ chưa giống web bán hàng. Bạn có thể chèn thêm CSS trực tiếp trong <style> như sau.
+
+CSS hoàn chỉnh cho file này
+<style>
+
+     /* ===== Banner ===== */
+ .banner-big a, .banner-big img {
+     display: block;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     border-radius: 4px;
+ }
+
+.banner-side a, .banner-side img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.promo-banner {
+    width: 100%;
+    border-radius: 4px;
+    margin: 20px 0;
+    display: block;
+}
+
+/* ===== Section ===== */
+.section-container{
+    max-width:1200px;
+    margin:auto;
+}
+
+/* ===== Product List ===== */
+.product-list{
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap:15px;
+}
+
+/* ===== Product Item ===== */
+.product-item{
+    background:white;
+    border-radius:8px;
+    padding:10px;
+    position:relative;
+    transition:0.25s;
+    border:1px solid #eee;
+}
+
+.product-item:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* ===== Product Image ===== */
+.product-img{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+}
+
+/* ===== Product Name ===== */
+.product-name{
+    font-size:14px;
+    font-weight:500;
+    height:40px;
+    overflow:hidden;
+    margin:10px 0;
+}
+
+/* ===== Price ===== */
+.price-box{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.price-new{
+    color:#d0021c;
+    font-weight:bold;
+}
+
+.price-old{
+    text-decoration:line-through;
+    color:#777;
+    font-size:13px;
+}
+
+/* ===== Rating ===== */
+.rating{
+    font-size:13px;
+    color:#f5a623;
+}
+
+/* ===== Badge ===== */
+.badge-top{
+    position:absolute;
+    top:8px;
+    left:8px;
+    background:#d0021c;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+.badge-installment{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:#288ad6;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:768px){
+    .product-list{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+</style>
+Sau khi thêm CSS
+Trang chủ sẽ có:
+
+Grid sản phẩm dạng shop
+
+Card sản phẩm hover nổi lên
+
+Giá mới màu đỏ, giá cũ gạch ngang
+
+Badge giảm giá
+
+Layout giống Thế Giới Di Động
+
+💡 Nếu bạn muốn mình viết luôn CSS cho toàn bộ web để giống 90% giao diện Thế Giới Di Động (navbar vàng, menu danh mục, card sản phẩm chuẩn) mình có thể gửi 1 block CSS ~300 dòng dùng cho toàn project Spring Boot + Thymeleaf. Giao diện sẽ nhìn xịn hơn rất nhiều.
+
+
+css truc tiep vo
+
+Bạn chỉ cần đặt CSS trực tiếp trong thẻ <style> của file hiện tại (không cần file CSS riêng). Thay phần <style> trong <head> bằng đoạn dưới đây để trang sản phẩm hiển thị đẹp hơn.
+
+<style>
+
+     /* ===== Layout chung ===== */
+ body{
+     background:#f5f5f5;
+     font-family: Arial, Helvetica, sans-serif;
+ }
+
+/* ===== Banner ===== */
+.banner-big a, .banner-big img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+.promo-banner{
+    width:100%;
+    margin:20px 0;
+    border-radius:6px;
+}
+
+/* ===== Section ===== */
+.section-container{
+    max-width:1200px;
+    margin:auto;
+}
+
+/* ===== Danh sách sản phẩm ===== */
+.product-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:15px;
+}
+
+/* ===== Card sản phẩm ===== */
+.product-item{
+    background:white;
+    border-radius:8px;
+    padding:10px;
+    border:1px solid #eee;
+    position:relative;
+    transition:0.25s;
+}
+
+.product-item:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* ===== Hình sản phẩm ===== */
+.product-img{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+}
+
+/* ===== Tên sản phẩm ===== */
+.product-name{
+    font-size:14px;
+    font-weight:500;
+    margin:10px 0;
+    height:40px;
+    overflow:hidden;
+}
+
+/* ===== Giá ===== */
+.price-box{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.price-new{
+    color:#d0021c;
+    font-weight:bold;
+}
+
+.price-old{
+    text-decoration:line-through;
+    color:#777;
+    font-size:13px;
+}
+
+/* ===== Rating ===== */
+.rating{
+    font-size:13px;
+    color:#f5a623;
+}
+
+/* ===== Badge giảm giá ===== */
+.badge-top{
+    position:absolute;
+    top:8px;
+    left:8px;
+    background:#d0021c;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+/* ===== Badge trả góp ===== */
+.badge-installment{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:#288ad6;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:768px){
+    .product-list{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+</style>
+✅ Sau khi thêm CSS này:
+
+Sản phẩm hiển thị dạng grid giống web bán hàng
+
+Card hover nổi lên
+
+Giá đỏ – giá cũ gạch ngang
+
+Có badge giảm giá và trả góp
+
+💡 Nếu bạn muốn, mình có thể viết thêm CSS cho:
+
+Navbar giống web bán điện thoại
+
+Trang chi tiết sản phẩm
+
+Trang giỏ hàng đẹp hơn
+
+Footer chuẩn
+
+→ để toàn bộ project Spring Boot + Thymeleaf nhìn giống web thương mại điện tử thật.
+
+
+lam phan header co ca css
+
+Bạn có thể làm Header (menu trên cùng) + CSS trực tiếp trong file layout.html để mọi trang dùng chung. Ví dụ một header giống web bán điện thoại gồm: logo, tìm kiếm, menu.
+
+Header + CSS
+Chèn vào trên <body> hoặc trong layout.html.
+
+<header class="main-header">
+
+    <div class="header-container">
+
+        <!-- Logo -->
+        <div class="logo">
+            <a th:href="@{/}">📱 MobileShop</a>
+        </div>
+
+        <!-- Search -->
+        <div class="search-box">
+            <input type="text" placeholder="Tìm sản phẩm...">
+            <button>🔍</button>
+        </div>
+
+        <!-- Menu -->
+        <nav class="menu">
+            <a th:href="@{/}">Trang chủ</a>
+            <a th:href="@{/products}">Sản phẩm</a>
+            <a th:href="@{/cart}">Giỏ hàng</a>
+            <a th:href="@{/products/add}">Thêm SP</a>
+        </nav>
+
+    </div>
+
+</header>
+CSS cho Header (viết ngay trong <style>)
+<style>
+
+    /* ===== Header ===== */
+
+.main-header{
+    background:#ffd400;
+    padding:10px 0;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+/* Logo */
+.logo a{
+    font-size:22px;
+    font-weight:bold;
+    text-decoration:none;
+    color:black;
+}
+
+/* Search box */
+.search-box{
+    display:flex;
+    width:400px;
+}
+
+.search-box input{
+    flex:1;
+    padding:8px;
+    border:none;
+    border-radius:4px 0 0 4px;
+}
+
+.search-box button{
+    padding:8px 12px;
+    border:none;
+    background:black;
+    color:white;
+    border-radius:0 4px 4px 0;
+    cursor:pointer;
+}
+
+/* Menu */
+.menu a{
+    margin-left:20px;
+    text-decoration:none;
+    color:black;
+    font-weight:500;
+}
+
+.menu a:hover{
+    color:#288ad6;
+}
+
+/* Responsive */
+@media(max-width:768px){
+
+    .header-container{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .search-box{
+        width:100%;
+    }
+
+}
+
+</style>
+Kết quả
+Header sẽ có:
+
+Logo MobileShop
+
+Thanh tìm kiếm
+
+Menu:
+
+Trang chủ
+
+Sản phẩm
+
+Giỏ hàng
+
+Thêm sản phẩm
+
+Màu vàng giống web bán điện thoại
+
+💡 Nếu bạn muốn mình viết header giống 90% giao diện của Thế Giới Di Động (có icon giỏ hàng, danh mục, banner nhỏ) mình có thể gửi 1 layout hoàn chỉnh cho Spring Boot + Thymeleaf để bạn dùng luôn cho project.
+
+
+css truc tiep
+
+Bạn có thể viết luôn Header + CSS trực tiếp trong cùng file HTML (không cần file CSS riêng). Ví dụ một header hoàn chỉnh như sau:
+
+<header>
+    <div class="header-container">
+
+        <div class="logo">
+            <a th:href="@{/}">📱 MobileShop</a>
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Tìm sản phẩm...">
+            <button>Tìm</button>
+        </div>
+
+        <nav class="menu">
+            <a th:href="@{/}">Trang chủ</a>
+            <a th:href="@{/products}">Sản phẩm</a>
+            <a th:href="@{/cart}">Giỏ hàng</a>
+            <a th:href="@{/products/add}">Thêm SP</a>
+        </nav>
+
+    </div>
+</header>
+
+<style>
+
+    /* ===== HEADER ===== */
+
+    header{
+        background:#ffd400;
+        padding:10px 0;
+        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .header-container{
+        max-width:1200px;
+        margin:auto;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+    }
+
+    /* Logo */
+    .logo a{
+        font-size:22px;
+        font-weight:bold;
+        text-decoration:none;
+        color:black;
+    }
+
+    /* Search */
+    .search-box{
+        display:flex;
+        width:400px;
+    }
+
+    .search-box input{
+        flex:1;
+        padding:8px;
+        border:1px solid #ccc;
+        border-radius:4px 0 0 4px;
+    }
+
+    .search-box button{
+        padding:8px 15px;
+        border:none;
+        background:black;
+        color:white;
+        border-radius:0 4px 4px 0;
+        cursor:pointer;
+    }
+
+    /* Menu */
+    .menu a{
+        margin-left:20px;
+        text-decoration:none;
+        color:black;
+        font-weight:500;
+    }
+
+    .menu a:hover{
+        color:#288ad6;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+
+        .header-container{
+            flex-direction:column;
+            gap:10px;
+        }
+
+        .search-box{
+            width:100%;
+        }
+
+    }
+
+</style>
+✅ Kết quả:
+
+Header có logo
+
+Có thanh tìm kiếm
+
+Có menu Trang chủ – Sản phẩm – Giỏ hàng – Thêm sản phẩm
+
+Tự responsive khi thu nhỏ màn hình
+
+💡 Nếu bạn muốn, mình có thể giúp bạn làm luôn layout layout.html chuẩn cho Thymeleaf (header + footer + menu + CSS) để mọi trang trong project Spring Boot dùng chung, nhìn sẽ chuyên nghiệp hơn nhiều.
+
+
+chỉnh css trang home và header cho hợp với nhau
+
+Để header và trang home nhìn đồng bộ, bạn nên dùng cùng màu chủ đạo + cùng container width + cùng style card.
+Ví dụ dùng màu vàng + trắng + xám nhẹ giống web bán điện thoại.
+
+Bạn có thể chèn CSS trực tiếp vào trang Home (trong <style>) như sau:
+
+<style>
+
+     /* ===== BODY ===== */
+ body{
+     background:#f5f5f5;
+     font-family:Arial, Helvetica, sans-serif;
+     margin:0;
+ }
+
+/* ===== HEADER ===== */
+header{
+    background:#ffd400;
+    padding:10px 0;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo a{
+    font-size:22px;
+    font-weight:bold;
+    text-decoration:none;
+    color:black;
+}
+
+.search-box{
+    display:flex;
+    width:400px;
+}
+
+.search-box input{
+    flex:1;
+    padding:8px;
+    border:none;
+    border-radius:4px 0 0 4px;
+}
+
+.search-box button{
+    padding:8px 15px;
+    border:none;
+    background:black;
+    color:white;
+    border-radius:0 4px 4px 0;
+}
+
+.menu a{
+    margin-left:20px;
+    text-decoration:none;
+    color:black;
+    font-weight:500;
+}
+
+.menu a:hover{
+    color:#288ad6;
+}
+
+/* ===== HOME SECTION ===== */
+.section-container{
+    max-width:1200px;
+    margin:20px auto;
+}
+
+/* ===== PRODUCT GRID ===== */
+.product-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:15px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product-item{
+    background:white;
+    border-radius:8px;
+    padding:12px;
+    border:1px solid #eee;
+    position:relative;
+    transition:0.25s;
+}
+
+.product-item:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* ===== PRODUCT IMAGE ===== */
+.product-img{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+}
+
+/* ===== PRODUCT NAME ===== */
+.product-name{
+    font-size:14px;
+    font-weight:500;
+    margin:10px 0;
+    height:40px;
+    overflow:hidden;
+}
+
+/* ===== PRICE ===== */
+.price-box{
+    display:flex;
+    gap:8px;
+}
+
+.price-new{
+    color:#d0021c;
+    font-weight:bold;
+}
+
+.price-old{
+    text-decoration:line-through;
+    color:#777;
+    font-size:13px;
+}
+
+/* ===== RATING ===== */
+.rating{
+    font-size:13px;
+    color:#f5a623;
+}
+
+/* ===== BADGE ===== */
+.badge-top{
+    position:absolute;
+    top:8px;
+    left:8px;
+    background:#d0021c;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+.badge-installment{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:#288ad6;
+    color:white;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+/* ===== BANNER ===== */
+.banner-big img{
+    width:100%;
+    border-radius:6px;
+}
+
+.promo-banner{
+    width:100%;
+    border-radius:6px;
+    margin:20px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+
+    .header-container{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .search-box{
+        width:100%;
+    }
+
+    .product-list{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+</style>
+Sau khi chỉnh
+Header và Home sẽ:
+
+Cùng màu vàng #ffd400
+
+Cùng max-width 1200px
+
+Card sản phẩm bo góc + hover nổi
+
+Banner khớp layout
+
+👉 Giao diện sẽ giống style của Thế Giới Di Động.
+
+💡 Nếu bạn muốn mình chỉnh luôn layout hoàn chỉnh cho project (Header + Home + Product + Cart + Footer cùng style) mình có thể viết 1 bộ CSS chuẩn ~400 dòng nhìn như web bán hàng thật để bạn dùng luôn cho đồ án.
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${title} ?: 'Your Cart'">Your Cart</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content" class="container mt-3">
+    <h1>Your Cart</h1>
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Your cart is
+        empty.</div>
+    <table class="table" th:unless="${cartItems.isEmpty()}">
+        <thead class="table-light">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td>
+                <a
+                        th:href="@{/cart/remove/{productId}(productId=${item.product.id})}" class="btn btndanger btn-sm">Remove</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a th:href="@{/cart/clear}" class="btn btn-secondary">Clear Cart</a>
+        |
+        <a th:href="@{/order/checkout}" class="btn btn-primary mb-3">Check Out</a>
+    </div>
+</section>
+</body>
+</html>
+
+css file này
+
+Bạn có thể thêm CSS trực tiếp vào file HTML này bằng thẻ <style> trong phần <head> để trang Cart nhìn đồng bộ với trang Home và Header.
+
+                                                                             Chỉnh lại <head> như sau:
+
+<head>
+<title th:text="${title} ?: 'Your Cart'">Your Cart</title>
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<style>
+
+ body{
+     background:#f5f5f5;
+     font-family:Arial, Helvetica, sans-serif;
+ }
+
+h1{
+    text-align:center;
+    font-weight:600;
+    margin-bottom:25px;
+}
+
+.container{
+    max-width:1000px;
+    background:white;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+table{
+    border-radius:6px;
+    overflow:hidden;
+}
+
+th{
+    text-align:center;
+}
+
+td{
+    vertical-align:middle;
+    text-align:center;
+}
+
+.btn-danger{
+    background:#d0021c;
+    border:none;
+}
+
+.btn-danger:hover{
+    background:#b00118;
+}
+
+.btn-primary{
+    background:#288ad6;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#1b6fb8;
+}
+
+.btn-secondary{
+    background:#6c757d;
+    border:none;
+}
+
+.alert-info{
+    text-align:center;
+    font-size:16px;
+}
+
+.mt-3{
+    text-align:center;
+}
+
+</style>
+</head>
+Sau khi thêm CSS
+Trang Cart sẽ:
+
+Có card trắng ở giữa trang
+
+Bảng căn giữa gọn gàng
+
+Nút Remove đỏ nổi bật
+
+Nút Checkout xanh
+
+Đồng bộ style với trang Home.
+
+💡 Mình cũng thấy trong code của bạn có 1 lỗi nhỏ:
+
+class="btn btndanger btn-sm"
+phải sửa thành:
+
+class="btn btn-danger btn-sm"
+(nó bị lỗi ký tự giữa btn và danger).
+
+Nếu bạn muốn, mình có thể chỉnh toàn bộ CSS cho project (Home + Header + Product + Cart + Add Product) để giao diện nhìn giống một website bán điện thoại hoàn chỉnh.
+
+
+Đã tải lên ảnh
+chỉnh cho 2 btn ngang bằng nhau
+
+Hai nút không đều vì btn-primary có thêm mb-3 và kích thước padding khác. Cách đơn giản nhất là đặt hai nút trong flex và cho cùng width.
+
+Sửa HTML
+Bọc 2 nút trong một div:
+
+<div class="cart-buttons">
+    <a th:href="@{/cart/clear}" class="btn btn-secondary">Clear Cart</a>
+    <a th:href="@{/order/checkout}" class="btn btn-primary">Check Out</a>
+</div>
+Thêm CSS trực tiếp
+<style>
+
+    .cart-buttons{
+        display:flex;
+        justify-content:center;
+        gap:10px;
+    }
+
+    .cart-buttons .btn{
+        width:140px;
+    }
+
+</style>
+Kết quả
+Hai nút bằng nhau
+
+Nằm ngang gọn gàng
+
+Có khoảng cách đẹp
+
+Nếu bạn muốn mình chỉnh UI giỏ hàng giống web shop hơn (có tổng tiền, icon thùng rác, nút checkout nổi bật) mình có thể viết 1 bản Cart đẹp hơn nhiều cho project của bạn.
+
+
+<div class="container">
+    <div class="footer-content">
+        <h3>Contact Us</h3>
+        <p>Email:Info@example.com</p>
+        <p>Phone:+121 56556 565556</p>
+        <p>Address:Your Address 123 street</p>
+    </div>
+    <div class="footer-content" id="Liên hệ">
+        <h3>Quick Links</h3>
+        <ul class="list">
+            <li><a href="">Trang chủ</a></li>
+            <li><a href="">Sản phảm</a></li>
+            <li><a href="">Liên hệ</a></li>
+        </ul>
+    </div>
+    <div class="footer-content">
+        <h3>Follow Us</h3>
+        <ul class="social-icons">
+            <li>
+                <a href=""><i class="fab fa-facebook"></i></a>
+            </li>
+            <li>
+                <a href=""><i class="fab fa-twitter"></i></a>
+            </li>
+            <li>
+                <a href=""><i class="fab fa-instagram"></i></a>
+            </li>
+            <li>
+                <a href=""><i class="fab fa-linkedin"></i></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="bottom-bar">
+    <p>&copy; 2025 your company . All rights reserved</p>
+</div>
+
+css cho footer này giờ giao diện chung
+
+Để footer hợp với giao diện chung (header vàng + nền xám + card trắng), bạn có thể thêm CSS trực tiếp như sau.
+
+Chèn dưới footer hoặc trong <style>:
+
+<style>
+
+     /* ===== FOOTER ===== */
+ footer{
+     background:#1f1f1f;
+     color:white;
+     padding:40px 0 0 0;
+     margin-top:40px;
+ }
+
+footer .container{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+
+.footer-content{
+    width:30%;
+}
+
+.footer-content h3{
+    margin-bottom:15px;
+    font-size:18px;
+}
+
+.footer-content p{
+    font-size:14px;
+    margin:5px 0;
+}
+
+/* ===== LINKS ===== */
+.list{
+    list-style:none;
+    padding:0;
+}
+
+.list li{
+    margin:8px 0;
+}
+
+.list a{
+    text-decoration:none;
+    color:#ccc;
+    font-size:14px;
+}
+
+.list a:hover{
+    color:#ffd400;
+}
+
+/* ===== SOCIAL ICON ===== */
+.social-icons{
+    list-style:none;
+    padding:0;
+    display:flex;
+    gap:10px;
+}
+
+.social-icons li a{
+    color:white;
+    font-size:18px;
+    transition:0.3s;
+}
+
+.social-icons li a:hover{
+    color:#ffd400;
+}
+
+/* ===== BOTTOM BAR ===== */
+.bottom-bar{
+    background:#111;
+    text-align:center;
+    padding:10px 0;
+    margin-top:30px;
+    font-size:14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+
+    footer .container{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .footer-content{
+        width:100%;
+    }
+
+}
+
+</style>
+Kết quả
+Footer sẽ:
+
+Nền đen xám sang
+
+Link hover màu vàng giống header
+
+Icon mạng xã hội căn ngang
+
+Responsive khi thu nhỏ màn hình
+
+⚠️ Nếu icon không hiện, nhớ thêm Font Awesome vào <head>:
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    💡 Nếu bạn muốn, mình có thể chỉnh lại toàn bộ layout (Header + Home + Product + Cart + Footer) cho đồng bộ 100% để web của bạn nhìn giống một trang bán điện thoại hoàn chỉnh cho project Spring Boot.
+
+
+    thêm 1 cái gì đó hợp lý ở giữ header và body
+
+    Một phần rất hợp lý đặt giữa Header và Body của web bán hàng là thanh danh mục (Category Bar) hoặc Banner khuyến mãi. Nó giúp điều hướng nhanh và nhìn web chuyên nghiệp hơn.
+
+    Dưới đây là Category Bar (menu danh mục) đặt ngay dưới header.
+
+    HTML (đặt ngay dưới Header)
+    <div class="category-bar">
+        <div class="category-container">
+
+            <a href="#">📱 Điện thoại</a>
+            <a href="#">💻 Laptop</a>
+            <a href="#">⌚ Đồng hồ</a>
+            <a href="#">🎧 Phụ kiện</a>
+            <a href="#">📷 Máy ảnh</a>
+            <a href="#">🎮 Gaming</a>
+
+        </div>
+    </div>
+    CSS (chèn trong <style>)
+    <style>
+
+        /* ===== CATEGORY BAR ===== */
+
+    .category-bar{
+        background:white;
+        border-bottom:1px solid #eee;
+    }
+
+    .category-container{
+        max-width:1200px;
+        margin:auto;
+        display:flex;
+        justify-content:center;
+        gap:30px;
+        padding:10px 0;
+    }
+
+    .category-container a{
+        text-decoration:none;
+        color:#333;
+        font-weight:500;
+        font-size:14px;
+    }
+
+    .category-container a:hover{
+        color:#288ad6;
+    }
+
+    </style>
+    Kết quả giao diện
+    Header
+    ⬇
+    Category Bar (menu danh mục)
+    ⬇
+    Banner
+    ⬇
+    Danh sách sản phẩm
+
+    Nhìn sẽ giống layout của các web bán hàng như:
+
+    Thế Giới Di Động
+
+    Shopee
+
+    💡 Nếu bạn muốn mình chỉ thêm 1 phần cực đẹp và phổ biến hơn cho web shop, mình có thể làm:
+
+    Flash Sale / Khuyến mãi hôm nay
+
+    Thanh thông báo freeship
+
+    Slider banner tự chạy
+
+    Danh mục có icon giống TGDĐ
+
+    → nhìn web xịn hơn gấp nhiều lần.
+
+
+    css lai cho đồng bộ
+
+    Để đồng bộ với Header vàng (#ffd400), Home và Footer, thanh Category Bar nên dùng nền trắng + border nhẹ + hover vàng/xanh.
+    Bạn có thể dùng HTML cũ và CSS chỉnh lại như sau.
+
+    HTML (đặt dưới Header)
+    <div class="category-bar">
+        <div class="category-container">
+            <a href="#">📱 Điện thoại</a>
+            <a href="#">💻 Laptop</a>
+            <a href="#">⌚ Đồng hồ</a>
+            <a href="#">🎧 Phụ kiện</a>
+            <a href="#">📷 Máy ảnh</a>
+            <a href="#">🎮 Gaming</a>
+        </div>
+    </div>
+    CSS đồng bộ giao diện
+    <style>
+
+        /* ===== CATEGORY BAR ===== */
+
+        .category-bar{
+            background:white;
+            border-bottom:1px solid #e5e5e5;
+        }
+
+        .category-container{
+            max-width:1200px;
+            margin:auto;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:35px;
+            padding:12px 0;
+        }
+
+        /* Link danh mục */
+        .category-container a{
+            text-decoration:none;
+            color:#333;
+            font-weight:500;
+            font-size:14px;
+            padding:6px 10px;
+            border-radius:5px;
+            transition:0.2s;
+        }
+
+        /* Hover */
+        .category-container a:hover{
+            background:#ffd400;
+            color:black;
+        }
+
+        /* Responsive */
+        @media(max-width:768px){
+
+            .category-container{
+                overflow-x:auto;
+                justify-content:flex-start;
+                padding-left:10px;
+            }
+
+        }
+
+    </style>
+    Kết quả
+    Thanh giữa Header và Home sẽ:
+
+    Nền trắng sạch
+
+    Hover vàng giống header
+
+    Khoảng cách đều và gọn
+
+    Mobile scroll ngang
+
+    Layout tổng thể:
+
+    HEADER (vàng)
+    ↓
+    CATEGORY BAR (trắng)
+    ↓
+    BANNER
+    ↓
+    SẢN PHẨM
+    ↓
+    FOOTER (đen)
+    💡 Nếu bạn muốn, mình có thể chỉnh lại toàn bộ CSS project cho đồng bộ 100% (Header + Category + Home + Product + Cart + Footer) để web nhìn giống một trang bán điện thoại hoàn chỉnh luôn.
+
+
+    sửa layout phần footer sao follow us không hiện
+
+    Phần Follow Us không hiện icon thường do chưa load thư viện Font Awesome (icon fab fa-facebook, fab fa-twitter… cần thư viện này).
+
+    1️⃣ Thêm Font Awesome vào <head> của layout.html
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        Đặt trước </head>.
+
+    2️⃣ Kiểm tra lại HTML phần Follow Us
+    <div class="footer-content">
+        <h3>Follow Us</h3>
+        <ul class="social-icons">
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+        </ul>
+    </div>
+    3️⃣ CSS cho icon hiển thị đẹp
+    <style>
+
+        .social-icons{
+            list-style:none;
+            padding:0;
+            display:flex;
+            gap:15px;
+        }
+
+        .social-icons a{
+            color:white;
+            font-size:20px;
+            transition:0.3s;
+        }
+
+        .social-icons a:hover{
+            color:#ffd400;
+        }
+
+    </style>
+    ✅ Sau khi thêm Font Awesome:
+
+    Facebook icon hiện
+
+    Twitter icon hiện
+
+    Instagram icon hiện
+
+    LinkedIn icon hiện
+
+    💡 Nếu Follow Us vẫn không hiện, khả năng cao là layout.html đang đặt footer ngoài layout:fragment nên Thymeleaf không render đúng.
+    Nếu bạn gửi file layout.html, mình có thể sửa layout chuẩn cho header + body + footer luôn.
+
+
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+          layout:decorate="~{layout}">
+    <head>
+        <title th:text="${title} ?: 'Product'">Product</title>
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    </head>
+    <body>
+    <section layout:fragment="content">
+        <h1>Products List</h1>
+        <div>
+            <a th:href="@{/products/add}" class="btn btn-primary mb-3">Add New
+                Product</a>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+                <th>Add To Cart</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${product.description}"></td>
+                <td th:text="${product.category?.name}"></td>
+                <td>
+                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn
+btn-success btn-sm">Edit</a>
+                    <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn
+btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+                <td>
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="number" name="quantity" min="1" value="1"
+                               class="form-control d-inline-block" style="width: 70px;">
+                        <input type="hidden" th:value="${product.id}"
+                               name="productId"/>
+                        <button type="submit" class="btn btn-warning btn-sm">Add to
+                            Cart</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    </body>
+    </html>
+
+    css lại file này
+
+    Để trang Product List đồng bộ với Header vàng + Home + Footer, bạn nên:
+
+    Nền xám nhẹ
+
+    Bảng trắng dạng card
+
+    Nút Add Product nổi bật
+
+    Nút Add to Cart màu vàng
+
+    Bạn chỉ cần thêm CSS trực tiếp vào <head>.
+
+        Chỉnh <head>
+            <head>
+                <title th:text="${title} ?: 'Product'">Product</title>
+
+                <link rel="stylesheet"
+                      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+                <style>
+
+                    body{
+                        background:#f5f5f5;
+                        font-family:Arial, Helvetica, sans-serif;
+                    }
+
+                    h1{
+                        text-align:center;
+                        margin:20px 0;
+                        font-weight:600;
+                    }
+
+                    /* container bảng */
+                    section{
+                        max-width:1200px;
+                        margin:auto;
+                        background:white;
+                        padding:20px;
+                        border-radius:8px;
+                        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+                    }
+
+                    /* bảng */
+                    table{
+                        margin-top:15px;
+                    }
+
+                    th{
+                        text-align:center;
+                    }
+
+                    td{
+                        vertical-align:middle;
+                    }
+
+                    /* input quantity */
+                    input[type="number"]{
+                        text-align:center;
+                    }
+
+                    /* nút add product */
+                    .btn-primary{
+                        background:#288ad6;
+                        border:none;
+                    }
+
+                    .btn-primary:hover{
+                        background:#1b6fb8;
+                    }
+
+                    /* nút add cart */
+                    .btn-warning{
+                        background:#ffd400;
+                        border:none;
+                    }
+
+                    .btn-warning:hover{
+                        background:#e6c200;
+                    }
+
+                    /* nút edit */
+                    .btn-success{
+                        margin-right:5px;
+                    }
+
+                </style>
+            </head>
+            Sau khi chỉnh giao diện
+            Trang Product List sẽ:
+
+            Bảng nằm trong card trắng
+
+            Nút Add Product nổi bật
+
+            Add to Cart màu vàng đồng bộ header
+
+            Khoảng cách gọn và dễ nhìn
+
+            💡 Nếu bạn muốn, mình có thể biến trang này thành dạng card sản phẩm giống trang Home (ảnh + giá + nút Add Cart) thay vì bảng.
+            Nhìn sẽ giống website bán hàng thật hơn rất nhiều.
+
+
+            footer trang add product chưa trùng khớp
+
+            Nguyên nhân footer trang Add Product không trùng khớp thường là do:
+
+            section của trang Add Product không có cùng width với layout
+
+            margin / padding khác trang Home
+
+            footer nằm sát nội dung vì body không đủ chiều cao
+
+            Cách sửa là đồng bộ container + khoảng cách.
+
+            1️⃣ Chỉnh CSS trong trang Add Product
+            Thêm vào <style> trong <head>:
+
+        <style>
+
+         body{
+             background:#f5f5f5;
+             min-height:100vh;
+             display:flex;
+             flex-direction:column;
+         }
+
+        /* nội dung chính */
+        section{
+            max-width:1200px;
+            margin:30px auto;
+            background:white;
+            padding:25px;
+            border-radius:8px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* để footer luôn nằm dưới */
+        main{
+            flex:1;
+        }
+
+        </style>
+            2️⃣ Đảm bảo layout.html có cấu trúc đúng
+            Trong layout.html nên có dạng:
+
+<body>
+
+<header>
+    <!-- header -->
+</header>
+
+<main layout:fragment="content"></main>
+
+<footer>
+    <!-- footer -->
+</footer>
+
+</body>
+3️⃣ Nếu vẫn lệch
+Kiểm tra trang Add Product phải có:
+
+<section layout:fragment="content">
+    không được dùng:
+
+    <div class="container">
+        vì container bootstrap đôi khi làm footer lệch width.
+
+        ✅ Sau khi sửa:
+
+        Footer căn giữa giống trang Home
+
+        Khoảng cách trên dưới đều
+
+        Footer luôn nằm cuối trang
+
+        💡 Nếu bạn muốn, mình có thể gửi 1 file layout.html chuẩn cho Spring Boot + Thymeleaf gồm:
+
+        Header
+
+        Category bar
+
+        Main content
+
+        Footer
+
+        → để mọi trang (Home, Product, Add Product, Cart) đều tự động đồng bộ giao diện.
+
+
+        <!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org"
+              xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+              layout:decorate="~{layout}">
+        <head>
+            <title th:text="${title} ?: 'Your Cart'">Place Order</title>
+            <link rel="stylesheet"
+                  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        </head>
+        <body>
+        <section layout:fragment="content" class="container mt-3">
+            <h1>Place Your Order</h1>
+            <form th:action="@{/order/submit}" method="post">
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Your Name:</label>
+                    <input type="text" id="customerName" name="customerName" class="formcontrol" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Order</button>
+            </form>
+        </section>
+        </body>
+        </html>
+
+        css lại file này
+
+        Để trang Place Order đồng bộ với Header vàng + Home + Footer, bạn nên làm form ở giữa trang, dạng card trắng giống các trang khác.
+
+        Chỉ cần thêm CSS trực tiếp vào <head>.
+
+        Chỉnh lại <head>
+            <head>
+                <title th:text="${title} ?: 'Your Cart'">Place Order</title>
+
+                <link rel="stylesheet"
+                      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+                <style>
+
+                    body{
+                        background:#f5f5f5;
+                        font-family:Arial, Helvetica, sans-serif;
+                    }
+
+                    h1{
+                        text-align:center;
+                        margin-bottom:25px;
+                        font-weight:600;
+                    }
+
+                    /* khung form */
+                    section{
+                        max-width:600px;
+                        margin:40px auto;
+                        background:white;
+                        padding:30px;
+                        border-radius:8px;
+                        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+                    }
+
+                    /* input */
+                    .form-control{
+                        border-radius:6px;
+                        padding:8px;
+                    }
+
+                    /* nút submit */
+                    .btn-primary{
+                        width:100%;
+                        background:#288ad6;
+                        border:none;
+                        padding:10px;
+                        font-weight:500;
+                    }
+
+                    .btn-primary:hover{
+                        background:#1b6fb8;
+                    }
+
+                </style>
+
+            </head>
+            Đồng thời sửa 1 lỗi nhỏ trong code của bạn
+            Bạn đang có:
+
+            class="formcontrol"
+            phải sửa thành:
+
+            class="form-control"
+            (ký tự giữa bị lỗi encoding).
+
+            Sau khi chỉnh giao diện
+            Trang Place Order sẽ:
+
+            Form nằm giữa trang
+
+            Có card trắng + shadow
+
+            Nút Submit Order nổi bật
+
+            Đồng bộ với các trang:
+
+            Home
+
+            Product
+
+            Cart
+
+            Add Product
+
+            💡 Nếu bạn muốn, mình có thể chỉnh toàn bộ project CSS (~250 dòng) để web nhìn giống một website bán điện thoại hoàn chỉnh, gồm:
+
+            Header
+
+            Category bar
+
+            Product card
+
+            Cart đẹp hơn
+
+            Footer chuẩn.
+
+
+            <!DOCTYPE html>
+            <html xmlns:th="http://www.thymeleaf.org"
+                  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                  layout:decorate="~{layout}">
+            <head>
+                <title th:text="${title} ?: 'Your Cart'">Place Order</title>
+                <link rel="stylesheet"
+                      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+            </head>
+            <body>
+            <section layout:fragment="content" class="container mt-3">
+                <h1>Place Your Order</h1>
+                <form th:action="@{/order/submit}" method="post">
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Your Name:</label>
+                        <input type="text" id="customerName" name="customerName" class="formcontrol" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Order</button>
+                </form>
+            </section>
+            </body>
+            </html>
+
+            css lại file này
+
+            sửa cho đầy đủ hơn
+
+            Mình sẽ viết lại CSS đầy đủ hơn để trang Place Order:
+
+            Đồng bộ với Header vàng
+
+            Form ở giữa trang
+
+            Có card trắng + shadow
+
+            Nút Submit đẹp và nổi bật
+
+            Footer không bị lệch
+
+            Bạn chỉ cần thêm CSS trực tiếp vào <head>.
+
+            File hoàn chỉnh (HTML + CSS)
+            <!DOCTYPE html>
+            <html xmlns:th="http://www.thymeleaf.org"
+                  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                  layout:decorate="~{layout}">
+            <head>
+                <title th:text="${title} ?: 'Place Order'">Place Order</title>
+
+                <link rel="stylesheet"
+                      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+                <style>
+
+                    /* ===== BODY ===== */
+                    body{
+                        background:#f5f5f5;
+                        font-family:Arial, Helvetica, sans-serif;
+                    }
+
+                    /* ===== TITLE ===== */
+                    h1{
+                        text-align:center;
+                        font-weight:600;
+                        margin-bottom:25px;
+                    }
+
+                    /* ===== FORM CONTAINER ===== */
+                    section{
+                        max-width:500px;
+                        margin:50px auto;
+                        background:white;
+                        padding:30px;
+                        border-radius:10px;
+                        box-shadow:0 4px 15px rgba(0,0,0,0.1);
+                    }
+
+                    /* ===== LABEL ===== */
+                    .form-label{
+                        font-weight:500;
+                        margin-bottom:5px;
+                    }
+
+                    /* ===== INPUT ===== */
+                    .form-control{
+                        border-radius:6px;
+                        padding:10px;
+                        border:1px solid #ccc;
+                    }
+
+                    .form-control:focus{
+                        border-color:#288ad6;
+                        box-shadow:0 0 0 0.2rem rgba(40,138,214,0.25);
+                    }
+
+                    /* ===== BUTTON ===== */
+                    .btn-primary{
+                        width:100%;
+                        padding:10px;
+                        font-weight:500;
+                        background:#288ad6;
+                        border:none;
+                        border-radius:6px;
+                    }
+
+                    .btn-primary:hover{
+                        background:#1b6fb8;
+                    }
+
+                    /* ===== RESPONSIVE ===== */
+                    @media(max-width:768px){
+
+                        section{
+                            margin:30px 15px;
+                            padding:20px;
+                        }
+
+                    }
+
+                </style>
+
+            </head>
+
+            <body>
+
+            <section layout:fragment="content">
+
+                <h1>Place Your Order</h1>
+
+                <form th:action="@{/order/submit}" method="post">
+
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Your Name:</label>
+
+                        <input type="text"
+                               id="customerName"
+                               name="customerName"
+                               class="form-control"
+                               placeholder="Enter your name"
+                               required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit Order
+                    </button>
+
+                </form>
+
+            </section>
+
+            </body>
+            </html>
+
+

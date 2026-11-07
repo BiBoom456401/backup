@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo phiếu nhập</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="layout.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Coffee Track</h2>
+        <ul class="nav flex-column">
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="reports.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Trang bán hàng</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_categories.html">Quản lý danh mục</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_products.html">Quản lý món</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_tables.html">Quản lý bàn</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#accountSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Quản lý tài khoản</a>
+                <div class="collapse" id="accountSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="manage_accounts.html">Danh sách tài khoản</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_roles.html">Vai trò</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#inventorySubmenu" data-bs-toggle="collapse" role="button" aria-expanded="true">Quản lý kho</a>
+                <div class="collapse show" id="inventorySubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="manage_materials.html">Nguyên vật liệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_suppliers.html">Nhà cung cấp</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="manage_imports.html">Phiếu nhập</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_imports_history.html">Lịch sử nhập hàng</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#timekeepingSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Chấm công</a>
+                <div class="collapse" id="timekeepingSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="timekeeping_scan.html">Quét mã chấm công</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="timekeeping_qr.html">Mã QR chấm công</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="manage_shifts.html">Quản lý ca</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="manage_schedules.html">Lịch làm việc</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#reportSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Báo cáo</a>
+                <div class="collapse" id="reportSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="sales_report.html">Báo cáo doanh thu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="timekeeping_report.html">Báo cáo chấm công</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-auto">
+                <a class="nav-link text-danger" href="#" id="logout-btn">Đăng xuất</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h1 class="mb-3">Tạo phiếu nhập hàng</h1>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <form id="import-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="import-supplier" class="form-label">Nhà cung cấp (tùy chọn)</label>
+                                    <select id="import-supplier" class="form-select">
+                                        <option value="">-- Chọn nhà cung cấp --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="import-date" class="form-label">Ngày nhập</label>
+                                    <input type="date" class="form-control" id="import-date" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="import-note" class="form-label">Ghi chú (tùy chọn)</label>
+                                    <textarea class="form-control" id="import-note" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <h5>Thêm nguyên vật liệu vào phiếu</h5>
+                            <div class="row g-3 align-items-end" id="add-item-form">
+                                <div class="col-md-5">
+                                    <label for="import-material" class="form-label">Nguyên vật liệu</label>
+                                    <select id="import-material" class="form-select">
+                                        <option value="">-- Chọn NVL --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="import-quantity" class="form-label">Số lượng</label>
+                                    <input type="number" step="0.01" class="form-control" id="import-quantity">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="import-cost" class="form-label">Đơn giá (cho 1 đơn vị)</label>
+                                    <input type="number" class="form-control" id="import-cost">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-primary w-100" id="add-item-btn">+</button>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <h4>Danh sách hàng nhập</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên NVL</th>
+                                        <th>SL</th>
+                                        <th>Đơn giá</th>
+                                        <th>Thành tiền</th>
+                                        <th>Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="import-items-list">
+                                    </tbody>
+                            </table>
+                            <h3 class="text-end">Tổng cộng: <span id="import-total-cost" class="text-danger">0 đ</span></h3>
+                            <button type="submit" class="btn btn-success btn-lg w-100">Lưu phiếu nhập kho</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="manage_imports.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

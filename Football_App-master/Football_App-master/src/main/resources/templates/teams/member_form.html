@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="glass-panel p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-5">
+                        <div class="bg-primary bg-opacity-20 p-3 rounded-4 me-3">
+                            <i class="fas fa-user-plus text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-900 mb-0" th:text="${member.id == null ? 'Thêm Thành Viên' : 'Chỉnh Sửa Thành Viên'}"></h3>
+                            <p class="text-muted mb-0">
+                                Đội: <span th:text="${team.name}">FC Example</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div th:if="${errorMessage}" class="alert alert-danger mb-4" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/teams/{teamId}/members/save(teamId=${team.id})}" th:object="${member}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="row g-4">
+                            <div class="col-md-8">
+                                <label class="form-label">Họ tên</label>
+                                <input type="text" th:field="*{fullName}" class="form-control" placeholder="Nhập họ tên thành viên" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Số áo</label>
+                                <input type="number" min="0" th:field="*{jerseyNumber}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('jerseyNumber')}" th:errors="*{jerseyNumber}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Vị trí</label>
+                                <input type="text" th:field="*{position}" class="form-control" placeholder="Ví dụ: Tiền đạo" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Nhập số điện thoại">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Email</label>
+                                <input type="email" th:field="*{email}" class="form-control" placeholder="example@gmail.com">
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-3">
+                            <button type="submit" class="btn btn-modern btn-primary-modern px-5">
+                                <i class="fas fa-save me-2"></i> Lưu thông tin
+                            </button>
+                            <a th:href="@{/teams/{teamId}/members(teamId=${team.id})}" class="btn btn-modern btn-outline-modern px-4">
+                                <i class="fas fa-times me-2"></i> Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

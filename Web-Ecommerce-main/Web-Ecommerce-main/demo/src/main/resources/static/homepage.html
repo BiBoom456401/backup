@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thế Giới Di Động - Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="homepage.css" />
+</head>
+
+<body class="tgdd">
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img class="brand-logo" src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG.png"
+          alt="TGDD" />
+        <span class="brand-text">thegioididong</span>
+      </div>
+
+      <div class="search">
+        <input type="text" placeholder="Bạn tìm gì..." aria-label="Tìm kiếm" />
+        <button class="search-btn" aria-label="Tìm kiếm">🔍</button>
+      </div>
+
+      <div class="header-actions">
+        <button class="action-btn">Đăng nhập</button>
+        <a href="/cart" class="action-btn cart-btn">🛒 Giỏ hàng</a>
+        <button class="action-btn location">Khu vực: TP.HCM</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="category-nav">
+    <div class="container category-inner">
+      <ul class="category-list" id="categoryNav"></ul>
+      <div class="mega-wrapper" id="megaWrapper">
+        <div class="mega-menu" id="megaMenu" aria-hidden="true"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Banner Slider -->
+    <section class="banner-slider-wrapper">
+      <div class="container">
+        <div class="banner-slider">
+          <a href="#">
+            <img src="images/image.png" alt="Chào hè rực rỡ - Ưu đãi cực cool">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-wrap">
+        <aside class="side-banner left">
+          <div class="banner-tag">Tết AI Sale</div>
+          <div class="banner-price">2,7 TRIỆU</div>
+          <div class="banner-sub">Trợ giá lên đến 2 triệu cho thiết bị công nghệ</div>
+          <div class="banner-cta">MUA NGAY</div>
+        </aside>
+
+        <div class="hero-main">
+          <div class="hero-content">
+            <div class="hero-text">
+              <span class="hero-kicker">Mùa nâng cấp</span>
+              <h1>iPhone Air</h1>
+              <p>Trả trước thấp, ưu đãi cực khủng</p>
+              <div class="hero-badges">
+                <span>0% lãi suất</span>
+                <span>Giảm đến 7 triệu</span>
+                <span>Giao nhanh 2h</span>
+              </div>
+            </div>
+
+            <div class="hero-product">
+              <img src="images/iphone-air.png" alt="iPhone Air" />
+            </div>
+
+            <div class="hero-text right">
+              <p>Trả chậm chỉ từ <strong>79K/ngày</strong></p>
+              <p>Tặng PMH đến 1 triệu áp dụng mua MacBook, AirPods, Watch</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side-banner right">
+          <div class="banner-tag">Tết sắm smartphone</div>
+          <div class="banner-price">Không trả lãi</div>
+          <div class="banner-sub">Ưu đãi trả góp 0%</div>
+          <div class="banner-cta">XEM NGAY</div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Flash Sale -->
+    <section class="promo" id="promoSection">
+      <div class="container">
+        <div class="promo-head">
+          <h2>Khuyến mãi online</h2>
+          <div class="flash-pill">
+            FLASH SALE
+            <span class="countdown" id="countdown">00 : 59 : 38</span>
+          </div>
+        </div>
+
+        <div class="promo-tabs">
+          <button class="tab active">Flash Sale</button>
+          <button class="tab">Giảm đến 50%</button>
+          <button class="tab">Online Only</button>
+          <button class="tab">Điện thoại</button>
+          <button class="tab">Apple</button>
+          <button class="tab">Laptop</button>
+          <button class="tab">Phụ kiện</button>
+          <button class="tab">Đồng hồ</button>
+        </div>
+
+        <div class="time-strip">
+          <div class="time-item active">
+            <div class="time-label">15:00</div>
+            <div class="time-sub">Đang diễn ra</div>
+          </div>
+          <div class="time-item">
+            <div class="time-label">18:00</div>
+            <div class="time-sub">Sắp diễn ra</div>
+          </div>
+          <div class="time-item">
+            <div class="time-label">21:30</div>
+            <div class="time-sub">Sắp diễn ra</div>
+          </div>
+          <div class="time-item">
+            <div class="time-label">00:00</div>
+            <div class="time-sub">Ngày mai</div>
+          </div>
+        </div>
+
+        <div class="promo-products">
+          <button class="promo-nav promo-nav-prev" id="promoPrev">❮</button>
+          <div class="promo-grid" id="promoProductGrid"></div>
+          <button class="promo-nav promo-nav-next" id="promoNext">❯</button>
+        </div>
+        <div class="promo-page-indicator" id="promoPageIndicator"></div>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section class="product-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sản phẩm</h2>
+          <div class="section-actions">
+            <a href="/products" class="btn-manage">📋 Quản lý</a>
+            <a href="/products/add" class="btn-add-product">+ Thêm sản phẩm</a>
+          </div>
+        </div>
+        <div class="normal-grid" id="normalProductGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="tgdd-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Tổng đài hỗ trợ</h4>
+        <p>Gọi mua: <strong>1800.1060</strong> (miễn phí)</p>
+        <p>Kỹ thuật: <strong>1800.1763</strong> (miễn phí)</p>
+        <p>Khiếu nại: <strong>1800.1062</strong> (miễn phí)</p>
+      </div>
+      <div>
+        <h4>Về công ty</h4>
+        <a href="#">Giới thiệu công ty</a>
+        <a href="#">Tuyển dụng</a>
+        <a href="#">Gửi góp ý, khiếu nại</a>
+      </div>
+      <div>
+        <h4>Thông tin khác</h4>
+        <a href="#">Tích điểm Quà tặng VIP</a>
+        <a href="#">Lịch sử mua hàng</a>
+        <a href="#">Chính sách bảo hành</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="mega-menu/menu.js"></script>
+  <script src="homepage-menu.js"></script>
+  <script src="homepage-products.js"></script>
+  <script>
+    (function startCountdown() {
+      let totalSeconds = 59 * 60 + 38;
+      const node = document.getElementById("countdown");
+      function update() {
+        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+        const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+        const s = String(totalSeconds % 60).padStart(2, "0");
+        node.textContent = `${h} : ${m} : ${s}`;
+        if (totalSeconds > 0) {
+          totalSeconds--;
+          setTimeout(update, 1000);
+        }
+      }
+      update();
+    })();
+  </script>
+</body>
+
+</html>

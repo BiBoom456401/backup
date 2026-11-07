@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="glass-panel p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-5">
+                        <div class="bg-primary bg-opacity-20 p-3 rounded-4 me-3">
+                            <i class="fas fa-trophy text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-900 mb-0" th:text="${tournament.id == null ? 'Thêm Giải Đấu' : 'Chỉnh Sửa Giải Đấu'}"></h3>
+                            <p class="text-muted mb-0">Cập nhật thông tin giải đấu theo giao diện hiện có</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${errorMessage}" class="alert alert-danger mb-4" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/admin/tournaments/save}" th:object="${tournament}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label">Tên giải đấu</label>
+                                <input type="text" th:field="*{name}" class="form-control" placeholder="Nhập tên giải đấu" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Mô tả</label>
+                                <textarea th:field="*{description}" class="form-control" rows="4" placeholder="Nhập mô tả giải đấu"></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Sân chính</label>
+                                <select th:field="*{field.id}" class="form-select form-control">
+                                    <option value="">Chọn sân chính</option>
+                                    <option th:each="field : ${fields}" th:value="${field.id}" th:text="${field.name}"></option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Số đội tối đa</label>
+                                <input type="number" min="2" th:field="*{maxTeams}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('maxTeams')}" th:errors="*{maxTeams}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày bắt đầu</label>
+                                <input type="date" th:field="*{startDate}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Giờ bắt đầu</label>
+                                <input type="time" th:field="*{startTime}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày kết thúc</label>
+                                <input type="date" th:field="*{endDate}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Giờ kết thúc</label>
+                                <input type="time" th:field="*{endTime}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Hạn đăng ký</label>
+                                <input type="date" th:field="*{registrationDeadline}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('registrationDeadline')}" th:errors="*{registrationDeadline}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Trạng thái</label>
+                                <select th:field="*{status}" class="form-select form-control" required>
+                                    <option value="">Chọn trạng thái</option>
+                                    <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-3">
+                            <button type="submit" class="btn btn-modern btn-primary-modern px-5">
+                                <i class="fas fa-save me-2"></i> Lưu thông tin
+                            </button>
+                            <a href="/admin/tournaments" class="btn btn-modern btn-outline-modern px-4">
+                                <i class="fas fa-times me-2"></i> Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+﻿@model Demo.Models.Student
+
+@{
+    ViewBag.Title = "Thêm sinh viên";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<!-- Thông báo lỗi hoặc thành công -->
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentCode)
+            @Html.TextBoxFor(model => model.StudentCode, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FullName)
+            @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BirthDate)
+            @Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gender)
+            @Html.DropDownListFor(model => model.Gender,
+            new SelectList(new[] { "Nam", "Nữ", "Khác" }), "-- Chọn giới tính --",
+                new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "email" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ClassId)
+        @Html.DropDownListFor(model => model.ClassId, (SelectList)ViewBag.Classes, "-- Chọn lớp --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ClassId, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm sinh viên</button>
+    <a href="@Url.Action("Index", "Student")" class="btn btn-secondary">Quay lại danh sách</a>
+</div>
+}

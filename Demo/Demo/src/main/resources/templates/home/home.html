@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Trang chủ -  Mobile</title>
+
+    <style>
+
+        /* ===== Layout chung ===== */
+        body{
+            background:#f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* ===== Banner ===== */
+        .banner-big a, .banner-big img{
+            display:block;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            border-radius:6px;
+        }
+
+        .promo-banner{
+            width:100%;
+            margin:20px 0;
+            border-radius:6px;
+        }
+
+        /* ===== Section ===== */
+        .section-container{
+            max-width:1200px;
+            margin:auto;
+        }
+
+        /* ===== Danh sách sản phẩm ===== */
+        .product-list{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+            gap:15px;
+        }
+
+        /* ===== Card sản phẩm ===== */
+        .product-item{
+            background:white;
+            border-radius:8px;
+            padding:10px;
+            border:1px solid #eee;
+            position:relative;
+            transition:0.25s;
+        }
+
+        .product-item:hover{
+            transform:translateY(-5px);
+            box-shadow:0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* ===== Hình sản phẩm ===== */
+        .product-img{
+            width:100%;
+            height:180px;
+            object-fit:contain;
+        }
+
+        /* ===== Tên sản phẩm ===== */
+        .product-name{
+            font-size:14px;
+            font-weight:500;
+            margin:10px 0;
+            height:40px;
+            overflow:hidden;
+        }
+
+        /* ===== Giá ===== */
+        .price-box{
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+
+        .price-new{
+            color:#d0021c;
+            font-weight:bold;
+        }
+
+        .price-old{
+            text-decoration:line-through;
+            color:#777;
+            font-size:13px;
+        }
+
+        /* ===== Rating ===== */
+        .rating{
+            font-size:13px;
+            color:#f5a623;
+        }
+
+        /* ===== Badge giảm giá ===== */
+        .badge-top{
+            position:absolute;
+            top:8px;
+            left:8px;
+            background:#d0021c;
+            color:white;
+            font-size:11px;
+            padding:2px 6px;
+            border-radius:4px;
+        }
+
+        /* ===== Badge trả góp ===== */
+        .badge-installment{
+            position:absolute;
+            top:8px;
+            right:8px;
+            background:#288ad6;
+            color:white;
+            font-size:11px;
+            padding:2px 6px;
+            border-radius:4px;
+        }
+
+        /* ===== Responsive ===== */
+        @media(max-width:768px){
+            .product-list{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+        .card{
+            border:none;
+            border-radius:10px;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary{
+            padding:10px 25px;
+            border-radius:20px;
+        }
+        /* nút xem thêm */
+        .btn-primary{
+            padding:10px 25px;
+            border-radius:25px;
+            font-weight:500;
+        }
+        .btn-view-more{
+            display:block;
+            margin:40px auto;   /* cách trên dưới 40px và căn giữa */
+            width:200px;
+            text-align:center;
+        }
+
+        /* hover nút */
+        .btn-primary:hover{
+            background:#0b5ed7;
+        }
+        .load-more{
+            text-align:center;
+            margin-top:40px;
+            margin-bottom:40px;
+        }
+    </style>
+</head>
+
+<body>
+<section layout:fragment="content">
+
+    <div class="home-banner-section">
+        <div class="banner-big">
+            <a href="#">
+                <img src="https://cdn.tgdd.vn/2024/02/banner/720-220-720x220-6.png" alt="Big Banner">
+            </a>
+        </div>
+
+    </div>
+
+    <div class="section-container mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded">
+            <h2 class="section-title m-0 text-uppercase fs-6 fw-bold">🔥 Gợi ý hôm nay</h2>
+            <a th:href="@{/products}" class="text-decoration-none" style="font-size: 13px; color: #288ad6;"><i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="product-list">
+            <div class="product-item" th:each="p : ${products != null ? products : #numbers.sequence(1, 10)}">
+
+                <a th:href="@{/detail/{id}(id=${p instanceof T(java.lang.Integer) ? p : p.id})}">
+
+
+                    <span class="badge-top">Giảm 15%</span>
+                    <span class="badge-installment">Trả góp 0%</span>
+
+                    <img class="product-img"
+                         th:src="${p.image != null ? p.image : 'https://cdn.tgdd.vn/Products/Images/42/305658/iphone-15-pro-max-blue-thumbnew-600x600.jpg'}"
+                         alt="Sản phẩm">
+
+                    <h3 class="product-name"
+                        th:text="${p.name != null ? p.name : 'iPhone 15 Pro Max 256GB - Chính hãng VN/A'}">
+                        Tên sản phẩm mẫu
+                    </h3>
+
+                    <div class="price-box">
+                        <span class="price-new"
+                              th:text="${p.price != null ? #numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + '₫' : '28.990.000₫'}">
+                            28.990.000₫
+                        </span>
+                        <span class="price-old">34.990.000₫</span>
+                    </div>
+
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span>(25)</span>
+                    </div>
+
+                    <div class="mt-2 text-center">
+                        <span class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <a href="#">
+        <img src="https://cdn.tgdd.vn/2024/01/banner/1200x100-1200x100-2.png" class="promo-banner" alt="Promo">
+    </a>
+
+    <div class="section-container mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded">
+            <h2 class="section-title m-0 text-uppercase fs-6 fw-bold">💻 Laptop tựu trường</h2>
+        </div>
+
+        <div class="product-list" id="product-list">
+            <div class="product-item" th:each="i : ${#numbers.sequence(1, 16)}">
+                <a href="#" class="text-decoration-none text-dark position-relative">
+                    <span class="badge-top">-10%</span>
+                    <img class="product-img"
+                         src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/44/335362/macbook-air-13-inch-m4-16gb-256gb-tgdd-1-638768909105991664-750x500.jpg"
+                         alt="Laptop">
+                    <h3 class="product-name">MacBook Air 15 inch M2 2023 8GB/256GB</h3>
+                    <div class="price-box">
+                        <span class="price-new">29.690.000₫</span>
+                        <span class="price-old">35.990.000₫</span>
+                    </div>
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <span>(10)</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button id="loadMoreBtn" class="btn btn-primary btn-view-more">
+                Xem thêm sản phẩm
+            </button>
+        </div>
+    </div>
+</section>
+</body>
+</html>

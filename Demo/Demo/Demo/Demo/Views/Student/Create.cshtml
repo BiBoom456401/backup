@@ -1,0 +1,32 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Thêm sinh viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="StudentCode" class="control-label"></label>
+        <input asp-for="StudentCode" class="form-control" />
+        <span asp-validation-for="StudentCode" class="text-danger"></span>
+    </div>
+
+    <!-- Các trường khác tương tự -->
+
+    <div class="form-group">
+        <label asp-for="ClassId" class="control-label"></label>
+        <select asp-for="ClassId" class="form-control"
+                asp-items="@(new SelectList(ViewBag.Classes, "Id", "Name"))">
+            <option value="">-- Chọn lớp --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Thêm" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</form>

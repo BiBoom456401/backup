@@ -1,0 +1,121 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Avatar Styles */
+.user-avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid #e9ecef;
+}
+
+.user-avatar-img img {
+    transition: transform 0.2s ease;
+}
+
+.user-avatar-img img:hover {
+    transform: scale(1.05);
+}
+
+.avatar-section {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.current-avatar {
+    position: relative;
+    display: inline-block;
+}
+
+.current-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: #28a745;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+/* Dropdown avatar styles */
+.navbar .dropdown-toggle img {
+    border: 2px solid rgba(0,0,0,0.1);
+    transition: border-color 0.2s ease;
+}
+
+.navbar .dropdown-toggle:hover img {
+    border-color: #007bff;
+}
+
+/* User card styles for admin */
+.user-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.user-card .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border: none;
+}
+
+.user-card .card-body {
+    padding: 30px;
+}
+
+/* Loading animation for avatar upload */
+.avatar-loading {
+    position: relative;
+    opacity: 0.6;
+}
+
+.avatar-loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

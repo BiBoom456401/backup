@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-900 mb-0">
+                <i class="fas fa-trophy text-primary me-2"></i> Quản Lý Giải Đấu
+            </h2>
+            <a href="/admin/tournaments/add" class="btn btn-modern btn-primary-modern">
+                <i class="fas fa-plus-circle me-2"></i> Thêm giải đấu
+            </a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="glass-panel overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 border-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-primary">ID</th>
+                            <th class="py-3 text-primary">Tên giải</th>
+                            <th class="py-3 text-primary">Bắt đầu</th>
+                            <th class="py-3 text-primary">Kết thúc</th>
+                            <th class="py-3 text-primary">Trạng thái</th>
+                            <th class="py-3 px-4 text-center text-primary">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="tournament : ${tournaments}" class="border-bottom border-white border-opacity-5 align-middle">
+                            <td class="ps-4 py-3 fw-bold text-primary" th:text="${tournament.id}">1</td>
+                            <td class="py-3 fw-bold text-white" th:text="${tournament.name}">Giải Mùa Hè</td>
+                            <td class="py-3 text-muted">
+                                <span th:text="${tournament.startDate}">2026-03-28</span>
+                                <span class="d-block small" th:text="${tournament.startTime}">08:00</span>
+                            </td>
+                            <td class="py-3 text-muted">
+                                <span th:text="${tournament.endDate}">2026-04-05</span>
+                                <span class="d-block small" th:text="${tournament.endTime}">17:00</span>
+                            </td>
+                            <td class="py-3">
+                                <span class="badge bg-primary px-3 py-2 rounded-pill" th:text="${tournament.status}">UPCOMING</span>
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a th:href="@{/admin/tournaments/{id}/registrations(id=${tournament.id})}" class="text-info text-decoration-none hover-scale" title="Duyệt đăng ký">
+                                        <i class="fas fa-list-check fs-5"></i>
+                                    </a>
+                                    <a th:href="@{/admin/tournaments/edit/{id}(id=${tournament.id})}" class="text-primary text-decoration-none hover-scale" title="Sửa">
+                                        <i class="fas fa-edit fs-5"></i>
+                                    </a>
+                                    <a th:href="@{/admin/tournaments/delete/{id}(id=${tournament.id})}" class="text-danger text-decoration-none hover-scale"
+                                       onclick="return confirm('Bạn có chắc muốn xóa giải đấu này?')" title="Xóa">
+                                        <i class="fas fa-trash-alt fs-5"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(tournaments)}">
+                            <td colspan="6" class="text-center py-4 text-muted">Chưa có giải đấu nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

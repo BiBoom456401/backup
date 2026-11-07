@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-900 mb-2">
+                    <i class="fas fa-users text-primary me-2"></i> Thành Viên Đội
+                </h2>
+                <p class="text-muted mb-0">
+                    Đội: <span th:text="${team.name}">FC Example</span> -
+                    <span th:text="${memberCount}">0</span> thành viên
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <a th:href="@{/teams/{teamId}/members/add(teamId=${team.id})}" class="btn btn-modern btn-primary-modern">
+                    <i class="fas fa-user-plus me-2"></i> Thêm thành viên
+                </a>
+                <a href="/teams/my" class="btn btn-modern btn-outline-modern">
+                    <i class="fas fa-arrow-left me-2"></i> Quay lại
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="glass-panel overflow-hidden mb-4">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 border-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-primary">Số áo</th>
+                            <th class="py-3 text-primary">Họ tên</th>
+                            <th class="py-3 text-primary">Vị trí</th>
+                            <th class="py-3 text-primary">Điện thoại</th>
+                            <th class="py-3 text-primary">Email</th>
+                            <th class="py-3 px-4 text-center text-primary">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="member : ${members}" class="border-bottom border-white border-opacity-5 align-middle">
+                            <td class="ps-4 py-3 fw-bold text-primary" th:text="${member.jerseyNumber}">10</td>
+                            <td class="py-3 fw-bold text-white" th:text="${member.fullName}">Nguyễn Văn A</td>
+                            <td class="py-3 text-muted" th:text="${member.position}">Tiền đạo</td>
+                            <td class="py-3 text-muted" th:text="${member.phoneNumber ?: 'Chưa có'}">Chưa có</td>
+                            <td class="py-3 text-muted" th:text="${member.email ?: 'Chưa có'}">Chưa có</td>
+                            <td class="py-3 px-4 text-center">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a th:href="@{/teams/{teamId}/members/edit/{memberId}(teamId=${team.id},memberId=${member.id})}" class="text-primary text-decoration-none hover-scale">
+                                        <i class="fas fa-edit fs-5"></i>
+                                    </a>
+                                    <a th:href="@{/teams/{teamId}/members/delete/{memberId}(teamId=${team.id},memberId=${member.id})}"
+                                       class="text-danger text-decoration-none hover-scale"
+                                       onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">
+                                        <i class="fas fa-trash-alt fs-5"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(members)}">
+                            <td colspan="6" class="text-center py-4 text-muted">Đội này chưa có thành viên nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel overflow-hidden">
+            <div class="p-4 border-bottom border-white border-opacity-10">
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-trophy text-primary me-2"></i> Lịch Sử Đăng Ký Giải
+                </h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 border-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-primary">Giải đấu</th>
+                            <th class="py-3 text-primary">Ngày đăng ký</th>
+                            <th class="py-3 text-primary">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="registration : ${registrations}" class="border-bottom border-white border-opacity-5 align-middle">
+                            <td class="ps-4 py-3 fw-bold text-white" th:text="${registration.tournament.name}">Giải Mùa Hè</td>
+                            <td class="py-3 text-muted" th:text="${#temporals.format(registration.registrationDate, 'dd-MM-yyyy HH:mm')}">28-03-2026 15:00</td>
+                            <td class="py-3">
+                                <span class="badge bg-primary px-3 py-2 rounded-pill" th:text="${registration.status}">PENDING</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(registrations)}">
+                            <td colspan="3" class="text-center py-4 text-muted">Đội này chưa đăng ký giải đấu nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title layout:title-pattern="$CONTENT_TITLE - TGDD Clone">
+    Thế Giới Di Động
+  </title>
+
+  <link rel="stylesheet" th:href="@{/homepage.css}" />
+  <link rel="stylesheet" th:href="@{/mega-menu/styles.css}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <th:block layout:fragment="styles"></th:block>
+</head>
+
+<body class="tgdd">
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <img class="brand-logo" src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG.png"
+          alt="thegioididong logo" />
+        <a th:href="@{/}" class="brand-text">thegioididong</a>
+      </div>
+
+      <form th:action="@{/products}" method="get" class="search">
+        <input type="text" name="q" placeholder="Bạn tìm gì..." th:value="${keyword}" aria-label="Tìm kiếm" />
+        <button class="search-btn" type="submit" aria-label="Tìm kiếm">🔍</button>
+      </form>
+
+      <div class="header-actions">
+        <a th:href="@{/loyalty}" class="action-btn">🎁 Tích điểm</a>
+        <a th:href="@{/admin/coupons}" class="action-btn">🎫 Mã KM</a>
+        <button class="action-btn" type="button">Đăng nhập</button>
+        <a th:href="@{/cart}" class="action-btn cart-btn">🛒 Giỏ hàng</a>
+        <button class="action-btn location" type="button">Khu vực: TP.HCM</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="category-nav">
+    <div class="container category-inner">
+      <ul class="category-list" id="categoryNav"></ul>
+
+      <div class="mega-wrapper" id="megaWrapper">
+        <div class="mega-menu" id="megaMenu" aria-hidden="true"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="header-banner">
+    <div class="container">
+      <img src="/images/image copy.png" alt="thegioididong.com" class="header-banner-img">
+    </div>
+  </div>
+
+  <main layout:fragment="content"></main>
+
+  <footer class="tgdd-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>Tổng đài hỗ trợ</h4>
+        <p>Gọi mua: <strong>1800.1060</strong> (miễn phí)</p>
+        <p>Kỹ thuật: <strong>1800.1763</strong> (miễn phí)</p>
+        <p>Khiếu nại: <strong>1800.1062</strong> (miễn phí)</p>
+      </div>
+      <div>
+        <h4>Về công ty</h4>
+        <a href="#">Giới thiệu công ty</a>
+        <a href="#">Tuyển dụng</a>
+        <a href="#">Gửi góp ý, khiếu nại</a>
+        <a href="#">Tra cứu đơn hàng</a>
+      </div>
+      <div>
+        <h4>Thông tin khác</h4>
+        <a href="#">Tích điểm Quà tặng VIP</a>
+        <a href="#">Lịch sử mua hàng</a>
+        <a href="#">Chính sách bảo hành</a>
+        <a href="#">Xem siêu thị gần nhất</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/mega-menu/menu.js"></script>
+  <script src="/homepage-menu.js"></script>
+  <th:block layout:fragment="scripts"></th:block>
+</body>
+
+</html>

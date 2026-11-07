@@ -1,0 +1,418 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Thanh toán đơn hàng</title>
+    <style>
+      .checkout-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .checkout-header {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      .checkout-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+      }
+      .checkout-header p {
+        color: #6b7280;
+        margin-top: 8px;
+      }
+      .checkout-content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 24px;
+      }
+      .checkout-form-section,
+      .order-summary {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+      .helper-text {
+        color: #6b7280;
+        font-size: 12px;
+        margin-top: 6px;
+        display: block;
+      }
+      .check-phone-btn {
+        background: #fde68a;
+        color: #92400e;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        margin-top: 4px;
+      }
+      .order-summary {
+        height: fit-content;
+        position: sticky;
+        top: 24px;
+      }
+      .order-items {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 16px;
+      }
+      .order-item {
+        display: flex;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        background: #f9fafb;
+        border-radius: 6px;
+        padding: 4px;
+      }
+      .order-item-info {
+        flex: 1;
+      }
+      .order-item-info h5 {
+        font-size: 14px;
+        margin: 0 0 4px 0;
+      }
+      .order-item-info .qty {
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .order-item-price {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .summary-divider {
+        border-top: 1px solid #e5e7eb;
+        margin: 16px 0;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .summary-row.total {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .summary-row.total strong {
+        color: #dc2626;
+      }
+      .submit-btn,
+      .back-btn {
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 10px;
+        border: none;
+        text-decoration: none;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        margin-top: 12px;
+        cursor: pointer;
+      }
+      .submit-btn {
+        background: #fcd34d;
+        color: #1f2937;
+      }
+      .back-btn {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      .available-coupons {
+        margin-top: 12px; padding: 12px; background: #fffbeb;
+        border: 1px solid #fde68a; border-radius: 10px;
+      }
+      .available-coupons h4 {
+        font-size: 14px; font-weight: 700; margin: 0 0 8px; color: #92400e;
+      }
+      .avail-coupon-item {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 8px 10px; background: white; border: 1px solid #e5e7eb;
+        border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+        transition: all 0.2s;
+      }
+      .avail-coupon-item:hover {
+        border-color: #f59e0b; box-shadow: 0 2px 6px rgba(245,158,11,0.15);
+      }
+      .avail-coupon-item .ac-code {
+        font-weight: 700; font-size: 13px; color: #1f2937;
+      }
+      .avail-coupon-item .ac-meta {
+        font-size: 11px; color: #6b7280; margin-top: 2px;
+      }
+      .avail-coupon-item .ac-use {
+        font-size: 11px; font-weight: 700; color: #059669;
+        background: #ecfdf5; padding: 4px 8px; border-radius: 6px;
+      }
+      @media (max-width: 900px) {
+        .checkout-content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="checkout-container">
+        <div class="checkout-header">
+          <h1>📝 Thanh toán đơn hàng</h1>
+          <p>Vui lòng điền thông tin để hoàn tất đặt hàng</p>
+        </div>
+
+        <div class="checkout-content">
+          <form th:action="@{/order/submit}" method="post" th:object="${order}" id="checkoutForm">
+            <div class="checkout-form-section" style="margin-bottom: 24px">
+              <h3 class="section-title">👤 Thông tin người nhận</h3>
+
+              <div class="form-group">
+                <label>Họ và tên</label>
+                <input type="text" th:field="*{customerName}" placeholder="Nguyễn Văn A" required />
+              </div>
+
+              <div class="form-group">
+                <label>Số điện thoại</label>
+                <input type="text" th:field="*{phone}" placeholder="0901234567" id="phoneField" required />
+                <button type="button" class="check-phone-btn" id="checkPhoneBtn">Kiểm tra điểm tích lũy</button>
+                <small id="pointsHint" class="helper-text">Điểm khả dụng sẽ hiển thị sau khi nhập số điện thoại.</small>
+              </div>
+
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" th:field="*{email}" placeholder="email@example.com" />
+              </div>
+
+              <div class="form-group">
+                <label>Điểm muốn dùng (từ đơn hàng trước)</label>
+                <input type="number" name="pointsToUse" value="0" min="0" id="pointsField" />
+                <small class="helper-text" style="color:#6b7280">Chỉ dùng được điểm đã tích từ các đơn hàng trước đó. 1 điểm = 1,000₫ giảm giá.</small>
+              </div>
+
+              <div class="form-group">
+                <label>Mã khuyến mãi</label>
+                <div style="display:flex; gap:8px">
+                  <input type="text" name="couponCode" id="couponField" placeholder="Nhập mã VD: KM12345678" style="flex:1" />
+                  <button type="button" class="check-phone-btn" id="checkCouponBtn" style="white-space:nowrap">Áp dụng</button>
+                </div>
+                <small id="couponHint" class="helper-text">Nhập mã khuyến mãi (nếu có) để được giảm giá.</small>
+                <div id="availableCouponsBox" class="available-coupons" style="display:none">
+                  <h4>🎫 Mã giảm giá có sẵn — bấm để dùng</h4>
+                  <div id="availableCouponsList"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Địa chỉ nhận hàng</label>
+                <textarea th:field="*{address}" rows="4" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Ghi chú</label>
+                <textarea th:field="*{note}" rows="4" placeholder="Giao trong giờ hành chính, gọi trước khi đến..."></textarea>
+              </div>
+
+              <a th:href="@{/cart}" class="back-btn">← Quay lại giỏ hàng</a>
+              <button type="submit" class="submit-btn">Đặt hàng (COD)</button>
+              <button type="button" class="submit-btn" id="vnpayBtn" style="background:linear-gradient(135deg,#0066cc,#004499); color:white; margin-top:8px">
+                💳 Thanh toán VNPay
+              </button>
+              <div style="margin-top:8px; padding:10px 14px; background:#eef2ff; border:1px solid #c7d2fe; border-radius:8px; font-size:12px; color:#4338ca">
+                <strong>📌 Thẻ test VNPay Sandbox:</strong><br>
+                Ngân hàng: <b>NCB</b> · Số thẻ: <b>9704198526191432198</b><br>
+                Tên: <b>NGUYEN VAN A</b> · Ngày phát hành: <b>07/15</b> · OTP: <b>123456</b>
+              </div>
+            </div>
+          </form>
+
+          <div class="order-summary">
+            <h3 class="section-title">🛒 Đơn hàng của bạn</h3>
+
+            <div class="order-items">
+              <div th:each="item : ${cartItems}" class="order-item">
+                <img
+                  th:src="${item.product.imageUrl != null and !item.product.imageUrl.isBlank() ? item.product.imageUrl : '/images/product-fallback.svg'}"
+                  th:alt="${item.product.name}"
+                />
+                <div class="order-item-info">
+                  <h5 th:text="${item.product.name}">Tên sản phẩm</h5>
+                  <span class="qty" th:text="'Số lượng: ' + ${item.quantity}">Số lượng: 1</span>
+                </div>
+                <span class="order-item-price" th:text="${item.subtotalDisplay} + '₫'">0₫</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row"><span>Tạm tính</span><strong th:text="${totalFormatted + ' đ'}">0 đ</strong></div>
+            <div class="summary-row"><span>Phí vận chuyển</span><strong th:text="${shippingFeeFormatted}">30,000₫</strong></div>
+            <div class="summary-row" style="color:#059669"><span>🎁 Điểm nhận sau đơn hàng</span><strong th:text="${earnedPoints + ' điểm'}">0 điểm</strong></div>
+            <div class="summary-row" id="discountRow" style="display: none"><span>Giảm giá</span><strong id="discountAmount">0 đ</strong></div>
+            <div class="summary-row total"><span>Tổng thanh toán</span><strong id="finalAmount" th:text="${totalFormatted + ' đ'}">0 đ</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<script layout:fragment="scripts" th:inline="javascript">
+  const phoneField = document.getElementById("phoneField");
+  const checkPhoneBtn = document.getElementById("checkPhoneBtn");
+  const pointsField = document.getElementById("pointsField");
+  const pointsHint = document.getElementById("pointsHint");
+  const discountRow = document.getElementById("discountRow");
+  const discountAmount = document.getElementById("discountAmount");
+  const finalAmount = document.getElementById("finalAmount");
+  const couponField = document.getElementById("couponField");
+  const checkCouponBtn = document.getElementById("checkCouponBtn");
+  const couponHint = document.getElementById("couponHint");
+  const total = /*[[${total}]]*/ 0;
+  const shippingFee = /*[[${shippingFee}]]*/ 0;
+  let maxPoints = 0;
+  let couponDiscount = 0;
+
+  function formatMoney(value) {
+    return Number(value).toLocaleString("vi-VN") + " đ";
+  }
+
+  function refreshSummary() {
+    const points = Math.max(0, Math.min(maxPoints, Number(pointsField.value || 0)));
+    pointsField.value = points;
+    const discount = points * 1000 + couponDiscount;
+    if (discount > 0) {
+      discountRow.style.display = "flex";
+      discountAmount.textContent = "-" + formatMoney(discount);
+    } else {
+      discountRow.style.display = "none";
+    }
+    finalAmount.textContent = formatMoney(Math.max(0, total - discount + shippingFee));
+  }
+
+  pointsField.addEventListener("input", refreshSummary);
+
+  async function lookupPoints() {
+    const phone = phoneField.value.trim();
+    if (!phone) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/order/api/points?phone=${encodeURIComponent(phone)}`);
+      const data = await response.json();
+      maxPoints = data.found ? data.points : 0;
+      pointsHint.textContent = data.found
+        ? `Khách hàng ${data.name} hiện có ${data.points} điểm.`
+        : "Chưa tìm thấy khách hàng cũ. Đơn hàng này sẽ tạo hồ sơ mới.";
+      refreshSummary();
+      loadAvailableCoupons(phone);
+    } catch (error) {
+      pointsHint.textContent = "Không thể kiểm tra điểm lúc này.";
+    }
+  }
+
+  async function loadAvailableCoupons(phone) {
+    const box = document.getElementById("availableCouponsBox");
+    const list = document.getElementById("availableCouponsList");
+    try {
+      const res = await fetch(`/order/api/available-coupons?phone=${encodeURIComponent(phone)}`);
+      const data = await res.json();
+      const all = [...(data.personal || []).map(c => ({...c, label: 'Của bạn'})),
+                   ...(data.publicCoupons || []).map(c => ({...c, label: 'Cửa hàng'}))];
+      if (all.length === 0) {
+        box.style.display = "none";
+        return;
+      }
+      list.innerHTML = all.map(c => {
+        const exp = new Date(c.expiresAt);
+        return `<div class="avail-coupon-item" onclick="applyCouponCode('${c.code}')">
+          <div>
+            <div class="ac-code">${c.code}</div>
+            <div class="ac-meta">Giảm ${c.discountFormatted}₫ · HSD: ${exp.toLocaleDateString('vi-VN')} · ${c.label}</div>
+          </div>
+          <span class="ac-use">Dùng</span>
+        </div>`;
+      }).join('');
+      box.style.display = "block";
+    } catch (e) {
+      box.style.display = "none";
+    }
+  }
+
+  function applyCouponCode(code) {
+    couponField.value = code;
+    checkCoupon();
+  }
+
+  phoneField.addEventListener("blur", lookupPoints);
+  checkPhoneBtn.addEventListener("click", lookupPoints);
+
+  async function checkCoupon() {
+    const code = couponField.value.trim();
+    if (!code) { couponHint.textContent = "Vui lòng nhập mã khuyến mãi."; couponDiscount = 0; refreshSummary(); return; }
+    try {
+      const res = await fetch(`/loyalty/api/validate-coupon?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      if (data.valid) {
+        couponDiscount = data.discountValue;
+        couponHint.textContent = `✅ Mã hợp lệ! Giảm ${data.discountFormatted}₫`;
+        couponHint.style.color = "#059669";
+      } else {
+        couponDiscount = 0;
+        couponHint.textContent = "❌ Mã không hợp lệ hoặc đã hết hạn.";
+        couponHint.style.color = "#dc2626";
+      }
+      refreshSummary();
+    } catch (e) {
+      couponHint.textContent = "Không thể kiểm tra mã lúc này.";
+      couponHint.style.color = "#dc2626";
+    }
+  }
+  checkCouponBtn.addEventListener("click", checkCoupon);
+
+  document.getElementById("vnpayBtn").addEventListener("click", function() {
+    const form = document.getElementById("checkoutForm");
+    form.action = '/payment/vnpay-create';
+    form.submit();
+  });
+</script>
+  </body>
+</html>

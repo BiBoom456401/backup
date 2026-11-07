@@ -1,0 +1,205 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title th:text="${category.name} + ' - thegioididong'">Danh mục sản phẩm</title>
+    <style>
+      .category-header {
+        background: linear-gradient(135deg, #ffd400 0%, #ffaa00 100%);
+        padding: 40px 20px;
+        margin: 24px 0 30px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .category-header h1 {
+        color: #1f2937;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+      }
+      .category-header p {
+        color: #4b5563;
+        font-size: 16px;
+        margin: 0;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+      .product-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .product-image {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        background: #f9fafb;
+        border-radius: 8px;
+      }
+      .product-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      .product-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 10px;
+        min-height: 48px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+      .product-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #dc2626;
+        margin-bottom: 5px;
+      }
+      .product-old-price {
+        font-size: 14px;
+        color: #9ca3af;
+        text-decoration: line-through;
+        margin-right: 8px;
+      }
+      .product-discount {
+        font-size: 12px;
+        color: #dc2626;
+        font-weight: 600;
+        background: #fee2e2;
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+      .product-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #fbbf24;
+        color: #1f2937;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .product-status {
+        font-size: 13px;
+        color: #6b7280;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .add-to-cart-btn {
+        background: #fbbf24;
+        color: #1f2937;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: auto;
+      }
+      .add-to-cart-btn:hover {
+        background: #f59e0b;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      .empty-state h3 {
+        font-size: 24px;
+        color: #6b7280;
+        margin-bottom: 10px;
+      }
+      .empty-state p {
+        color: #9ca3af;
+        margin-bottom: 20px;
+      }
+      .back-btn {
+        display: inline-block;
+        background: #f3f4f6;
+        color: #1f2937;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+      .back-btn:hover {
+        background: #e5e7eb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section layout:fragment="content">
+      <div class="container">
+        <div class="category-header">
+          <h1 th:text="${category.name}">Danh mục sản phẩm</h1>
+          <p>
+            <span th:text="${#lists.size(products)}">0</span> sản phẩm có sẵn
+          </p>
+        </div>
+
+        <div class="products-grid" th:if="${!#lists.isEmpty(products)}">
+          <article class="product-card" th:each="product : ${products}" th:data-id="${product.id}">
+            <span class="product-badge" th:if="${product.badge != null}" th:text="${product.badge}"></span>
+
+            <div class="product-image">
+              <img
+                th:src="${product.imageUrl != null ? product.imageUrl : '/images/product-fallback.svg'}"
+                th:alt="${product.name}"
+              />
+            </div>
+
+            <h3 class="product-name" th:text="${product.name}">Tên sản phẩm</h3>
+
+            <div class="product-price" th:text="${product.priceDisplay + 'đ'}">0đ</div>
+            <div th:if="${product.oldPrice != null or product.discountPercent != null}">
+              <span class="product-old-price" th:if="${product.oldPrice != null}" th:text="${product.oldPriceDisplay + 'đ'}">0đ</span>
+              <span class="product-discount" th:if="${product.discountPercent != null}" th:text="${'-' + product.discountPercent + '%'}">-0%</span>
+            </div>
+
+            <div class="product-status">
+              <span>🔥</span>
+              <span th:text="${product.statusText != null ? product.statusText : 'Vừa mở bán'}">Vừa mở bán</span>
+            </div>
+
+            <form th:action="@{/cart/add}" method="post">
+              <input type="hidden" name="productId" th:value="${product.id}" />
+              <input type="hidden" name="quantity" value="1" />
+              <input type="hidden" name="redirect" th:value="@{/products/category/{id}(id=${category.id})}" />
+              <button type="submit" class="add-to-cart-btn">🛒 Thêm vào giỏ hàng</button>
+            </form>
+          </article>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(products)}">
+          <h3>🔍 Không có sản phẩm</h3>
+          <p>Danh mục này hiện chưa có sản phẩm nào.</p>
+          <a th:href="@{/}" class="back-btn">← Quay lại trang chủ</a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+/* Thiết lập cơ bản */
+body {
+    display: flex; /* Bật chế độ Flexbox */
+    background-color: #f0f2f5; /* Màu nền xám nhạt hơn cho nội dung */
+}
+
+/* --- Thanh Menu Dọc (Sidebar) --- */
+.sidebar {
+    width: 280px; /* Độ rộng của menu */
+    min-height: 100vh; /* Cao bằng màn hình */
+    background-color: #ffffff; /* Màu nền trắng */
+    color: #333; /* Màu chữ tối */
+    padding: 20px;
+    position: fixed; /* Giữ cố định khi cuộn */
+    z-index: 1000; /* Đảm bảo nó nằm trên cùng */
+    display: flex; /* Bật flex cho sidebar */
+    flex-direction: column; /* Xếp các mục theo chiều dọc */
+    border-right: 1px solid #e0e0e0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #0d6efd; /* Màu xanh dương chính */
+    font-weight: 700;
+}
+
+/* Các link trong menu */
+.sidebar .nav-link {
+    font-size: 1.1em;
+    color: #555; /* Màu chữ xám đậm */
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+/* Khi di chuột vào link */
+.sidebar .nav-link:hover {
+    background-color: #e9ecef; /* Màu nền xám nhạt khi hover */
+    color: #000;
+}
+
+/* Link đang được active (trang hiện tại) */
+.sidebar .nav-link.active {
+    background-color: #0d6efd; /* Màu xanh Bootstrap */
+    color: white;
+    font-weight: bold;
+}
+
+/* Mũi tên cho menu con */
+.sidebar .nav-link[data-bs-toggle="collapse"]::after {
+    content: ' \25BC'; /* Mũi tên chỉ xuống */
+    float: right;
+    font-size: 0.8em;
+    transition: transform 0.2s;
+    margin-left: auto;
+}
+.sidebar .nav-link[data-bs-toggle="collapse"].collapsed::after {
+    transform: rotate(-90deg); /* Xoay mũi tên sang phải */
+}
+
+/* Menu con */
+.sidebar .nav-item .collapse {
+    margin-left: 15px;
+    border-left: 1px solid #e0e0e0;
+}
+.sidebar .nav-item .collapse .nav-link {
+    font-size: 1em; 
+    padding-left: 20px;
+}
+
+/* --- Khu vực Nội dung chính --- */
+.main-content {
+    flex-grow: 1; 
+    margin-left: 280px; /* Chừa khoảng trống cho sidebar */
+    transition: margin-left 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Top Bar --- */
+.top-bar {
+    background-color: #ffffff;
+    padding: 10px 30px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.top-bar .search-bar {
+    width: 40%;
+}
+
+.top-bar .admin-info {
+    display: flex;
+    align-items: center;
+}
+
+.top-bar .admin-info .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* --- Nội dung chính bên trong --- */
+.page-content {
+    padding: 30px;
+    flex-grow: 1;
+}
+
+/* Nút bật/tắt sidebar, chỉ hiển thị trên màn hình nhỏ */
+#sidebar-toggle-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001; /* Nằm trên cả sidebar */
+    display: none;
+}
+
+/* Media Query cho màn hình nhỏ (ví dụ: tablet và mobile) */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #sidebar-toggle-btn {
+        display: block;
+    }
+}
+
+/* --- CSS CHO DASHBOARD MỚI --- */
+.stat-card {
+    border-radius: 8px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.stat-card .icon {
+    font-size: 3rem;
+    opacity: 0.5;
+    margin-right: 20px;
+}
+.stat-card .info h5 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+.stat-card .info p {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}

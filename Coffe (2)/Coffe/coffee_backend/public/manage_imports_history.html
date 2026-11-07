@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử nhập hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="layout.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Coffee Track</h2>
+        <ul class="nav flex-column">
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="reports.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Trang bán hàng</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_categories.html">Quản lý danh mục</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_products.html">Quản lý món</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link" href="manage_tables.html">Quản lý bàn</a>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#accountSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Quản lý tài khoản</a>
+                <div class="collapse" id="accountSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="manage_accounts.html">Danh sách tài khoản</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_roles.html">Vai trò</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#inventorySubmenu" data-bs-toggle="collapse" role="button" aria-expanded="true">Quản lý kho</a>
+                <div class="collapse show" id="inventorySubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="manage_materials.html">Nguyên vật liệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_suppliers.html">Nhà cung cấp</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manage_imports.html">Phiếu nhập</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="manage_imports_history.html">Lịch sử nhập hàng</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#timekeepingSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Chấm công</a>
+                <div class="collapse" id="timekeepingSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="timekeeping_scan.html">Quét mã chấm công</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="timekeeping_qr.html">Mã QR chấm công</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="manage_shifts.html">Quản lý ca</a></li>
+                        <li class="nav-item admin-only"><a class="nav-link" href="manage_schedules.html">Lịch làm việc</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item admin-only">
+                <a class="nav-link collapsed" href="#reportSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false">Báo cáo</a>
+                <div class="collapse" id="reportSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="sales_report.html">Báo cáo doanh thu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="timekeeping_report.html">Báo cáo chấm công</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-auto">
+                <a class="nav-link text-danger" href="#" id="logout-btn">Đăng xuất</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>Lịch sử nhập hàng</h1>
+        <hr>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form id="history-form" class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label for="start-date" class="form-label">Từ ngày</label>
+                        <input type="date" class="form-control" id="start-date" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="end-date" class="form-label">Đến ngày</label>
+                        <input type="date" class="form-control" id="end-date" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Xem lịch sử</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title">Kết quả (nhấp vào dòng để xem chi tiết)</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã PN</th>
+                            <th>Ngày Nhập</th>
+                            <th>NCC</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="import-history-list">
+                        <tr>
+                            <td colspan="4" class="text-center">Vui lòng chọn ngày để xem lịch sử.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="import-details-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="import-details-title">Chi tiết phiếu nhập</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="import-details-body">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="manage_imports_history.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

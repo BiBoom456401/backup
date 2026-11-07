@@ -1,0 +1,277 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Đặt hàng thành công</title>
+    <style>
+      .confirmation-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+      .success-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+      .success-header {
+        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+        color: white;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .success-icon {
+        font-size: 64px;
+        display: block;
+        margin-bottom: 16px;
+      }
+      .success-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+      }
+      .success-header p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 16px;
+      }
+      .order-number {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 20px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-top: 16px;
+        font-weight: 600;
+      }
+      .order-content {
+        padding: 32px;
+      }
+      .info-section {
+        margin-bottom: 28px;
+      }
+      .info-section:last-child {
+        margin-bottom: 0;
+      }
+      .info-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .info-card {
+        background: #f9fafb;
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-row .label {
+        color: #6b7280;
+        font-size: 14px;
+      }
+      .info-row .value {
+        color: #1f2937;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: right;
+      }
+      .order-items-list {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .order-item {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-item img {
+        width: 64px;
+        height: 64px;
+        object-fit: contain;
+        background: #f9fafb;
+        border-radius: 8px;
+        padding: 4px;
+      }
+      .order-item-info {
+        flex: 1;
+      }
+      .order-item-info h5 {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        color: #1f2937;
+      }
+      .qty {
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .order-item-price {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1f2937;
+      }
+      .order-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px;
+        background: #f9fafb;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .order-total .amount {
+        color: #dc2626;
+      }
+      .actions {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+      }
+      .btn {
+        flex: 1;
+        padding: 14px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: #fcd34d;
+        color: #1f2937;
+      }
+      .btn-primary:hover {
+        background: #fbbf24;
+      }
+      .btn-outline {
+        background: white;
+        color: #374151;
+        border: 1px solid #d1d5db;
+      }
+      .btn-outline:hover {
+        background: #f9fafb;
+        border-color: #9ca3af;
+      }
+      .notice-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 16px;
+        margin-top: 24px;
+      }
+      .notice-box h4 {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        color: #1d4ed8;
+      }
+      .notice-box p {
+        margin: 0;
+        font-size: 14px;
+        color: #1e3a8a;
+        line-height: 1.6;
+      }
+      @media (max-width: 640px) {
+        .actions {
+          flex-direction: column;
+        }
+        .info-row,
+        .order-total {
+          flex-direction: column;
+          gap: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="confirmation-container">
+        <div class="success-card">
+          <div class="success-header">
+            <span class="success-icon">✅</span>
+            <h1>Đặt hàng thành công!</h1>
+            <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi</p>
+            <div class="order-number" th:text="'Mã đơn hàng #' + ${order.id}">Mã đơn hàng #1</div>
+          </div>
+
+          <div class="order-content">
+            <div class="info-section">
+              <div class="info-section-title">📦 Thông tin giao hàng</div>
+              <div class="info-card">
+                <div class="info-row"><span class="label">Khách hàng</span><span class="value" th:text="${order.customerName}">Tên</span></div>
+                <div class="info-row"><span class="label">Số điện thoại</span><span class="value" th:text="${order.phone}">090...</span></div>
+                <div class="info-row"><span class="label">Email</span><span class="value" th:text="${order.email}">mail@example.com</span></div>
+                <div class="info-row"><span class="label">Địa chỉ</span><span class="value" th:text="${order.address}">Địa chỉ</span></div>
+              </div>
+            </div>
+
+            <div class="info-section">
+              <div class="info-section-title">🧾 Chi tiết đơn hàng</div>
+              <div class="order-items-list">
+                <div th:each="detail : ${order.orderDetails}" class="order-item">
+                  <img th:src="${detail.product.imageUrl != null and !detail.product.imageUrl.isBlank() ? detail.product.imageUrl : '/images/product-fallback.svg'}" th:alt="${detail.product.name}" />
+                  <div class="order-item-info">
+                    <h5 th:text="${detail.product.name}">Tên sản phẩm</h5>
+                    <span class="qty" th:text="'Số lượng: ' + ${detail.quantity}">Số lượng: 1</span>
+                  </div>
+                  <span class="order-item-price" th:text="${#numbers.formatInteger(detail.product.price * detail.quantity, 3, 'POINT')} + '₫'">0₫</span>
+                </div>
+                <div class="order-total">
+                  <span class="label">Tổng thanh toán</span>
+                  <span class="amount" th:text="${order.finalAmountFormatted} + '₫'">0₫</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-section">
+              <div class="info-section-title">💳 Thanh toán và ưu đãi</div>
+              <div class="info-card">
+                <div class="info-row"><span class="label">Tổng trước giảm</span><span class="value" th:text="${order.totalFormatted} + '₫'">0₫</span></div>
+                <div class="info-row"><span class="label">Phí vận chuyển</span><span class="value" th:text="${order.shippingFee == 0 ? 'Miễn phí' : order.shippingFeeFormatted + '₫'}">Miễn phí</span></div>
+                <div class="info-row" th:if="${order.pointsUsed != null and order.pointsUsed > 0}"><span class="label">Điểm đã dùng</span><span class="value" th:text="${order.pointsUsed} + ' điểm'">0 điểm</span></div>
+                <div class="info-row" th:if="${order.discountAmount > 0}"><span class="label">Giảm giá</span><span class="value" th:text="${'-' + order.discountFormatted + '₫'}">0₫</span></div>
+                <div class="info-row"><span class="label">Điểm tích lũy</span><span class="value" th:text="${'+' + order.pointsEarned + ' điểm'}">+0 điểm</span></div>
+                <div class="info-row"><span class="label">Phương thức TT</span><span class="value" th:text="${order.paymentMethod == 'VNPAY' ? 'VNPay' : 'Thanh toán khi nhận hàng (COD)'}">COD</span></div>
+                <div class="info-row"><span class="label">Trạng thái TT</span><span class="value" th:text="${order.paymentStatus == 'PAID' ? '✅ Đã thanh toán' : (order.paymentStatus == 'FAILED' ? '❌ Thất bại' : '⏳ Chờ thanh toán')}">Chờ</span></div>
+              </div>
+            </div>
+
+            <div class="notice-box">
+              <h4>📞 Thông tin liên hệ</h4>
+              <p>
+                Nhân viên sẽ gọi điện xác nhận đơn hàng trong vòng 15 - 30 phút
+                (trong giờ hành chính).<br />
+                Nếu có thắc mắc, vui lòng gọi hotline:
+                <strong>1800.1060</strong>
+              </p>
+            </div>
+
+            <div class="actions">
+              <a th:href="@{/products}" class="btn btn-primary">Tiếp tục mua sắm</a>
+              <a th:href="@{/}" class="btn btn-outline">Về trang chủ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,255 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  ul{
+    list-style: none;
+  }
+
+#wrapper{
+    width: 100%;
+    height: 50%;
+}
+
+#header{
+    width: 100%;
+    padding: 0px 30px;
+    display:  flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff3bd;
+    z-index: 10; 
+    position: fixed; 
+
+}
+.dropdown-content1{
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    right: 0px;
+    top:70px
+}
+.dropdown-content1 a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    border: 1px solid black;
+
+}
+
+.dropdown:hover .dropdown-content1{
+    display: block;
+   
+} 
+
+#menu{
+    list-style: none;
+    display: flex;
+    font-size: 40px;
+}
+
+#menu .item{
+    margin: 0px 25px;
+}
+
+#menu .item{
+    color: #626a67;
+    text-decoration: none ;
+}
+
+#actions{
+    display: flex;
+}
+
+#actions .item{
+    margin-left: 22px;
+}
+
+#banner{
+    top: 100px;
+    width: 100%;
+    background-image: url(https://cdn.discordapp.com/attachments/1142087858572763150/1150081506669248532/background-am-thuc-chau-au-sang-trong_081311568_3.png);
+    height: 460px;
+    margin-top: 0px;
+    display: flex;
+    padding: 30px 133px;
+    position: relative;  
+    color: #ffe15c;
+}
+
+.logo{
+    border-radius: 100%;
+
+}
+
+.itam{
+    margin-top: 100px;
+    text-align: center;
+    background-color: #CFCFCF;
+    color: blue;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.box-left{
+    font-size: 50px;
+    padding-top: 280px;
+    margin-left: -10px;
+    
+}
+
+.scroll-top {
+    position: sticky;
+    top: 10px;
+    right: 10px;
+}
+
+.mauwebsite li .boxfullmau {
+    border-radius: 12px;
+    background-color: #f6f6f6;
+}
+
+.img {
+    border: none;
+}
+
+.anhmau {
+    width: 10%;
+    min-height: 300px;
+}
+
+.nameitem{
+    color: red;
+    padding-right: 30%;
+    padding-left: 35%;
+    font-size: 200%;
+    font-weight: bold
+}
+
+.mauwebsite li {
+    float: left;
+    width: 30%;
+    margin-left: 1.6%;
+    margin-right: 1.6%;
+    background-color: #FFF;
+    overflow: hidden;
+    margin-bottom: 17px;
+    margin-top: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,.15);
+    border-radius: 12px;
+    padding: auto;
+}
+
+.anhmau{
+width: 100%;
+height: 100%;
+margin-left: auto;
+margin-right: auto;
+}
+
+.mauwebsite li .boxfullmau {
+    border-radius: 12px;
+    background-color: #f6f6f6;
+}
+
+.boxfullmau{
+    box-sizing: border-box;
+    padding: 20px 30px;
+    margin: auto;
+}
+
+
+
+footer{
+    background: #343434;
+    padding-top: 50px;
+}
+.container{
+    width: 1140px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+.footer-content{
+    width: 33.3%;
+    padding-top: 50px;
+}
+h3{
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.footer-content p{
+    width:190px;
+    margin: auto;
+    padding: 7px;
+}
+.footer-content ul{
+    text-align: center;
+}
+.list{
+    padding: 0;
+}
+.list li{
+    width: auto;
+    text-align: center;
+    list-style-type:none;
+    padding: 7px;
+    position: relative;
+}
+.list li::before{
+    content: '';
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 2px;
+    background: #f18930;
+    transition-duration: .5s;
+}
+.list li:hover::before{
+    width: 70px;
+}
+.social-icons{
+    text-align: center;
+    padding: 0;
+}
+.social-icons li{
+    display: inline-block;
+    text-align: center;
+    padding: 5px;
+}
+.social-icons i{
+    color: white;
+    font-size: 25px;
+}
+a{
+    text-decoration: none;
+}
+a:hover{
+    color: #f18930;
+}
+.social-icons i:hover{
+    color: #f18930;
+}
+.bottom-bar{
+    background: #f18930;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 50px;
+}
+.bottom-bar p{
+    color: #343434;
+    margin: 0;
+    font-size: 16px;
+    padding: 7px;
+}

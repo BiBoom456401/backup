@@ -1,0 +1,135 @@
+
+#wrapper{
+    width: 100%;
+    height: 50%;
+}
+
+#header{
+    width: 100%;
+    padding: 0px 30px;
+    display:  flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff3bd;
+    z-index: 10; 
+    position: fixed; 
+
+}
+
+#menu{
+    list-style: none;
+    display: flex;
+    font-size: 40px;
+}
+
+#menu .item{
+    margin: 0px 25px;
+}
+
+#menu .item{
+    color: #626a67;
+    text-decoration: none ;
+}
+
+#actions{
+    display: flex;
+}
+
+#actions .item{
+    margin-left: 22px;
+}
+
+#banner{
+    top: 100px;
+    width: 100%;
+    background-image: url(https://cdn.discordapp.com/attachments/1142087858572763150/1150081506669248532/background-am-thuc-chau-au-sang-trong_081311568_3.png);
+    height: 460px;
+    margin-top: 0px;
+    display: flex;
+    padding: 30px 133px;
+    position: relative;  
+    color: #ffe15c;
+}
+
+.logo{
+    border-radius: 100%;
+
+}
+
+.itam{
+    margin-top: 100px;
+    text-align: center;
+    background-color: #CFCFCF;
+    color: blue;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.box-left{
+    font-size: 50px;
+    padding-top: 280px;
+    margin-left: -10px;
+    
+}
+
+.scroll-top {
+    position: sticky;
+    top: 10px;
+    right: 10px;
+}
+
+.mauwebsite li .boxfullmau {
+    border-radius: 12px;
+    background-color: #f6f6f6;
+}
+
+.img {
+    border: none;
+}
+
+.anhmau {
+    width: 10%;
+    min-height: 300px;
+}
+
+.nameitem{
+    color: red;
+    padding-right: 30%;
+    padding-left: 35%;
+    font-size: 200%;
+    font-weight: bold
+}
+
+.mauwebsite li {
+    float: left;
+    width: 30%;
+    margin-left: 1.6%;
+    margin-right: 1.6%;
+    background-color: #FFF;
+    overflow: hidden;
+    margin-bottom: 17px;
+    margin-top: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,.15);
+    border-radius: 12px;
+    padding: auto;
+}
+
+.anhmau{
+width: 100%;
+height: 100%;
+margin-left: auto;
+margin-right: auto;
+}
+
+.mauwebsite li .boxfullmau {
+    border-radius: 12px;
+    background-color: #f6f6f6;
+}
+
+.boxfullmau{
+    box-sizing: border-box;
+    padding: 20px 30px;
+    margin: auto;
+}
+

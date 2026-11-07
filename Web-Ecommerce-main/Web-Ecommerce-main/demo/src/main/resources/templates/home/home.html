@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Trang chủ - thegioididong</title>
+</head>
+
+<body>
+    <section layout:fragment="content">
+
+        <!-- Banner Slider -->
+        <section class="banner-slider-wrapper">
+            <div class="container">
+                <div class="banner-slider">
+                    <a href="#">
+                        <img src="/images/image.png" alt="Chào hè rực rỡ - Ưu đãi cực cool">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-wrap">
+                <aside class="side-banner left">
+                    <div class="banner-tag">Tết AI Sale</div>
+                    <div class="banner-price">2,7 TRIỆU</div>
+                    <div class="banner-sub">Trợ giá lên đến 2 triệu cho thiết bị công nghệ</div>
+                    <div class="banner-cta">MUA NGAY</div>
+                </aside>
+
+                <div class="hero-main">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <span class="hero-kicker">Mùa nâng cấp</span>
+                            <h1>iPhone Air</h1>
+                            <p>Trả trước thấp, ưu đãi cực khủng</p>
+                            <div class="hero-badges">
+                                <span>0% lãi suất</span>
+                                <span>Giảm đến 7 triệu</span>
+                                <span>Giao nhanh 2h</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-product">
+                            <img src="/images/iphone-air.png" alt="iPhone Air">
+                        </div>
+
+                        <div class="hero-text right">
+                            <p>Trả chậm chỉ từ <strong>79K/ngày</strong></p>
+                            <p>Tặng PMH đến 1 triệu áp dụng mua MacBook, AirPods, Watch</p>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="side-banner right">
+                    <div class="banner-tag">Tết sắm smartphone</div>
+                    <div class="banner-price">Không trả lãi</div>
+                    <div class="banner-sub">Ưu đãi trả góp 0%</div>
+                    <div class="banner-cta">XEM NGAY</div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Promo Section (Flash Sale) -->
+        <section class="promo" id="promoSection">
+            <div class="container">
+                <div class="promo-head">
+                    <h2>Khuyến mãi online</h2>
+                    <div class="flash-pill">
+                        FLASH SALE
+                        <span class="countdown" id="countdown">00 : 59 : 38</span>
+                    </div>
+                </div>
+
+                <div class="promo-tabs">
+                    <button class="tab active">Flash Sale</button>
+                    <button class="tab">Giảm đến 50%</button>
+                    <button class="tab">Online Only</button>
+                    <button class="tab">Điện thoại</button>
+                    <button class="tab">Apple</button>
+                    <button class="tab">Laptop</button>
+                    <button class="tab">Phụ kiện</button>
+                    <button class="tab">Đồng hồ</button>
+                </div>
+
+                <div class="time-strip">
+                    <div class="time-item active">
+                        <div class="time-label">15:00</div>
+                        <div class="time-sub">Đang diễn ra</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-label">18:00</div>
+                        <div class="time-sub">Sắp diễn ra</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-label">21:30</div>
+                        <div class="time-sub">Sắp diễn ra</div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-label">00:00</div>
+                        <div class="time-sub">Ngày mai</div>
+                    </div>
+                </div>
+
+                <div class="promo-products">
+                    <button class="promo-nav promo-nav-prev" id="promoPrev">❮</button>
+                    <div class="promo-grid" id="promoProductGrid">
+                        <!-- Promo products loaded via JS -->
+                    </div>
+                    <button class="promo-nav promo-nav-next" id="promoNext">❯</button>
+                </div>
+                <div class="promo-page-indicator" id="promoPageIndicator"></div>
+            </div>
+        </section>
+
+        <!-- Normal Products Section -->
+        <section class="product-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Sản phẩm</h2>
+                    <div class="section-actions">
+                        <a th:href="@{/products}" class="btn-manage">📋 Quản lý</a>
+                        <a th:href="@{/products/add}" class="btn-add-product">+ Thêm sản phẩm</a>
+                    </div>
+                </div>
+
+                <div class="normal-grid" id="normalProductGrid">
+                    <!-- Normal products loaded via JS -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <th:block layout:fragment="scripts">
+        <script>
+            (function startCountdown() {
+                let totalSeconds = 59 * 60 + 38;
+                const countdown = document.getElementById("countdown");
+
+                function update() {
+                    const hours = Math.floor(totalSeconds / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+
+                    countdown.textContent =
+                        String(hours).padStart(2, "0") +
+                        " : " +
+                        String(minutes).padStart(2, "0") +
+                        " : " +
+                        String(seconds).padStart(2, "0");
+
+                    if (totalSeconds > 0) {
+                        totalSeconds--;
+                        setTimeout(update, 1000);
+                    }
+                }
+                update();
+            })();
+        </script>
+        <script src="/homepage-products.js"></script>
+    </th:block>
+</body>
+
+</html>

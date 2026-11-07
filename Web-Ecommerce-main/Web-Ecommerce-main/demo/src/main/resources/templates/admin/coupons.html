@@ -1,0 +1,177 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Quản lý mã khuyến mãi</title>
+    <style>
+      .admin-container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .admin-header {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        border-radius: 20px; padding: 40px 32px; color: white; margin-bottom: 32px;
+        text-align: center;
+      }
+      .admin-header h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px; }
+      .admin-header p { font-size: 15px; opacity: 0.8; margin: 0; }
+
+      .alert {
+        padding: 14px 20px; border-radius: 12px; margin-bottom: 20px;
+        font-weight: 600; font-size: 14px;
+      }
+      .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+      .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+      .create-card {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px; margin-bottom: 32px;
+      }
+      .create-card h3 { font-size: 20px; font-weight: 700; margin: 0 0 20px; }
+      .form-grid {
+        display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: end;
+      }
+      @media (max-width: 768px) {
+        .form-grid { grid-template-columns: 1fr; }
+      }
+      .form-field label {
+        display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;
+      }
+      .form-field input {
+        width: 100%; padding: 12px 14px; border: 2px solid #e5e7eb; border-radius: 10px;
+        font-size: 14px; transition: border-color 0.2s;
+      }
+      .form-field input:focus { border-color: #f59e0b; outline: none; }
+      .create-btn {
+        padding: 12px 28px; background: linear-gradient(135deg, #10b981, #059669);
+        color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 14px;
+        cursor: pointer; white-space: nowrap; height: 46px; transition: transform 0.2s;
+      }
+      .create-btn:hover { transform: scale(1.02); }
+
+      .coupons-card {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px;
+      }
+      .coupons-card h3 { font-size: 20px; font-weight: 700; margin: 0 0 20px; }
+      .coupon-table {
+        width: 100%; border-collapse: collapse; font-size: 14px;
+      }
+      .coupon-table th {
+        background: #f9fafb; padding: 12px 16px; text-align: left; font-weight: 600;
+        color: #374151; border-bottom: 2px solid #e5e7eb;
+      }
+      .coupon-table td {
+        padding: 14px 16px; border-bottom: 1px solid #f3f4f6; vertical-align: middle;
+      }
+      .coupon-table tr:hover { background: #f9fafb; }
+      .code-cell {
+        font-weight: 700; font-size: 15px; color: #1f2937; letter-spacing: 1px;
+        font-family: monospace;
+      }
+      .discount-cell { font-weight: 700; color: #dc2626; }
+      .badge-sm {
+        padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        display: inline-block;
+      }
+      .badge-active { background: #ecfdf5; color: #065f46; }
+      .badge-used { background: #f3f4f6; color: #6b7280; }
+      .badge-expired { background: #fef2f2; color: #991b1b; }
+      .badge-admin { background: #eff6ff; color: #1d4ed8; }
+      .badge-customer { background: #fef3c7; color: #92400e; }
+      .delete-btn {
+        padding: 6px 14px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
+        border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+        transition: all 0.2s;
+      }
+      .delete-btn:hover { background: #dc2626; color: white; }
+      .empty-state {
+        text-align: center; padding: 40px; color: #6b7280;
+      }
+      .empty-state .icon { font-size: 48px; margin-bottom: 12px; display: block; }
+    </style>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="admin-container">
+        <div class="admin-header">
+          <h1>🎫 Quản lý mã khuyến mãi</h1>
+          <p>Tạo và quản lý mã giảm giá cho khách hàng</p>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="create-card">
+          <h3>➕ Tạo mã mới</h3>
+          <form th:action="@{/admin/coupons/create}" method="post">
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Mã khuyến mãi (để trống = tự tạo)</label>
+                <input type="text" name="code" placeholder="VD: SALE50K" maxlength="20" style="text-transform:uppercase" />
+              </div>
+              <div class="form-field">
+                <label>Giá trị giảm (₫) *</label>
+                <input type="number" name="discountValue" placeholder="VD: 50000" min="1000" step="1000" required />
+              </div>
+              <div class="form-field">
+                <label>Số ngày hiệu lực</label>
+                <input type="number" name="validityDays" value="30" min="1" max="365" />
+              </div>
+              <button type="submit" class="create-btn">Tạo mã</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="coupons-card">
+          <h3>📋 Danh sách mã khuyến mãi (<span th:text="${#lists.size(coupons)}">0</span>)</h3>
+
+          <div th:if="${#lists.isEmpty(coupons)}" class="empty-state">
+            <span class="icon">🎫</span>
+            <h4>Chưa có mã khuyến mãi nào</h4>
+            <p>Tạo mã đầu tiên ở form phía trên</p>
+          </div>
+
+          <table th:unless="${#lists.isEmpty(coupons)}" class="coupon-table">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Giảm giá</th>
+                <th>Nguồn</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th>Hết hạn</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="c : ${coupons}">
+                <td class="code-cell" th:text="${c.code}">KM-XXXX</td>
+                <td class="discount-cell" th:text="${c.discountFormatted + '₫'}">10,000₫</td>
+                <td>
+                  <span th:if="${c.customer == null}" class="badge-sm badge-admin">Admin</span>
+                  <span th:if="${c.customer != null}" class="badge-sm badge-customer"
+                        th:text="${c.customer.name != null ? c.customer.name : c.customer.phone}">KH</span>
+                </td>
+                <td>
+                  <span th:if="${c.used}" class="badge-sm badge-used">Đã dùng</span>
+                  <span th:if="${!c.used and c.valid}" class="badge-sm badge-active">Còn hiệu lực</span>
+                  <span th:if="${!c.used and !c.valid}" class="badge-sm badge-expired">Hết hạn</span>
+                </td>
+                <td th:text="${#temporals.format(c.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2026</td>
+                <td th:text="${#temporals.format(c.expiresAt, 'dd/MM/yyyy')}">01/02/2026</td>
+                <td>
+                  <form th:action="@{/admin/coupons/delete}" method="post" style="display:inline"
+                        onsubmit="return confirm('Xóa mã này?')">
+                    <input type="hidden" name="id" th:value="${c.id}" />
+                    <button type="submit" class="delete-btn">Xóa</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

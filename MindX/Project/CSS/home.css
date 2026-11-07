@@ -1,0 +1,194 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+ul{
+    list-style: none;
+}
+#header{
+    width: 100%;
+    padding: 0px 30px;
+    display:  flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff3bd;
+    z-index: 10; 
+    position: fixed; 
+
+}
+
+#menu{
+    list-style: none;
+    display: flex;
+    font-size: 40px;
+}
+
+#menu .item{
+    margin: 0px 25px;
+}
+
+#menu .item{
+    color: #626a67;
+    text-decoration: none ;
+}
+
+#actions{
+    display: flex;
+}
+
+#actions .item{
+    margin-left: 22px;
+}
+.itam{
+    margin-top: 100px;
+    text-align: center;
+    background-color: #CFCFCF;
+    color: blue;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+/*  */
+section
+{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background-image: url(../IMG/phong-nen-chup-food.jpg);
+    background-attachment: fixed;
+    background-size: cover ;
+}
+.content
+{
+    width: 50%;
+    color: #fff;
+    float: left;
+    position: relative;
+}
+.content__form{
+    max-width: 600px;
+    position: absolute;
+    right: 0;
+    top: -100px;
+}
+.content h2
+{
+    font-size: 3em;
+    letter-spacing: 0.3em;
+    color: white;
+}
+.content p
+{
+    margin:10px 0 40px;
+}
+.content a
+{
+ text-decoration:none;
+ color: #fff;
+ border: 2px solid black;
+ font-weight: 500;
+ padding: 10px 40px;
+ border-radius: 40px;
+ transition: .5s;
+}
+.content a:hover
+{
+    background-color: black;
+}
+.login
+{
+    width: 50%;
+    float: left;
+}
+.login__form{
+    width: 440px;
+    margin: 0 auto;
+}
+.login h2
+{
+    text-align: center;
+    color: white;
+    font-size: 2em;
+}
+.input-box 
+{
+    position:relative ;
+    width: 100%;
+    height: 50px;
+    padding: 40px 0;
+}
+.input-box .input
+{
+    width: 100%;
+    height: 50px;
+    border: 2px solid white;
+    border-radius: 40px;
+    background: transparent;
+    background-color: transparent;
+    outline: none;
+    padding-left: 10px;
+    font-size: 18px;
+    color: white;
+}
+::placeholder
+{
+    color: white;
+    font-size: 1.2em !important;
+    padding: 0 20px;
+}
+.input-box i
+{
+    position: absolute;
+    top: 55px;
+    left: 400px;
+    font-size: 1.2em;
+    color: black;
+}
+.remember-forgot
+{
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    margin: 25px 0 15px;
+}
+.remember-forgot a
+{
+    color: #fff;
+    text-decoration: none;
+}
+.remember-forgot a:hover
+{
+    text-decoration: underline;
+}
+#button
+{
+    width: 100%;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 40px;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    transition: .5s;
+    background-color: black;
+    color: #fff;
+}
+.register-link
+{
+    display: flex;
+    justify-content: center;
+    color: #fff;
+}
+.register-link a
+{
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+}
+.register-link a:hover
+{
+    text-decoration: underline;
+}

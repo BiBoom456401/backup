@@ -1,0 +1,110 @@
+@model IEnumerable<Demo.Models.Student>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý sinh viên";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary"><i class="fas fa-user-graduate me-2"></i>@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-success btn-lg"><i class="fas fa-plus-circle me-2"></i>Thêm sinh viên</a>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                           class="form-control form-control-lg" placeholder="Tìm theo tên hoặc mã SV">
+                </div>
+                <div class="col-md-5">
+                    <select name="classFilter" class="form-select form-select-lg"
+                            asp-items="@(new SelectList(ViewBag.Classes, "Name", "Name", ViewData["CurrentClassFilter"]))">
+                        <option value="">-- Tất cả lớp --</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-search me-2"></i>Tìm kiếm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th><i class="fas fa-id-card"></i> Mã SV</th>
+                                <th><i class="fas fa-user"></i> Họ tên</th>
+                                <th><i class="fas fa-envelope"></i> Email</th>
+                                <th><i class="fas fa-cake-candles"></i> Ngày sinh</th>
+                                <th><i class="fas fa-school"></i> Lớp</th>
+                                <th><i class="fas fa-cogs"></i> Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.StudentCode</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.Class?.Name</td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>Không tìm thấy sinh viên nào
+                </div>
+            }
+
+            <!-- Pagination (optional) -->
+            @* <div class="mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Add pagination links here -->
+                    </ul>
+                </nav>
+            </div> *@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Thêm các script cần thiết ở đây
+            $('.table').DataTable({
+                responsive: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json'
+                }
+            });
+        });
+    </script>
+}

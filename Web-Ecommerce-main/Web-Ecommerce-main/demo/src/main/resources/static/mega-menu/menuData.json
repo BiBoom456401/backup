@@ -1,0 +1,73 @@
+{
+  "navItems": [
+    {
+      "id": "phu-kien",
+      "label": "Phụ kiện",
+      "groups": [
+        {
+          "title": "Phụ kiện di động",
+          "items": [
+            {
+              "id": "sac",
+              "label": "Sạc, cáp",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/4259/4259146.png",
+              "badge": "Hot"
+            },
+            {
+              "id": "op-lung",
+              "label": "Ốp lưng điện thoại",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/1047/1047711.png"
+            },
+            {
+              "id": "dan-man",
+              "label": "Miếng dán",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/564/564445.png"
+            },
+            {
+              "id": "pin",
+              "label": "Pin sạc dự phòng",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/1170/1170576.png"
+            },
+            {
+              "id": "airtag",
+              "label": "AirTag, phụ kiện Apple",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/1047/1047725.png",
+              "badge": "Mới"
+            }
+          ]
+        },
+        {
+          "title": "Phụ kiện laptop, PC",
+          "items": [
+            {
+              "id": "chuot",
+              "label": "Chuột máy tính",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/2917/2917997.png"
+            },
+            {
+              "id": "ban-phim",
+              "label": "Bàn phím",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/4335/4335321.png"
+            },
+            {
+              "id": "hub",
+              "label": "Hub, cáp chuyển đổi",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/2889/2889676.png"
+            },
+            {
+              "id": "router",
+              "label": "Router - Thiết bị mạng",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/483/483947.png",
+              "badge": "Hot"
+            },
+            {
+              "id": "loa",
+              "label": "Loa vi tính",
+              "iconUrl": "https://cdn-icons-png.flaticon.com/512/727/727269.png"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

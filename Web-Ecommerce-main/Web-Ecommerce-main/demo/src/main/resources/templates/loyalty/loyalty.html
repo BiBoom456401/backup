@@ -1,0 +1,392 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Tra cứu điểm tích lũy</title>
+    <style>
+      .loyalty-container { max-width: 900px; margin: 0 auto; padding: 24px; }
+      .loyalty-hero {
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #ec4899 100%);
+        border-radius: 20px; padding: 48px 32px; text-align: center; color: white; margin-bottom: 32px;
+        position: relative; overflow: hidden;
+      }
+      .loyalty-hero::before {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+      }
+      @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+      .loyalty-hero h1 { font-size: 32px; font-weight: 800; margin: 0 0 8px; position: relative; }
+      .loyalty-hero p { font-size: 16px; opacity: 0.9; margin: 0; position: relative; }
+
+      .search-card {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px; margin-bottom: 24px;
+      }
+      .search-row { display: flex; gap: 12px; }
+      .search-row input {
+        flex: 1; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 12px;
+        font-size: 16px; transition: border-color 0.2s;
+      }
+      .search-row input:focus { border-color: #f59e0b; outline: none; }
+      .search-row button {
+        padding: 14px 28px; background: linear-gradient(135deg, #f59e0b, #ef4444);
+        color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px;
+        cursor: pointer; white-space: nowrap; transition: transform 0.2s;
+      }
+      .search-row button:hover { transform: scale(1.02); }
+
+      .result-section { display: none; }
+      .result-section.active { display: block; }
+
+      .points-card {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px; margin-bottom: 24px; text-align: center;
+      }
+      .points-circle {
+        width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 16px;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        box-shadow: 0 8px 32px rgba(245,158,11,0.3);
+      }
+      .points-number { font-size: 42px; font-weight: 800; color: white; line-height: 1; }
+      .points-label { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 600; }
+      .customer-name { font-size: 22px; font-weight: 700; color: #1f2937; margin: 12px 0 4px; }
+      .customer-stats {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;
+        padding-top: 20px; border-top: 1px solid #f3f4f6;
+      }
+      .stat-item { text-align: center; }
+      .stat-value { font-size: 20px; font-weight: 700; color: #1f2937; }
+      .stat-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+      .redeem-card {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px; margin-bottom: 24px;
+      }
+      .redeem-card h3 { font-size: 20px; font-weight: 700; margin: 0 0 8px; }
+      .redeem-card p { color: #6b7280; margin: 0 0 20px; font-size: 14px; }
+      .redeem-info {
+        background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 16px;
+        margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+      }
+      .redeem-info .icon { font-size: 28px; }
+      .redeem-info .text { font-size: 14px; color: #92400e; }
+      .redeem-info .text strong { color: #78350f; }
+      .redeem-btn {
+        padding: 14px 32px; background: linear-gradient(135deg, #10b981, #059669);
+        color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 15px;
+        cursor: pointer; transition: transform 0.2s;
+      }
+      .redeem-btn:hover { transform: scale(1.02); }
+      .redeem-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+      .coupon-result {
+        margin-top: 16px; padding: 16px; background: #ecfdf5; border: 1px solid #a7f3d0;
+        border-radius: 12px; display: none;
+      }
+      .coupon-result.active { display: block; }
+      .coupon-code {
+        font-size: 24px; font-weight: 800; color: #065f46; letter-spacing: 2px;
+        background: white; padding: 12px 20px; border-radius: 8px; display: inline-block;
+        border: 2px dashed #10b981; margin: 8px 0;
+      }
+
+      .coupons-list {
+        background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 32px;
+      }
+      .coupons-list h3 { font-size: 20px; font-weight: 700; margin: 0 0 20px; }
+      .coupon-item {
+        display: flex; align-items: center; gap: 16px; padding: 16px;
+        border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px;
+        transition: box-shadow 0.2s;
+      }
+      .coupon-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      .coupon-item.used { opacity: 0.5; }
+      .coupon-item .coupon-icon {
+        width: 48px; height: 48px; border-radius: 10px; display: flex;
+        align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+      }
+      .coupon-icon.valid { background: #ecfdf5; }
+      .coupon-icon.expired { background: #fef2f2; }
+      .coupon-icon.used-icon { background: #f3f4f6; }
+      .coupon-details { flex: 1; }
+      .coupon-details .code { font-weight: 700; font-size: 15px; color: #1f2937; }
+      .coupon-details .meta { font-size: 12px; color: #6b7280; margin-top: 4px; }
+      .coupon-badge {
+        padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      }
+      .badge-valid { background: #ecfdf5; color: #065f46; }
+      .badge-expired { background: #fef2f2; color: #991b1b; }
+      .badge-used { background: #f3f4f6; color: #6b7280; }
+
+      .not-found {
+        text-align: center; padding: 40px; background: white; border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      }
+      .not-found .icon { font-size: 48px; margin-bottom: 12px; }
+      .not-found h3 { color: #374151; margin: 0 0 8px; }
+      .not-found p { color: #6b7280; margin: 0; }
+
+      @media (max-width: 640px) {
+        .search-row { flex-direction: column; }
+        .customer-stats { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="loyalty-container">
+        <div class="loyalty-hero">
+          <h1>🎁 Tra cứu điểm tích lũy</h1>
+          <p>Nhập số điện thoại để xem điểm và đổi mã khuyến mãi</p>
+        </div>
+
+        <div class="search-card">
+          <div class="search-row">
+            <input type="text" id="phoneInput" placeholder="Nhập số điện thoại (VD: 0901234567)" maxlength="11" />
+            <button onclick="lookupPoints()" id="searchBtn">🔍 Tra cứu</button>
+          </div>
+        </div>
+
+        <div id="resultSection" class="result-section">
+          <!-- Points card -->
+          <div class="points-card" id="pointsCard">
+            <div class="points-circle">
+              <span class="points-number" id="pointsNumber">0</span>
+              <span class="points-label">ĐIỂM</span>
+            </div>
+            <div class="customer-name" id="customerName">Khách hàng</div>
+            <div class="customer-stats">
+              <div class="stat-item">
+                <div class="stat-value" id="totalSpent">0₫</div>
+                <div class="stat-label">Tổng chi tiêu</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" id="orderCount">0</div>
+                <div class="stat-label">Đơn hàng</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value" id="pointsDisplay">0</div>
+                <div class="stat-label">Điểm hiện có</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Redeem coupon -->
+          <div class="redeem-card" id="redeemCard">
+            <h3>🎟️ Đổi mã khuyến mãi</h3>
+            <p>Dùng điểm tích lũy để đổi mã giảm giá cho đơn hàng tiếp theo</p>
+
+            <div th:each="tier, idx : ${tiers}" class="redeem-info" style="cursor:pointer; transition:all 0.2s"
+                 th:attr="onclick='selectTier(' + ${idx.index} + ', ' + ${tier.points} + ')'"
+                 th:id="'tier-' + ${idx.index}">
+              <span class="icon">💰</span>
+              <span class="text">
+                <strong th:text="${tier.points} + ' điểm'">10 điểm</strong> = Mã giảm
+                <strong th:text="${#numbers.formatInteger(tier.discount, 3, 'POINT')} + '₫'">10,000₫</strong>
+                <span style="font-size:12px; color:#6b7280"> (hiệu lực 30 ngày)</span>
+              </span>
+            </div>
+
+            <button class="redeem-btn" id="redeemBtn" onclick="redeemCoupon()" disabled>🎁 Chọn gói để đổi mã</button>
+            <div class="coupon-result" id="couponResult">
+              <p style="margin:0 0 8px; color:#065f46; font-weight:600">🎉 Đổi mã thành công!</p>
+              <div class="coupon-code" id="newCouponCode">KM-XXXX</div>
+              <p style="margin:8px 0 0; font-size:13px; color:#6b7280" id="couponExpiry">Hạn sử dụng: ...</p>
+            </div>
+          </div>
+
+          <!-- Coupons list -->
+          <div class="coupons-list" id="couponsList">
+            <h3>📋 Mã khuyến mãi của bạn</h3>
+            <div id="couponsContainer"></div>
+            <p id="noCoupons" style="text-align:center; color:#6b7280; display:none">Chưa có mã khuyến mãi nào</p>
+          </div>
+        </div>
+
+        <div id="notFoundSection" class="result-section">
+          <div class="not-found">
+            <span class="icon">🔍</span>
+            <h3>Không tìm thấy khách hàng</h3>
+            <p>Số điện thoại chưa có trong hệ thống. Hãy mua hàng để tích điểm!</p>
+          </div>
+        </div>
+
+        <!-- Public coupons from admin -->
+        <div class="coupons-list" id="publicCouponsSection" style="margin-top: 24px">
+          <h3>🎫 Mã khuyến mãi có sẵn từ cửa hàng</h3>
+          <p style="color:#6b7280; font-size:14px; margin:-12px 0 20px">Các mã giảm giá do cửa hàng tạo — ai cũng có thể dùng!</p>
+          <div id="publicCouponsContainer"></div>
+          <p id="noPublicCoupons" style="text-align:center; color:#6b7280; display:none">Hiện chưa có mã khuyến mãi nào từ cửa hàng.</p>
+        </div>
+      </div>
+    </section>
+
+    <script layout:fragment="scripts">
+      let currentPhone = '';
+      let selectedTier = -1;
+      let selectedTierPoints = 0;
+
+      function formatMoney(value) {
+        return Number(value).toLocaleString('vi-VN') + '₫';
+      }
+
+      function selectTier(index, points) {
+        selectedTier = index;
+        selectedTierPoints = points;
+        document.querySelectorAll('.redeem-info').forEach((el, i) => {
+          el.style.border = i === index ? '2px solid #10b981' : '';
+          el.style.background = i === index ? '#ecfdf5' : '#fffbeb';
+        });
+        const btn = document.getElementById('redeemBtn');
+        const currentPoints = Number(document.getElementById('pointsNumber').textContent || 0);
+        btn.disabled = currentPoints < points;
+        btn.textContent = currentPoints >= points ? '🎁 Đổi mã ngay' : '🎁 Không đủ điểm';
+      }
+
+      async function lookupPoints() {
+        const phone = document.getElementById('phoneInput').value.trim();
+        if (!phone) return;
+        currentPhone = phone;
+
+        document.getElementById('resultSection').classList.remove('active');
+        document.getElementById('notFoundSection').classList.remove('active');
+        document.getElementById('couponResult').classList.remove('active');
+
+        try {
+          const res = await fetch(`/loyalty/api/lookup?phone=${encodeURIComponent(phone)}`);
+          const data = await res.json();
+
+          if (!data.found) {
+            document.getElementById('notFoundSection').classList.add('active');
+            return;
+          }
+
+          document.getElementById('pointsNumber').textContent = data.points;
+          document.getElementById('customerName').textContent = data.name;
+          document.getElementById('totalSpent').textContent = formatMoney(data.totalSpent);
+          document.getElementById('orderCount').textContent = data.orderCount;
+          document.getElementById('pointsDisplay').textContent = data.points;
+
+          const redeemBtn = document.getElementById('redeemBtn');
+          redeemBtn.disabled = true;
+          redeemBtn.textContent = '🎁 Chọn gói để đổi mã';
+          selectedTier = -1;
+
+          renderCoupons(data.coupons);
+          document.getElementById('resultSection').classList.add('active');
+        } catch (err) {
+          alert('Lỗi khi tra cứu. Vui lòng thử lại.');
+        }
+      }
+
+      async function redeemCoupon() {
+        if (!currentPhone || selectedTier < 0) return;
+
+        try {
+          const res = await fetch('/loyalty/api/redeem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `phone=${encodeURIComponent(currentPhone)}&tierIndex=${selectedTier}`
+          });
+          const data = await res.json();
+
+          if (!data.success) {
+            alert(data.error);
+            return;
+          }
+
+          document.getElementById('newCouponCode').textContent = data.code;
+          const expDate = new Date(data.expiresAt);
+          document.getElementById('couponExpiry').textContent =
+            'Hạn sử dụng: ' + expDate.toLocaleDateString('vi-VN');
+          document.getElementById('couponResult').classList.add('active');
+
+          lookupPoints();
+        } catch (err) {
+          alert('Lỗi khi đổi mã. Vui lòng thử lại.');
+        }
+      }
+
+      function renderCoupons(coupons) {
+        const container = document.getElementById('couponsContainer');
+        const noCoupons = document.getElementById('noCoupons');
+
+        if (!coupons || coupons.length === 0) {
+          container.innerHTML = '';
+          noCoupons.style.display = 'block';
+          return;
+        }
+
+        noCoupons.style.display = 'none';
+        container.innerHTML = coupons.map(c => {
+          const exp = new Date(c.expiresAt);
+          let badgeClass, badgeText, iconClass, icon;
+
+          if (c.used) {
+            badgeClass = 'badge-used'; badgeText = 'Đã dùng';
+            iconClass = 'used-icon'; icon = '✓';
+          } else if (!c.valid) {
+            badgeClass = 'badge-expired'; badgeText = 'Hết hạn';
+            iconClass = 'expired'; icon = '⏰';
+          } else {
+            badgeClass = 'badge-valid'; badgeText = 'Còn hiệu lực';
+            iconClass = 'valid'; icon = '🎟️';
+          }
+
+          return `
+            <div class="coupon-item ${c.used ? 'used' : ''}">
+              <div class="coupon-icon ${iconClass}">${icon}</div>
+              <div class="coupon-details">
+                <div class="code">${c.code}</div>
+                <div class="meta">Giảm ${c.discountFormatted}₫ · HSD: ${exp.toLocaleDateString('vi-VN')}</div>
+              </div>
+              <span class="coupon-badge ${badgeClass}">${badgeText}</span>
+            </div>`;
+        }).join('');
+      }
+
+      document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') lookupPoints();
+      });
+
+      async function loadPublicCoupons() {
+        try {
+          const res = await fetch('/loyalty/api/public-coupons');
+          const coupons = await res.json();
+          const container = document.getElementById('publicCouponsContainer');
+          const noCoupons = document.getElementById('noPublicCoupons');
+
+          if (!coupons || coupons.length === 0) {
+            container.innerHTML = '';
+            noCoupons.style.display = 'block';
+            return;
+          }
+
+          noCoupons.style.display = 'none';
+          container.innerHTML = coupons.map(c => {
+            const exp = new Date(c.expiresAt);
+            return `
+              <div class="coupon-item">
+                <div class="coupon-icon valid">🎫</div>
+                <div class="coupon-details">
+                  <div class="code">${c.code}</div>
+                  <div class="meta">Giảm ${c.discountFormatted}₫ · HSD: ${exp.toLocaleDateString('vi-VN')}</div>
+                </div>
+                <span class="coupon-badge badge-valid">Còn hiệu lực</span>
+              </div>`;
+          }).join('');
+        } catch (err) {
+          console.error('Error loading public coupons:', err);
+        }
+      }
+
+      loadPublicCoupons();
+    </script>
+  </body>
+</html>

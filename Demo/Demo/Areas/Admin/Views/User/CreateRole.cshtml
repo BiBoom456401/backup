@@ -1,0 +1,177 @@
+@model CreateRoleViewModel
+
+@{
+    ViewData["Title"] = "Tạo Role mới";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-header-title">
+            <h1><i class="fas fa-plus-circle"></i> Tạo Role mới</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index"><i class="fas fa-users"></i> Quản lý User</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="User" asp-action="RolesList"><i class="fas fa-user-tag"></i> Danh sách Role</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Tạo Role mới</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <!-- Main Form -->
+        <div class="col-xl-8 col-lg-9 col-md-12">
+            <div class="user-card">
+                <div class="user-card-header text-center">
+                    <div class="user-card-title">
+                        <i class="fas fa-plus-circle text-primary me-2"></i>
+                        <span>Tạo Role mới cho hệ thống</span>
+                    </div>
+                </div>
+                
+                <form asp-action="CreateRole" method="post" id="createRoleForm">
+                    <div class="user-card-body">
+                        <!-- Error Messages -->
+                        <div asp-validation-summary="ModelOnly" class="alert-modern error" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Có lỗi xảy ra!</strong>
+                                <p>Vui lòng kiểm tra lại thông tin và thử lại.</p>
+                            </div>
+                        </div>
+                          <!-- Main Form Section -->
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="form-modern">
+                                    <div class="form-group mb-4">
+                                        <label asp-for="RoleName" class="form-label fw-bold text-center d-block mb-3">
+                                            <i class="fas fa-user-tag text-primary"></i> 
+                                            Tên Role <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-shield-alt"></i>
+                                            </span>
+                                            <input asp-for="RoleName" class="form-control modern-input text-center" 
+                                                   placeholder="Ví dụ: Admin, Manager, Editor, Moderator..." 
+                                                   autocomplete="off" 
+                                                   maxlength="50" />
+                                        </div>
+                                        <span asp-validation-for="RoleName" class="field-error d-block text-center mt-2"></span>
+                                        <div class="form-help mt-3 text-center">
+                                            <i class="fas fa-info-circle text-info"></i>
+                                            <small class="text-muted d-block">
+                                                Role name nên sử dụng tiếng Anh, không dấu, không có khoảng trắng và ký tự đặc biệt
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 justify-content-between">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="action-btn primary-btn px-4" id="createBtn">
+                                            <i class="fas fa-save me-2"></i> Tạo Role
+                                        </button>
+                                        <a asp-action="RolesList" class="action-btn secondary-btn px-4">
+                                            <i class="fas fa-arrow-left me-2"></i> Quay lại danh sách
+                                        </a>
+                                    </div>
+                                    <button type="reset" class="action-btn outline-btn" id="resetBtn">
+                                        <i class="fas fa-undo me-2"></i> Làm mới
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Form validation và submission
+            $('#createRoleForm').on('submit', function(e) {
+                const roleName = $('#RoleName').val().trim();
+                
+                if (!roleName) {
+                    e.preventDefault();
+                    showAlert('error', 'Vui lòng nhập tên role!');
+                    return false;
+                }
+                
+                // Kiểm tra format role name
+                const rolePattern = /^[a-zA-Z][a-zA-Z0-9]*$/;
+                if (!rolePattern.test(roleName)) {
+                    e.preventDefault();
+                    showAlert('error', 'Tên role không hợp lệ! Chỉ được sử dụng chữ cái và số, bắt đầu bằng chữ cái.');
+                    return false;
+                }
+                
+                // Show loading state
+                const createBtn = $('#createBtn');
+                createBtn.prop('disabled', true);
+                createBtn.html('<i class="fas fa-spinner fa-spin"></i> Đang tạo...');
+            });
+            
+            // Real-time validation
+            $('#RoleName').on('input', function() {
+                const value = $(this).val().trim();
+                const errorSpan = $(this).siblings('.field-error');
+                
+                if (value) {
+                    const rolePattern = /^[a-zA-Z][a-zA-Z0-9]*$/;
+                    if (!rolePattern.test(value)) {
+                        $(this).addClass('is-invalid');
+                        errorSpan.text('Tên role chỉ được chứa chữ cái và số, bắt đầu bằng chữ cái');
+                    } else {
+                        $(this).removeClass('is-invalid').addClass('is-valid');
+                        errorSpan.text('');
+                    }
+                } else {
+                    $(this).removeClass('is-invalid is-valid');
+                    errorSpan.text('');
+                }
+            });
+            
+            // Helper function để show alerts
+            function showAlert(type, message) {
+                const alertClass = type === 'error' ? 'alert-modern error' : 'alert-modern success';
+                const icon = type === 'error' ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle';
+                
+                const alertHtml = `
+                    <div class="${alertClass}" style="margin-bottom: 20px;">
+                        <i class="${icon}"></i>
+                        <div>
+                            <strong>${type === 'error' ? 'Lỗi!' : 'Thành công!'}</strong>
+                            <p>${message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                $('.user-card-body').prepend(alertHtml);
+                
+                // Auto hide after 5 seconds
+                setTimeout(function() {
+                    $('.alert-modern').fadeOut();
+                }, 5000);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+    <div th:fragment="content">
+        <div class="row g-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="glass-panel p-4 p-md-5" th:if="${tournament != null}">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h2 class="fw-900 mb-2" th:text="${tournament.name}">Giải Mùa Hè</h2>
+                            <p class="text-muted mb-0" th:text="${tournament.description ?: 'Chưa có mô tả'}">Mô tả</p>
+                        </div>
+                        <span class="badge bg-primary px-3 py-2 rounded-pill" th:text="${tournament.status}">UPCOMING</span>
+                    </div>
+
+                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="glass-panel p-4 h-100">
+                                <div class="text-muted small mb-2">Thời gian bắt đầu</div>
+                                <div class="fw-bold fs-5">
+                                    <span th:text="${tournament.startDate}">2026-03-28</span>
+                                    <span th:text="${tournament.startTime}">08:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-panel p-4 h-100">
+                                <div class="text-muted small mb-2">Thời gian kết thúc</div>
+                                <div class="fw-bold fs-5">
+                                    <span th:text="${tournament.endDate}">2026-04-05</span>
+                                    <span th:text="${tournament.endTime}">17:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-panel p-4 h-100">
+                                <div class="text-muted small mb-2">Sân chính</div>
+                                <div class="fw-bold" th:text="${tournament.field != null ? tournament.field.name : 'Chưa cập nhật'}">Sân A</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-panel p-4 h-100">
+                                <div class="text-muted small mb-2">Số đội tối đa</div>
+                                <div class="fw-bold" th:text="${tournament.maxTeams}">8</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-panel p-4 h-100">
+                                <div class="text-muted small mb-2">Hạn đăng ký</div>
+                                <div class="fw-bold" th:text="${tournament.registrationDeadline}">2026-03-20</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 mt-4" sec:authorize="isAuthenticated()">
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-file-signature text-primary me-2"></i> Đăng ký đội vào giải
+                        </h4>
+                        <div th:if="${#lists.isEmpty(myTeams)}" class="text-muted">
+                            Bạn chưa có đội nào. Hãy tạo đội trước ở mục "Đội của tôi".
+                        </div>
+                        <form th:if="${!#lists.isEmpty(myTeams)}" th:action="@{/tournaments/{id}/register(id=${tournament.id})}" method="post">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-8">
+                                    <label class="form-label">Chọn đội của bạn</label>
+                                    <select name="teamId" class="form-select form-control" required>
+                                        <option value="">Chọn đội bóng</option>
+                                        <option th:each="team : ${myTeams}" th:value="${team.id}" th:text="${team.name}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-modern btn-primary-modern w-100">
+                                        <i class="fas fa-paper-plane me-2"></i> Đăng ký
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel p-4 mt-4">
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-calendar-days text-primary me-2"></i> Lịch thi đấu và kết quả
+                        </h4>
+                        <div class="row g-3" th:if="${!#lists.isEmpty(matches)}">
+                            <div class="col-12" th:each="match : ${matches}">
+                                <div class="glass-panel p-3">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                        <div>
+                                            <div class="fw-bold">
+                                                <span th:text="${match.team1.name}">Đội A</span>
+                                                <span class="mx-2">vs</span>
+                                                <span th:text="${match.team2.name}">Đội B</span>
+                                            </div>
+                                            <div class="text-muted small" th:text="${#temporals.format(match.startTime, 'dd-MM-yyyy HH:mm')}">28-03-2026 08:00</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="fw-bold fs-5">
+                                                <span th:text="${match.score1}">0</span>
+                                                <span class="mx-2">-</span>
+                                                <span th:text="${match.score2}">0</span>
+                                            </div>
+                                            <span class="badge bg-primary px-3 py-2 rounded-pill" th:text="${match.status}">SCHEDULED</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(matches)}" class="text-muted">
+                            Giải đấu chưa có lịch thi đấu.
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/tournaments" class="btn btn-modern btn-outline-modern">
+                            <i class="fas fa-arrow-left me-2"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 text-center text-muted" th:if="${tournament == null}">
+                    Không tìm thấy giải đấu.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

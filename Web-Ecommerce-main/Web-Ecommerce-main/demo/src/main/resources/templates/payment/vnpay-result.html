@@ -1,0 +1,88 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Kết quả thanh toán VNPay</title>
+    <style>
+      .payment-result { max-width: 600px; margin: 0 auto; padding: 40px 24px; }
+      .result-card {
+        background: white; border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1); overflow: hidden;
+      }
+      .result-header {
+        padding: 48px 32px; text-align: center; color: white;
+      }
+      .result-header.success {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+      .result-header.failed {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+      .result-icon { font-size: 72px; display: block; margin-bottom: 16px; }
+      .result-header h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px; }
+      .result-header p { font-size: 16px; opacity: 0.9; margin: 0; }
+      .result-body { padding: 32px; }
+      .info-row {
+        display: flex; justify-content: space-between; padding: 12px 0;
+        border-bottom: 1px solid #f3f4f6; font-size: 14px;
+      }
+      .info-row:last-child { border-bottom: none; }
+      .info-row .label { color: #6b7280; }
+      .info-row .value { font-weight: 600; color: #1f2937; }
+      .result-actions {
+        display: flex; gap: 12px; margin-top: 24px; padding-top: 24px;
+        border-top: 2px solid #f3f4f6;
+      }
+      .result-btn {
+        flex: 1; padding: 14px; border-radius: 12px; text-align: center;
+        text-decoration: none; font-weight: 700; font-size: 15px;
+      }
+      .btn-primary { background: #fcd34d; color: #1f2937; }
+      .btn-secondary { background: #f3f4f6; color: #374151; }
+    </style>
+  </head>
+  <body>
+    <section layout:fragment="content">
+      <div class="payment-result">
+        <div class="result-card">
+          <div th:class="${success ? 'result-header success' : 'result-header failed'}">
+            <span class="result-icon" th:text="${success ? '✅' : '❌'}">✅</span>
+            <h1 th:text="${success ? 'Thanh toán thành công!' : 'Thanh toán thất bại'}">Kết quả</h1>
+            <p th:text="${success ? 'Đơn hàng đã được thanh toán qua VNPay' : 'Giao dịch không thành công, vui lòng thử lại'}">Mô tả</p>
+          </div>
+          <div class="result-body">
+            <div th:if="${order != null}">
+              <div class="info-row">
+                <span class="label">Mã đơn hàng</span>
+                <span class="value" th:text="'#' + ${order.id}">#1</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Khách hàng</span>
+                <span class="value" th:text="${order.customerName}">Tên</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Tổng thanh toán</span>
+                <span class="value" style="color:#dc2626" th:text="${order.finalAmountFormatted} + '₫'">0₫</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Phương thức</span>
+                <span class="value">VNPay</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Trạng thái</span>
+                <span class="value" th:text="${success ? 'Đã thanh toán' : 'Thất bại'}">Trạng thái</span>
+              </div>
+            </div>
+            <div class="result-actions">
+              <a th:href="@{/products}" class="result-btn btn-primary">Tiếp tục mua sắm</a>
+              <a th:href="@{/}" class="result-btn btn-secondary">Về trang chủ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

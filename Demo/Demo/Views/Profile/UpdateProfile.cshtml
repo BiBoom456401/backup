@@ -1,0 +1,125 @@
+@model UpdateProfileViewModel
+
+@{
+    ViewData["Title"] = "Cập nhật hồ sơ";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Cập nhật hồ sơ cá nhân</h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+                        <input asp-for="Id" type="hidden" />
+                        
+                        <!-- Avatar Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-4 text-center">
+                                <div class="avatar-section">
+                                    <div class="current-avatar mb-3">
+                                        @if (!string.IsNullOrEmpty(Model.CurrentAvatar))
+                                        {
+                                            <img src="@Model.CurrentAvatar" alt="Avatar hiện tại" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ddd;">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; font-size: 48px; margin: 0 auto;">
+                                                @(Model.FullName?.Substring(0, 1).ToUpper() ?? "U")
+                                            </div>
+                                        }
+                                    </div>
+                                    <h6 class="text-muted">Avatar hiện tại</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label asp-for="AvatarFile" class="form-label"><i class="fas fa-image me-2"></i>Chọn avatar mới</label>
+                                    <input asp-for="AvatarFile" type="file" class="form-control" accept="image/*">
+                                    <span asp-validation-for="AvatarFile" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <small>Chọn file ảnh (.jpg, .jpeg, .png, .gif). Kích thước tối đa: 5MB</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Profile Information -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FullName" class="form-label"><i class="fas fa-user me-2"></i>Họ tên</label>
+                                    <input asp-for="FullName" class="form-control" placeholder="Nhập họ tên đầy đủ">
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Age" class="form-label"><i class="fas fa-birthday-cake me-2"></i>Tuổi</label>
+                                    <input asp-for="Age" class="form-control" placeholder="Nhập tuổi">
+                                    <span asp-validation-for="Age" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Address" class="form-label"><i class="fas fa-map-marker-alt me-2"></i>Địa chỉ</label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Nhập địa chỉ"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i>Hủy
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Cập nhật hồ sơ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Preview selected image
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const currentAvatar = document.querySelector('.current-avatar img, .current-avatar div');
+                    if (currentAvatar.tagName === 'IMG') {
+                        currentAvatar.src = e.target.result;
+                    } else {
+                        // Replace the div with an img
+                        const newImg = document.createElement('img');
+                        newImg.src = e.target.result;
+                        newImg.alt = 'Preview';
+                        newImg.className = 'rounded-circle';
+                        newImg.style.cssText = 'width: 120px; height: 120px; object-fit: cover; border: 3px solid #ddd;';
+                        currentAvatar.parentNode.replaceChild(newImg, currentAvatar);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,211 @@
+<!doctype html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+    <head>
+        <title>Quản lý Danh mục</title>
+        <style>
+            .categories-page {
+                padding: 20px 0;
+            }
+            .page-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+                border-bottom: 2px solid #ffd400;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+            .page-title {
+                font-size: 24px;
+                font-weight: 700;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .page-title i {
+                color: #ffd400;
+                font-size: 28px;
+            }
+            .btn-add {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 20px;
+                border-radius: 999px;
+                text-decoration: none;
+                background: #000;
+                color: #fff;
+                font-weight: 600;
+            }
+            .stats-row {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            .stat-card {
+                background: #fff;
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            }
+            .stat-card.primary {
+                background: linear-gradient(135deg, #ffd400 0%, #ffb300 100%);
+            }
+            .stat-number {
+                font-size: 30px;
+                font-weight: 800;
+                margin-bottom: 6px;
+            }
+            .category-table-wrap {
+                background: #fff;
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            }
+            .category-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .category-table th,
+            .category-table td {
+                padding: 14px 12px;
+                border-bottom: 1px solid #ececec;
+                text-align: left;
+            }
+            .category-table th {
+                background: #f8fafc;
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 700;
+            }
+            .category-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #999;
+                font-size: 20px;
+            }
+            .action-links {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .action-links a {
+                text-decoration: none;
+                padding: 8px 14px;
+                border-radius: 999px;
+                font-size: 13px;
+                font-weight: 600;
+            }
+            .link-view {
+                background: #eff6ff;
+                color: #2563eb;
+            }
+            .link-edit {
+                background: #fef3c7;
+                color: #92400e;
+            }
+            .link-delete {
+                background: #fee2e2;
+                color: #dc2626;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 40px 16px;
+                color: #6b7280;
+            }
+            @media (max-width: 900px) {
+                .stats-row {
+                    grid-template-columns: 1fr;
+                }
+                .category-table {
+                    display: block;
+                    overflow-x: auto;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <section layout:fragment="content">
+            <div class="container categories-page">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="ph-fill ph-folders"></i>
+                        Quản lý Danh mục
+                    </h1>
+                    <a th:href="@{/categories/add}" class="btn-add">
+                        <i class="ph-bold ph-plus"></i> Thêm danh mục mới
+                    </a>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-card primary">
+                        <div class="stat-number" th:text="${categories != null ? categories.size() : 0}">0</div>
+                        <div>Tổng danh mục</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${categories != null ? #lists.size(categories.?[parentId == null]) : 0}">0</div>
+                        <div>Danh mục gốc</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${categories != null ? #lists.size(categories.?[parentId != null]) : 0}">0</div>
+                        <div>Danh mục con</div>
+                    </div>
+                </div>
+
+                <div class="category-table-wrap">
+                    <table class="category-table" th:if="${categories != null and !#lists.isEmpty(categories)}">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px">Icon</th>
+                                <th>Tên danh mục</th>
+                                <th style="width: 140px">Loại</th>
+                                <th style="width: 140px">Sản phẩm</th>
+                                <th style="width: 260px">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="category : ${categories}">
+                                <td>
+                                    <div class="category-icon">
+                                        <img th:if="${category.iconUrl != null and !category.iconUrl.isBlank()}" th:src="${category.iconUrl}" th:alt="${category.name}" style="width: 24px; height: 24px; object-fit: contain" />
+                                        <i th:unless="${category.iconUrl != null and !category.iconUrl.isBlank()}" class="ph ph-grid-four"></i>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong th:text="${category.name}">Tên danh mục</strong>
+                                    <div style="margin-top: 4px; color: #9ca3af; font-size: 13px" th:text="${category.parentId != null ? 'Parent ID: ' + category.parentId : 'Danh mục cấp cao nhất'}">Danh mục gốc</div>
+                                </td>
+                                <td th:text="${category.parentId != null ? 'Danh mục con' : 'Danh mục gốc'}">Danh mục gốc</td>
+                                <td th:text="${category.products != null ? #lists.size(category.products) : 0}">0</td>
+                                <td>
+                                    <div class="action-links">
+                                        <a th:href="@{/products/category/{id}(id=${category.id})}" class="link-view">Xem sản phẩm</a>
+                                        <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="link-edit">Sửa</a>
+                                        <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="link-delete" onclick="return confirm('Bạn có chắc muốn xóa danh mục này?');">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="empty-state" th:if="${categories == null or #lists.isEmpty(categories)}">
+                        Chưa có danh mục nào được tạo.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

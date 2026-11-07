@@ -1,0 +1,388 @@
+@model UserViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết User";
+}
+
+<div class="page-header-modern">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-user-circle mr-3"></i>Chi tiết Người dùng</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-action="Index">Users</a></li>
+                        <li class="breadcrumb-item active">Chi tiết</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="user-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-id-card mr-2"></i>
+                        Thông tin chi tiết
+                    </h3>
+                    <div class="card-tools">
+                        <a asp-action="Index" class="action-btn btn btn-light btn-sm mr-2">
+                            <i class="fas fa-arrow-left mr-1"></i> Quay lại
+                        </a>
+                        <a asp-action="ManageRoles" asp-route-id="@Model.Id" class="action-btn btn btn-warning btn-sm">
+                            <i class="fas fa-user-cog mr-1"></i> Phân quyền
+                        </a>
+                    </div>
+                </div>                
+                <div class="card-body">                    <!-- User Avatar Section -->
+                    <div class="text-center mb-4">
+                        <div class="avatar-container mb-3">
+                            @if (!string.IsNullOrEmpty(Model.Avatar))
+                            {
+                                <img src="@Model.Avatar" alt="@Model.FullName" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #e9ecef; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                            }
+                            else
+                            {
+                                <div class="user-avatar mx-auto d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; font-size: 3rem; border: 4px solid #e9ecef; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                    @(Model.FullName?.Substring(0, 1).ToUpper() ?? "U")
+                                </div>
+                            }
+                        </div>                        <h4 class="mt-3 mb-1">@Model.FullName</h4>
+                        <p class="text-muted">@Model.Email</p>
+                        
+                        <!-- Admin Avatar Management -->
+                        <div class="avatar-management mt-3">
+                            <form id="avatarForm" enctype="multipart/form-data" class="d-inline-block">
+                                <input type="hidden" name="userId" value="@Model.Id" />
+                                <div class="input-group input-group-sm" style="max-width: 300px; margin: 0 auto;">
+                                    <input type="file" class="form-control" id="avatarFile" name="avatarFile" accept="image/*" style="font-size: 12px;">
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="uploadAvatar()">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-1">JPG, PNG, GIF (max 5MB)</small>
+                            </form>
+                            
+                            @if (!string.IsNullOrEmpty(Model.Avatar) && !Model.Avatar.Contains("default-avatar"))
+                            {
+                                <button type="button" class="btn btn-outline-secondary btn-sm mt-2" onclick="resetAvatar('@Model.Id')">
+                                    <i class="fas fa-undo me-1"></i>Reset Avatar
+                                </button>
+                            }
+                        </div>
+                        <div class="mb-3">
+                            @if (Model.IsLocked)
+                            {
+                                <span class="badge badge-danger badge-lg">
+                                    <i class="fas fa-lock mr-1"></i>Tài khoản đã khóa
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success badge-lg">
+                                    <i class="fas fa-check-circle mr-1"></i>Đang hoạt động
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- User Information -->
+                    <div class="form-modern">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-user mr-2"></i>Họ tên:
+                                    </label>
+                                    <div class="bg-light p-3 rounded">@Model.FullName</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-envelope mr-2"></i>Email:
+                                    </label>
+                                    <div class="bg-light p-3 rounded">
+                                        <a href="mailto:@Model.Email" class="text-decoration-none">@Model.Email</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-phone mr-2"></i>Số điện thoại:
+                                    </label>
+                                    <div class="bg-light p-3 rounded">
+                                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                        {
+                                            <span>@Model.PhoneNumber</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Chưa có thông tin</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-birthday-cake mr-2"></i>Tuổi:
+                                    </label>
+                                    <div class="bg-light p-3 rounded">
+                                        @if (!string.IsNullOrEmpty(Model.Age))
+                                        {
+                                            <span>@Model.Age tuổi</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Chưa có thông tin</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>Địa chỉ:
+                                    </label>
+                                    <div class="bg-light p-3 rounded">
+                                        @if (!string.IsNullOrEmpty(Model.Address))
+                                        {
+                                            <span>@Model.Address</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Chưa có thông tin</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-user-shield mr-2"></i>Phân quyền (Roles):
+                                    </label>
+                                    <div class="bg-light p-3 rounded">
+                                        @if (Model.Roles.Any())
+                                        {
+                                            @foreach (var role in Model.Roles)
+                                            {
+                                                <span class="role-badge @GetRoleCssClass(role) mr-2 mb-2">
+                                                    <i class="@GetRoleIcon(role) mr-1"></i>
+                                                    @role
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">
+                                                <i class="fas fa-minus-circle mr-1"></i>Chưa có role
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-4">
+                        <div class="btn-group">
+                            @if (Model.IsLocked)
+                            {
+                                <button onclick="unlockUser('@Model.Id')" class="action-btn btn btn-success btn-lg">
+                                    <i class="fas fa-unlock mr-2"></i> Mở khóa tài khoản
+                                </button>
+                            }
+                            else
+                            {
+                                <button onclick="lockUser('@Model.Id')" class="action-btn btn btn-danger btn-lg">
+                                    <i class="fas fa-lock mr-2"></i> Khóa tài khoản
+                                </button>
+                            }
+                            <a asp-action="ManageRoles" asp-route-id="@Model.Id" class="action-btn btn btn-warning btn-lg ml-2">
+                                <i class="fas fa-user-cog mr-2"></i> Quản lý phân quyền
+                            </a>
+                        </div>
+                    </div>                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function lockUser(userId) {
+            Swal.fire({
+                title: 'Xác nhận khóa tài khoản',
+                text: "Bạn có chắc chắn muốn khóa tài khoản này?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Có, khóa tài khoản!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '@Url.Action("LockUser", "User")',
+                        type: 'POST',
+                        data: { id: userId },
+                        success: function(result) {
+                            if (result.success) {
+                                Swal.fire('Thành công!', result.message, 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Lỗi!', result.message, 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Lỗi!', 'Có lỗi xảy ra', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function unlockUser(userId) {
+            Swal.fire({
+                title: 'Xác nhận mở khóa tài khoản',
+                text: "Bạn có chắc chắn muốn mở khóa tài khoản này?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Có, mở khóa!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '@Url.Action("UnlockUser", "User")',
+                        type: 'POST',
+                        data: { id: userId },
+                        success: function(result) {
+                            if (result.success) {
+                                Swal.fire('Thành công!', result.message, 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Lỗi!', result.message, 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Lỗi!', 'Có lỗi xảy ra', 'error');
+                        }
+                    });
+                }
+            });
+        }        function resetAvatar(userId) {
+            if (confirm('Bạn có chắc chắn muốn reset avatar về mặc định?')) {
+                $.ajax({
+                    url: '@Url.Action("ResetAvatar", "User")',
+                    type: 'POST',
+                    data: { userId: userId },
+                    success: function(response) {
+                        if (response.success) {
+                            // Reload the page to show updated avatar
+                            location.reload();
+                        } else {
+                            alert('Lỗi: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi reset avatar');
+                    }
+                });
+            }
+        }
+
+        function uploadAvatar() {
+            const formData = new FormData();
+            const fileInput = document.getElementById('avatarFile');
+            const userId = document.querySelector('input[name="userId"]').value;
+            
+            if (!fileInput.files[0]) {
+                alert('Vui lòng chọn file ảnh');
+                return;
+            }
+            
+            formData.append('userId', userId);
+            formData.append('avatarFile', fileInput.files[0]);
+            
+            // Show loading
+            const uploadBtn = event.target;
+            const originalText = uploadBtn.innerHTML;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            uploadBtn.disabled = true;
+            
+            $.ajax({
+                url: '@Url.Action("UploadAvatar", "User")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        // Update avatar image immediately
+                        const avatarContainer = document.querySelector('.avatar-container');
+                        avatarContainer.innerHTML = `<img src="${response.avatarPath}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #e9ecef; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">`;
+                        
+                        // Clear file input
+                        fileInput.value = '';
+                        
+                        alert('Upload avatar thành công!');
+                    } else {
+                        alert('Lỗi: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi upload avatar');
+                },
+                complete: function() {
+                    // Restore button
+                    uploadBtn.innerHTML = originalText;
+                    uploadBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+}
+
+@functions {
+    private string GetRoleCssClass(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "admin",
+            "Company" => "company", 
+            "Employee" => "employee",
+            "Customer" => "customer",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleIcon(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "fas fa-crown",
+            "Company" => "fas fa-building",
+            "Employee" => "fas fa-user-tie",
+            "Customer" => "fas fa-user",
+            _ => "fas fa-user-tag"
+        };
+    }
+}

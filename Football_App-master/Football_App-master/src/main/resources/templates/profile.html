@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="glass-panel p-5 h-100">
+                    <h3 class="fw-bold mb-4 text-gradient"><i class="fas fa-id-card me-2"></i> Thông tin cá nhân</h3>
+                    <div th:if="${param.success}" class="alert alert-success glass-panel border-success text-success mb-4">
+                        Cập nhật hồ sơ thành công!
+                    </div>
+                    
+                    <form th:action="@{/profile}" th:object="${user}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{password}">
+                        <input type="hidden" th:field="*{role}">
+                        
+                        <div class="mb-4">
+                            <label class="form-label"><i class="fas fa-user text-primary me-2"></i> Tài khoản</label>
+                            <input type="text" th:field="*{username}" class="form-control bg-transparent" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label"><i class="fas fa-envelope text-primary me-2"></i> Email</label>
+                            <input type="email" th:field="*{email}" class="form-control" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label"><i class="fas fa-signature text-primary me-2"></i> Họ tên</label>
+                            <input type="text" th:field="*{fullName}" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-modern btn-primary-modern w-100 py-2">Cập nhật thông tin</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="glass-panel p-5 h-100">
+                    <h3 class="fw-bold mb-4 text-gradient"><i class="fas fa-key me-2"></i> Đổi mật khẩu</h3>
+                    <div th:if="${param.passwordSuccess}" class="alert alert-success glass-panel border-success text-success mb-4">
+                        Đổi mật khẩu thành công!
+                    </div>
+                    
+                    <form th:action="@{/change-password}" method="post">
+                        <div class="mb-4">
+                            <label class="form-label">Mật khẩu mới</label>
+                            <input type="password" name="newPassword" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-modern btn-outline-modern w-100 py-2">Xác nhận đổi mật khẩu</button>
+                    </form>
+
+                    <hr class="my-4 border-white border-opacity-10">
+                    <a href="/bookings/my" class="btn btn-modern btn-primary-modern w-100 py-2">
+                        <i class="fas fa-clock-rotate-left me-2"></i> Xem lịch sử đặt sân
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

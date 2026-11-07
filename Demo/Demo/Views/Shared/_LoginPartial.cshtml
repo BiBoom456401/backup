@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userAvatar = currentUser?.Avatar ?? "/images/avatars/default-avatar.svg";
+    
+    @if (await UserManager.IsInRoleAsync(currentUser, "Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                <i class="fas fa-cog"></i> Quản lý
+            </a>
+        </li>
+    }
+    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-dark d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="@userAvatar" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+            @UserManager.GetUserName(User)
+        </a>        
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-user-cog me-2"></i>Quản lý tài khoản</a></li>
+            <li><a class="dropdown-item" asp-controller="Profile" asp-action="UpdateProfile"><i class="fas fa-user-edit me-2"></i>Cập nhật hồ sơ</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form id="logoutForm" class="d-inline" asp-controller="Auth" asp-action="Logout" method="post">
+                    <button id="logout" type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-controller="Auth" asp-action="Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="login" asp-controller="Auth" asp-action="Login">Login</a>
+    </li>
+}
+</ul>

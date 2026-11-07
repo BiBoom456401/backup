@@ -1,0 +1,197 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="stats-label">Tổng sản phẩm</div>
+                        <div class="stats-number">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-box stats-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="stats-label">Danh mục</div>
+                        <div class="stats-number">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-list stats-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="stats-label">Người dùng</div>
+                        <div class="stats-number">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users stats-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stats-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="stats-label">Đơn hàng</div>
+                        <div class="stats-number">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart stats-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Quick Actions -->
+    <div class="col-lg-6 mb-4">
+        <div class="card admin-card">
+            <div class="card-header admin-card-header">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Thao tác nhanh</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-primary btn-admin w-100">
+                            <i class="fas fa-plus"></i><br>
+                            Thêm sản phẩm
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-success btn-admin w-100">
+                            <i class="fas fa-plus"></i><br>
+                            Thêm danh mục
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-info btn-admin w-100">
+                            <i class="fas fa-eye"></i><br>
+                            Xem sản phẩm
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-warning btn-admin w-100">
+                            <i class="fas fa-eye"></i><br>
+                            Xem danh mục
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="col-lg-6 mb-4">
+        <div class="card admin-card">
+            <div class="card-header admin-card-header">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Hoạt động gần đây</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-plus-circle text-success me-3"></i>
+                        <div>
+                            <div class="fw-bold">Thêm sản phẩm mới</div>
+                            <small class="text-muted">2 phút trước</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-edit text-warning me-3"></i>
+                        <div>
+                            <div class="fw-bold">Cập nhật danh mục</div>
+                            <small class="text-muted">15 phút trước</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-user-plus text-info me-3"></i>
+                        <div>
+                            <div class="fw-bold">Người dùng mới đăng ký</div>
+                            <small class="text-muted">1 giờ trước</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Xem tất cả</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- System Information -->
+    <div class="col-lg-12 mb-4">
+        <div class="card admin-card">
+            <div class="card-header admin-card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin hệ thống</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Phiên bản ứng dụng</h6>
+                        <p class="text-muted">1.0.0</p>
+                        
+                        <h6>Framework</h6>
+                        <p class="text-muted">.NET 8.0</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Cơ sở dữ liệu</h6>
+                        <p class="text-muted">SQL Server</p>
+                        
+                        <h6>Máy chủ</h6>
+                        <p class="text-muted">IIS Express</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add any dashboard-specific JavaScript here
+        $(document).ready(function() {
+            // Simulate loading statistics (replace with actual API calls)
+            setTimeout(function() {
+                // Update statistics with real data
+                console.log('Dashboard loaded');
+            }, 1000);
+        });
+    </script>
+}

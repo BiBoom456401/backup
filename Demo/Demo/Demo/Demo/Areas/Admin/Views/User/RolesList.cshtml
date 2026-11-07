@@ -1,0 +1,210 @@
+@using Microsoft.AspNetCore.Identity
+@model List<IdentityRole>
+
+@{
+    ViewData["Title"] = "Danh sách Roles";
+}
+
+<div class="page-header-modern">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-user-shield mr-3"></i>Quản lý Roles</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-action="Index">Users</a></li>
+                        <li class="breadcrumb-item active">Roles</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="user-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-list mr-2"></i>
+                        Danh sách Roles
+                    </h3>
+                    <div class="card-tools">
+                        <a asp-action="Index" class="action-btn btn btn-light btn-sm mr-2">
+                            <i class="fas fa-arrow-left mr-1"></i> Quay lại Users
+                        </a>
+                        <a asp-action="CreateRole" class="action-btn btn btn-success btn-sm">
+                            <i class="fas fa-plus mr-1"></i> Tạo Role mới
+                        </a>
+                    </div>
+                </div>                <div class="card-body">
+                    @if (TempData["success"] != null)
+                    {
+                        <div class="alert-modern alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            @TempData["success"]
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                    }
+                    
+                    @if (Model.Any())
+                    {
+                        <div class="modern-table">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="rolesTable">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fas fa-key mr-2"></i>ID</th>
+                                            <th><i class="fas fa-tag mr-2"></i>Tên Role</th>
+                                            <th><i class="fas fa-users mr-2"></i>Số lượng Users</th>
+                                            <th><i class="fas fa-cogs mr-2"></i>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var role in Model)
+                                        {
+                                            <tr>
+                                                <td><code class="bg-light p-2 rounded">@role.Id</code></td>
+                                                <td>
+                                                    <span class="role-badge @GetRoleCssClass(role.Name)">
+                                                        <i class="fas @GetRoleIcon(role.Name) mr-1"></i>
+                                                        @role.Name
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-info badge-pill" id="userCount_@role.Id">
+                                                        <i class="fas fa-spinner fa-spin mr-1"></i>Đang tải...
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (!IsSystemRole(role.Name))
+                                                    {
+                                                        <button onclick="deleteRole('@role.Id', '@role.Name')" 
+                                                                class="action-btn btn btn-danger btn-sm" title="Xóa role">
+                                                            <i class="fas fa-trash mr-1"></i>Xóa
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">
+                                                            <i class="fas fa-lock mr-1"></i> System Role
+                                                        </span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-user-shield"></i>
+                            <h5>Chưa có roles nào</h5>
+                            <p>Hệ thống chưa có roles nào. Hãy tạo role đầu tiên để bắt đầu quản lý phân quyền.</p>
+                            <a asp-action="CreateRole" class="action-btn btn btn-success btn-lg">
+                                <i class="fas fa-plus mr-2"></i> Tạo Role đầu tiên
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#rolesTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"
+                },
+                "responsive": true,
+                "pageLength": 10,
+                "order": [[1, "asc"]]
+            });
+            
+            // Load user count for each role
+            @foreach (var role in Model)
+            {
+                <text>loadUserCount('@role.Id', '@role.Name');</text>
+            }
+        });        function loadUserCount(roleId, roleName) {
+            // Simulated user count loading - you can implement actual API call
+            setTimeout(function() {
+                var count = Math.floor(Math.random() * 10); // Replace with actual API call
+                $('#userCount_' + roleId).html('<i class="fas fa-users mr-1"></i>' + count + ' users');
+            }, 500);
+        }
+
+        function deleteRole(roleId, roleName) {
+            if (confirm('Bạn có chắc chắn muốn xóa role "' + roleName + '"?\n\nLưu ý: Chỉ có thể xóa role không có user nào đang sử dụng.')) {
+                $.ajax({
+                    url: '@Url.Action("DeleteRole", "User")',
+                    type: 'POST',
+                    data: { id: roleId },
+                    success: function(result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            location.reload();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra');
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+@functions {
+    private string GetRoleBadgeClass(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "danger",
+            "Company" => "warning", 
+            "Employee" => "info",
+            "Customer" => "primary",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleCssClass(string? roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "admin",
+            "Company" => "company", 
+            "Employee" => "employee",
+            "Customer" => "customer",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleIcon(string? roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "fa-crown",
+            "Company" => "fa-building", 
+            "Employee" => "fa-user-tie",
+            "Customer" => "fa-user",
+            _ => "fa-user-circle"
+        };
+    }
+    
+    private bool IsSystemRole(string? roleName)
+    {
+        return roleName == "Admin" || roleName == "Customer" || roleName == "Company" || roleName == "Employee";
+    }
+}

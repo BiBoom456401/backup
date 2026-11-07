@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const a = parseFloat(prompt('Nhap can nang(kg) = ')) ;
+        const b = parseFloat(prompt('Nhap chieu cao(m) = ')) ;
+
+        const BMI = a/(b*b);
+        switch (BMI) {
+case (BMI < 16):
+    console.log('Do gay III')
+    ;
+    break;
+case ( 16 <= BMI < 17):
+    console.log('Do gay II')
+    ;
+    break;
+case (17<= BMI < 18.5):
+    console.log('Do gay I')
+    ;
+    break;
+case (18.5 <= BMI < 25):
+    console.log('Binh thuong')
+    ;
+    break;
+case (25 <= BMI < 30):
+    console.log('thua can')
+    ;
+    break;
+case (30 <= BMI < 35):
+    console.log('Beo phi do I')
+    ;
+    break;
+case (35 <= BMI < 40):
+    console.log('Beo phi do II')
+    ;
+    break;
+case (BMI > 40):
+    console.log('Beo phi do III')
+    ;
+    break;
+}
+    </script>
+</body>
+</html>

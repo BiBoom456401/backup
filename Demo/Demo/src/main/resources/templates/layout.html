@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - Mobile">Mobile</title>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a th:href="@{/}">📱 MobileShop</a>
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Tìm sản phẩm...">
+            <button>Tìm</button>
+        </div>
+
+        <nav class="menu">
+            <a th:href="@{/}">Trang chủ</a>
+            <a th:href="@{/products}">Sản phẩm</a>
+            <a th:href="@{/cart}">Giỏ hàng</a>
+            <a th:href="@{/products/add}">Thêm sản phẩm</a>
+        </nav>
+
+    </div>
+</header>
+
+<div class="category-bar">
+    <div class="category-container">
+
+        <a href="#">📱 Điện thoại</a>
+        <a href="#">💻 Laptop</a>
+        <a href="#">⌚ Đồng hồ</a>
+        <a href="#">🎧 Phụ kiện</a>
+        <a href="#">📷 Máy ảnh</a>
+        <a href="#">🎮 Gaming</a>
+
+    </div>
+</div>
+<style>
+
+    /* ===== CATEGORY BAR ===== */
+
+    .category-bar{
+        background:white;
+        border-bottom:1px solid #e5e5e5;
+    }
+
+    .category-container{
+        max-width:1200px;
+        margin:auto;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:35px;
+        padding:12px 0;
+    }
+
+    /* Link danh mục */
+    .category-container a{
+        text-decoration:none;
+        color:#333;
+        font-weight:500;
+        font-size:14px;
+        padding:6px 10px;
+        border-radius:5px;
+        transition:0.2s;
+    }
+
+    /* Hover */
+    .category-container a:hover{
+        background:#ffd400;
+        color:black;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+
+        .category-container{
+            overflow-x:auto;
+            justify-content:flex-start;
+            padding-left:10px;
+        }
+
+    }
+
+    /* ===== BODY ===== */
+    body{
+        background:#f5f5f5;
+        font-family:Arial, Helvetica, sans-serif;
+        margin:0;
+    }
+
+    /* ===== HEADER ===== */
+    header{
+        background:#ffd400;
+        padding:10px 0;
+        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .header-container{
+        max-width:1200px;
+        margin:auto;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+    }
+
+    .logo a{
+        font-size:22px;
+        font-weight:bold;
+        text-decoration:none;
+        color:black;
+    }
+
+    .search-box{
+        display:flex;
+        width:400px;
+    }
+
+    .search-box input{
+        flex:1;
+        padding:8px;
+        border:none;
+        border-radius:4px 0 0 4px;
+    }
+
+    .search-box button{
+        padding:8px 15px;
+        border:none;
+        background:black;
+        color:white;
+        border-radius:0 4px 4px 0;
+    }
+
+    .menu a{
+        margin-left:20px;
+        text-decoration:none;
+        color:black;
+        font-weight:500;
+    }
+
+    .menu a:hover{
+        color:#288ad6;
+    }
+
+    /* ===== HOME SECTION ===== */
+    .section-container{
+        max-width:1200px;
+        margin:20px auto;
+    }
+
+    /* ===== PRODUCT GRID ===== */
+    .product-list{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+        gap:15px;
+    }
+
+    /* ===== PRODUCT CARD ===== */
+    .product-item{
+        background:white;
+        border-radius:8px;
+        padding:12px;
+        border:1px solid #eee;
+        position:relative;
+        transition:0.25s;
+    }
+
+    .product-item:hover{
+        transform:translateY(-5px);
+        box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    }
+
+    /* ===== PRODUCT IMAGE ===== */
+    .product-img{
+        width:100%;
+        height:180px;
+        object-fit:contain;
+    }
+
+    /* ===== PRODUCT NAME ===== */
+    .product-name{
+        font-size:14px;
+        font-weight:500;
+        margin:10px 0;
+        height:40px;
+        overflow:hidden;
+    }
+
+    /* ===== PRICE ===== */
+    .price-box{
+        display:flex;
+        gap:8px;
+    }
+
+    .price-new{
+        color:#d0021c;
+        font-weight:bold;
+    }
+
+    .price-old{
+        text-decoration:line-through;
+        color:#777;
+        font-size:13px;
+    }
+
+    /* ===== RATING ===== */
+    .rating{
+        font-size:13px;
+        color:#f5a623;
+    }
+
+    /* ===== BADGE ===== */
+    .badge-top{
+        position:absolute;
+        top:8px;
+        left:8px;
+        background:#d0021c;
+        color:white;
+        font-size:11px;
+        padding:2px 6px;
+        border-radius:4px;
+    }
+
+    .badge-installment{
+        position:absolute;
+        top:8px;
+        right:8px;
+        background:#288ad6;
+        color:white;
+        font-size:11px;
+        padding:2px 6px;
+        border-radius:4px;
+    }
+
+    /* ===== BANNER ===== */
+    .banner-big img{
+        width:100%;
+        border-radius:6px;
+    }
+
+    .promo-banner{
+        width:100%;
+        border-radius:6px;
+        margin:20px 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:768px){
+
+        .header-container{
+            flex-direction:column;
+            gap:10px;
+        }
+
+        .search-box{
+            width:100%;
+        }
+
+        .product-list{
+            grid-template-columns:repeat(2,1fr);
+        }
+    }
+    /* ===== FOOTER ===== */
+
+    .main-footer{
+        background:#1f1f1f;
+        color:white;
+        margin-top:40px;
+    }
+
+    .footer-container{
+        max-width:1200px;
+        margin:auto;
+        padding:40px 20px;
+        display:flex;
+        justify-content:space-between;
+        flex-wrap:wrap;
+    }
+
+    .footer-content{
+        width:30%;
+    }
+
+    .footer-content h3{
+        margin-bottom:15px;
+    }
+
+    .footer-content p{
+        font-size:14px;
+        margin:5px 0;
+    }
+
+    /* links */
+
+    .footer-links{
+        list-style:none;
+        padding:0;
+    }
+
+    .footer-links li{
+        margin:8px 0;
+    }
+
+    .footer-links a{
+        text-decoration:none;
+        color:#ccc;
+    }
+
+    .footer-links a:hover{
+        color:#ffd400;
+    }
+
+    /* social */
+
+    .social-icons{
+        list-style:none;
+        padding:0;
+        display:flex;
+        gap:15px;
+    }
+
+    .social-icons a{
+        color:white;
+        font-size:20px;
+    }
+
+    .social-icons a:hover{
+        color:#ffd400;
+    }
+
+    /* bottom */
+
+    .bottom-bar{
+        background:#111;
+        text-align:center;
+        padding:12px 0;
+        font-size:14px;
+    }
+
+    /* responsive */
+
+    @media(max-width:768px){
+
+        .footer-container{
+            flex-direction:column;
+            gap:25px;
+        }
+
+        .footer-content{
+            width:100%;
+        }
+
+    }
+
+</style>
+
+<div layout:fragment="content">
+    <!-- Nội dung trang con sẽ vào đây -->
+</div>
+
+<footer class="main-footer">
+    <div class="footer-container">
+
+        <div class="footer-content">
+            <h3>Contact Us</h3>
+            <p>Email: info@example.com</p>
+            <p>Phone: +121 56556 565556</p>
+            <p>Address: Your Address 123 street</p>
+        </div>
+
+        <div class="footer-content">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+                <li><a th:href="@{/}">Trang chủ</a></li>
+                <li><a th:href="@{/products}">Sản phẩm</a></li>
+                <li><a href="#contact">Liên hệ</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-content">
+            <h3>Follow Us</h3>
+            <ul class="social-icons">
+                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="bottom-bar">
+        <p>© 2025 Your Company. All rights reserved</p>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</footer>
+
+</body>
+</html>

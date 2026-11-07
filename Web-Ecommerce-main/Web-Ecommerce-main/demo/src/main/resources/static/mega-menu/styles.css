@@ -1,0 +1,158 @@
+:root {
+  --bg: #f2f2f2;
+  --yellow: #ffd400;
+  --text: #1a1a1a;
+  --muted: #5b5b5b;
+  --white: #ffffff;
+  --border: #e5e5e5;
+  --shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+  --radius: 18px;
+  --menu-width: 1140px;
+  --menu-padding: 18px;
+  --group-gap: 20px;
+  --item-gap: 12px;
+  --icon-size: 42px;
+  --item-radius: 12px;
+  --hover-bg: #f7f7f7;
+  --badge-hot: #ff3b30;
+  --badge-new: #1e88ff;
+  --font: "Be Vietnam Pro", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.topbar {
+  background: var(--yellow);
+  padding: 10px 0;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.nav-item:hover,
+.nav-item.is-active {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  margin-left: 2px;
+}
+
+.page {
+  padding: 24px 0 60px;
+}
+
+.mega-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.mega-menu {
+  width: min(var(--menu-width), 100%);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--menu-padding);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--group-gap);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+.mega-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mega-group h4 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mega-item-list,
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--item-gap);
+}
+
+.mega-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  padding: 8px 6px;
+  border-radius: var(--item-radius);
+}
+
+.mega-item:hover {
+  background: var(--hover-bg);
+}
+
+.mega-item img,
+.mega-item i {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #f1f1f1;
+  border: 1px solid #e3e3e3;
+  overflow: hidden;
+}
+
+.mega-item img {
+  object-fit: contain;
+  padding: 6px;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="hero-section mb-5 position-relative">
+            <h1 class="hero-title">
+                Sẵn Sàng <span class="text-gradient">Ra Sân</span>,<br>
+                Ghi Bàn <span class="text-gradient">Đẳng Cấp</span> 
+                <i class="fas fa-trophy text-secondary ms-2" style="font-size: 0.8em;"></i>
+            </h1>
+            <p class="lead text-muted mb-5">Hệ thống đặt sân bóng đá hiện đại, nhanh chóng và chuyên nghiệp nhất.</p>
+            
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <form th:action="@{/}" method="get" class="glass-panel p-2 d-flex">
+                        <div class="input-group">
+                            <span class="input-group-text border-0 bg-transparent text-muted">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input class="form-control border-0 bg-transparent" type="search" name="search" placeholder="Tìm kiếm sân bóng gần bạn..." aria-label="Search">
+                        </div>
+                        <button class="btn btn-modern btn-primary-modern ms-2" type="submit">
+                            <i class="fas fa-running me-2"></i> Tìm kiếm
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Field Listings -->
+        <h2 class="mb-4 fw-bold">
+            <i class="fas fa-stadium text-primary me-2"></i> Hệ Thống Sân Bóng
+        </h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="field : ${fields}">
+                <div class="glass-card h-100">
+                    <div class="overflow-hidden position-relative">
+                        <img th:src="${field.imageUrl ?: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=800'}" 
+                             class="card-img-top card-img-modern" alt="..." style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3 shadow" th:text="${field.type}">5 người</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3" th:text="${field.name}">Tân Sơn Nhất Stadium</h5>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="price-tag">
+                                <i class="fas fa-coins text-secondary"></i>
+                                <span th:text="${#numbers.formatDecimal(field.price, 0, 'COMMA', 0, 'POINT')}">500,000</span>
+                                <small class="text-muted fs-6">VNĐ/giờ</small>
+                            </div>
+                        </div>
+                        <a th:href="@{/fields/{id}(id=${field.id})}" class="btn btn-modern btn-outline-modern w-100">
+                            <i class="fas fa-info-circle me-2"></i> Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

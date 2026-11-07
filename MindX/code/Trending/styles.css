@@ -1,0 +1,123 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.formpage{
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../IMG/background.png);
+  background-size: cover;
+  background-attachment: fixed;
+}
+.formpage__header{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+.formpage__header img{
+  height: 100px;
+  width: auto;
+  margin-left: 30px;
+}
+.formpage__header--nav ul{
+  list-style-type: none;
+  overflow: hidden;
+  margin-right: 40px;
+}
+
+.formpage__header--nav li{
+  display: inline;
+  padding: 20px;
+}
+.formpage__header--nav li a{
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+.formpage__header--nav li a:hover{
+  color: black;
+}
+.formpage__header--nav li.dropdown{
+  display: inline-block;
+}
+.dropdown-content{
+  display: none;
+  position: absolute;
+  background-image: url(../IMG/background.png);
+  min-width: 70px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.dropdown-content a{
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  border: 1px solid black;
+  
+}
+.dropdown-content a:hover{
+  color: white;
+}
+.dropdown:hover .dropdown-content{
+  display: block;
+}    
+
+  .column {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+  }
+
+  
+  .row {
+    margin: 0 2px;
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: url(./Img/background-giay-cu-xam_090129420.jpg);
+    border: 2px solid red;
+  }
+
+  li.page{
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    line-height: 40px;
+  }
+
+
+
+.li{
+  text-emphasis: none;
+}

@@ -1,0 +1,32 @@
+﻿@model Demo.Models.Student
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Xóa sinh viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Bạn có chắc chắn muốn xóa sinh viên này?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Mã SV</dt>
+        <dd class="col-sm-10">@Model.StudentCode</dd>
+        <dt class="col-sm-2">Họ tên</dt>
+        <dd class="col-sm-10">@Model.FullName</dd>
+        <dt class="col-sm-2">Ngày sinh</dt>
+        <dd class="col-sm-10">@Model.BirthDate?.ToShortDateString()</dd>
+        <dt class="col-sm-2">Giới tính</dt>
+        <dd class="col-sm-10">@Model.Gender</dd>
+        <dt class="col-sm-2">Lớp</dt>
+        <dd class="col-sm-10">@Model.Class?.Name</dd>
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

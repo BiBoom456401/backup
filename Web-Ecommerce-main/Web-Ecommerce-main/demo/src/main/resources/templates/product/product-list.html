@@ -1,0 +1,229 @@
+<!doctype html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+    <head>
+        <title>Quản lý Sản phẩm</title>
+        <style>
+            .product-admin-section {
+                padding: 24px 0 40px;
+            }
+            .admin-header {
+                background: linear-gradient(135deg, #ffd400, #f3c400);
+                padding: 20px 24px;
+                border-radius: 14px 14px 0 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .admin-header h3 {
+                margin: 0;
+                font-size: 18px;
+                font-weight: 700;
+                color: #000;
+            }
+            .admin-body {
+                background: #fff;
+                border-radius: 0 0 14px 14px;
+                padding: 20px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            }
+            .toolbar-row {
+                display: flex;
+                gap: 12px;
+                margin-bottom: 18px;
+                flex-wrap: wrap;
+            }
+            .toolbar-form {
+                display: flex;
+                gap: 8px;
+                flex: 1;
+            }
+            .toolbar-form input,
+            .toolbar-form select {
+                flex: 1;
+                padding: 10px 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 10px;
+            }
+            .product-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .product-table th,
+            .product-table td {
+                padding: 14px 12px;
+                border-bottom: 1px solid #ececec;
+                vertical-align: middle;
+            }
+            .product-table th {
+                background: #f9fafb;
+                font-size: 13px;
+                font-weight: 700;
+                color: #4b5563;
+            }
+            .btn-action,
+            .btn-add-new,
+            .btn-back,
+            .filter-btn {
+                padding: 10px 16px;
+                border-radius: 999px;
+                font-weight: 600;
+                font-size: 13px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                border: none;
+            }
+            .btn-add-new,
+            .filter-btn {
+                background: #000;
+                color: #fff;
+                cursor: pointer;
+            }
+            .btn-back {
+                background: #f0f0f0;
+                color: #333;
+            }
+            .btn-action {
+                background: #eff6ff;
+                color: #1d4ed8;
+                margin: 0 4px 4px 0;
+            }
+            .btn-edit {
+                background: #dbeafe;
+                color: #1d4ed8;
+            }
+            .btn-delete {
+                background: #fee2e2;
+                color: #dc2626;
+            }
+            .table-thumb {
+                width: 56px;
+                height: 56px;
+                object-fit: contain;
+                background: #f9fafb;
+                border-radius: 8px;
+                padding: 4px;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 40px;
+                color: #999;
+            }
+            @media (max-width: 900px) {
+                .admin-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+                .product-table {
+                    display: block;
+                    overflow-x: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <section class="product-admin-section">
+                <div class="container">
+                    <div class="admin-header">
+                        <h3>📦 Quản lý sản phẩm</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                            <a th:href="@{/}" class="btn-back">← Trang chủ</a>
+                            <a th:href="@{/products/add}" class="btn-add-new">+ Thêm sản phẩm mới</a>
+                        </div>
+                    </div>
+                    <div class="admin-body">
+                        <div class="toolbar-row">
+                            <form th:action="@{/products}" method="get" class="toolbar-form">
+                                <input type="text" name="q" placeholder="Tìm theo tên sản phẩm" th:value="${keyword}" />
+                                <button type="submit" class="filter-btn">Tìm kiếm</button>
+                            </form>
+                            <form th:action="@{/products}" method="get" class="toolbar-form" style="max-width: 380px">
+                                <select name="category">
+                                    <option value="">Tất cả danh mục</option>
+                                    <option
+                                        th:each="categoryOption : ${categories}"
+                                        th:value="${categoryOption.id}"
+                                        th:text="${categoryOption.name}"
+                                        th:selected="${selectedCategory != null and selectedCategory == categoryOption.id}"
+                                    >Danh mục</option>
+                                </select>
+                                <button type="submit" class="filter-btn">Lọc</button>
+                            </form>
+                        </div>
+                        <table class="product-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px; text-align: center">ID</th>
+                                    <th style="width: 80px">Ảnh</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th style="width: 140px; text-align: right">Giá</th>
+                                    <th style="width: 120px">Danh mục</th>
+                                    <th style="width: 80px; text-align: center">Promo</th>
+                                    <th style="width: 160px; text-align: center">Hành động</th>
+                                    <th style="width: 180px; text-align: center">Thêm giỏ hàng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="prod : ${products}">
+                                    <td style="text-align: center" th:text="${prod.id}">1</td>
+                                    <td>
+                                        <img
+                                            th:src="${prod.imageUrl != null and !prod.imageUrl.isBlank() ? prod.imageUrl : '/images/product-fallback.svg'}"
+                                            th:alt="${prod.name}"
+                                            class="table-thumb"
+                                        />
+                                    </td>
+                                    <td>
+                                        <strong th:text="${prod.name}">Tên sản phẩm</strong>
+                                        <div style="margin-top: 6px; color: #6b7280; font-size: 13px" th:text="${prod.description}">Mô tả</div>
+                                    </td>
+                                    <td style="text-align: right">
+                                        <strong th:text="${prod.priceDisplay + ' đ'}">0 đ</strong>
+                                        <div th:if="${prod.oldPrice != null}" style="margin-top: 6px; color: #9ca3af; text-decoration: line-through; font-size: 13px" th:text="${prod.oldPriceDisplay + ' đ'}">0 đ</div>
+                                    </td>
+                                    <td th:text="${prod.category != null ? prod.category.name : 'Chưa phân loại'}">Danh mục</td>
+                                    <td style="text-align: center">
+                                        <span th:text="${prod.promo ? '🔥 Có' : 'Không'}">Không</span>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <a th:href="@{/products/edit/{id}(id=${prod.id})}" class="btn-action btn-edit">✏️ Sửa</a>
+                                        <a
+                                            th:href="@{/products/delete/{id}(id=${prod.id})}"
+                                            class="btn-action btn-delete"
+                                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
+                                        >🗑️ Xóa</a>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <form
+                                            th:action="@{/cart/add}"
+                                            method="post"
+                                            style="display: inline-flex; align-items: center; gap: 8px"
+                                        >
+                                            <input type="number" name="quantity" min="1" value="1" style="width: 60px; padding: 6px; border: 1px solid #d1d5db; border-radius: 6px; text-align: center" />
+                                            <input type="hidden" th:value="${prod.id}" name="productId" />
+                                            <input type="hidden" th:value="@{/products}" name="redirect" />
+                                            <button type="submit" class="btn-action" style="background: #fef3c7; color: #92400e; white-space: nowrap">
+                                                🛒 Thêm
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr th:if="${products == null or products.empty}">
+                                    <td colspan="8" class="empty-state">Chưa có sản phẩm nào</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </body>
+</html>

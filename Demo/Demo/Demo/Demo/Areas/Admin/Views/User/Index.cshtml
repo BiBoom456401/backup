@@ -1,0 +1,336 @@
+@model List<UserViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý User";
+}
+
+<div class="page-header-modern">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-users mr-3"></i>Quản lý Người dùng</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                        <li class="breadcrumb-item active">Quản lý Users</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card users">
+                <div class="stats-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stats-number">@Model.Count</div>
+                <div class="stats-label">Tổng Users</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card active">
+                <div class="stats-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stats-number">@Model.Count(u => !u.IsLocked)</div>
+                <div class="stats-label">Đang hoạt động</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card roles">
+                <div class="stats-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+                <div class="stats-number">@Model.Count(u => u.IsLocked)</div>
+                <div class="stats-label">Đã khóa</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card roles">
+                <div class="stats-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="stats-number">@Model.SelectMany(u => u.Roles).Distinct().Count()</div>
+                <div class="stats-label">Roles</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="user-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-users mr-2"></i>
+                        Danh sách Người dùng
+                    </h3>
+                    <div class="card-tools">
+                        <div class="btn-group">
+                            <a asp-action="CreateRole" class="action-btn btn btn-success btn-sm mr-2">
+                                <i class="fas fa-plus-circle mr-1"></i> Tạo Role mới
+                            </a>
+                            <a asp-action="RolesList" class="action-btn btn btn-info btn-sm">
+                                <i class="fas fa-list-alt mr-1"></i> Danh sách Roles
+                            </a>
+                        </div>
+                    </div>
+                </div>                <div class="card-body">
+                    @if (TempData["success"] != null)
+                    {
+                        <div class="alert-modern alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <strong>Thành công!</strong> @TempData["success"]
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    
+                    @if (Model.Any())
+                    {
+                        <div class="modern-table">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fas fa-user mr-2"></i>Người dùng</th>
+                                            <th><i class="fas fa-envelope mr-2"></i>Email</th>
+                                            <th><i class="fas fa-phone mr-2"></i>Điện thoại</th>
+                                            <th><i class="fas fa-map-marker-alt mr-2"></i>Địa chỉ</th>
+                                            <th><i class="fas fa-birthday-cake mr-2"></i>Tuổi</th>
+                                            <th><i class="fas fa-user-tag mr-2"></i>Roles</th>
+                                            <th><i class="fas fa-toggle-on mr-2"></i>Trạng thái</th>
+                                            <th class="text-center"><i class="fas fa-cogs mr-2"></i>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var user in Model)
+                                        {
+                                            <tr>                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="user-avatar-img me-3">
+                                                            @if (!string.IsNullOrEmpty(user.Avatar))
+                                                            {
+                                                                <img src="@user.Avatar" alt="@user.FullName" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="user-avatar">
+                                                                    @(user.FullName?.Substring(0, 1).ToUpper() ?? "U")
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <div class="font-weight-bold">@user.FullName</div>
+                                                            <small class="text-muted">ID: @user.Id.Substring(0, 8)...</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><a href="mailto:@user.Email" class="text-decoration-none">@user.Email</a></td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                                    {
+                                                        <span class="badge badge-light">@user.PhoneNumber</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">Chưa có</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(user.Address))
+                                                    {
+                                                        <span class="text-truncate" style="max-width: 150px;" title="@user.Address">@user.Address</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">Chưa có</span>
+                                                    }
+                                                </td>                                               
+                                                 <td>
+                                                    @if (!string.IsNullOrEmpty(user.Age))
+                                                    {
+                                                        <span class="badge badge-secondary">@user.Age tuổi</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">Chưa có</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.Roles.Any())
+                                                    {
+                                                        @foreach (var role in user.Roles)
+                                                        {
+                                                            <span class="role-badge @GetRoleCssClass(role) mb-1 mr-1">
+                                                                <i class="@GetRoleIcon(role) mr-1"></i>
+                                                                @role
+                                                            </span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-secondary">
+                                                            <i class="fas fa-minus-circle mr-1"></i>
+                                                            Chưa có role
+                                                        </span>
+                                                    }
+                                                </td>                                                <td>
+                                                    @if (user.IsLocked)
+                                                    {
+                                                        <span class="badge status-badge status-locked">
+                                                            <i class="fas fa-lock mr-1"></i> Đã khóa
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge status-badge status-active">
+                                                            <i class="fas fa-check-circle mr-1"></i> Hoạt động
+                                                        </span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a asp-action="Details" asp-route-id="@user.Id" 
+                                                           class="action-btn btn btn-info btn-sm" title="Chi tiết">
+                                                            <i class="fas fa-eye mr-1"></i>Chi tiết
+                                                        </a>
+                                                        <a asp-action="ManageRoles" asp-route-id="@user.Id" 
+                                                           class="action-btn btn btn-warning btn-sm" title="Phân quyền">
+                                                            <i class="fas fa-user-cog mr-1"></i>Phân quyền
+                                                        </a>
+                                                        @if (user.IsLocked)
+                                                        {
+                                                            <button onclick="unlockUser('@user.Id')" 
+                                                                    class="action-btn btn btn-success btn-sm" title="Mở khóa">
+                                                                <i class="fas fa-unlock mr-1"></i>Mở khóa
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button onclick="lockUser('@user.Id')"
+                                                                    class="action-btn btn btn-danger btn-sm" title="Khóa tài khoản">
+                                                                <i class="fas fa-lock mr-1"></i>Khóa
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h5>Chưa có người dùng nào</h5>
+                            <p>Hệ thống chưa có người dùng nào. Người dùng sẽ được tạo khi họ đăng ký tài khoản.</p>
+                        </div>
+                    }                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"
+                },
+                "responsive": true,
+                "pageLength": 10,
+                "order": [[0, "asc"]]
+            });
+        });
+
+        function lockUser(userId) {
+            if (confirm('Bạn có chắc chắn muốn khóa tài khoản này?')) {
+                $.ajax({
+                    url: '@Url.Action("LockUser", "User")',
+                    type: 'POST',
+                    data: { id: userId },
+                    success: function(result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            location.reload();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra');
+                    }
+                });
+            }
+        }
+
+        function unlockUser(userId) {
+            if (confirm('Bạn có chắc chắn muốn mở khóa tài khoản này?')) {
+                $.ajax({
+                    url: '@Url.Action("UnlockUser", "User")',
+                    type: 'POST',
+                    data: { id: userId },
+                    success: function(result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            location.reload();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra');
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+@functions {
+    private string GetRoleBadgeClass(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "danger",
+            "Company" => "warning", 
+            "Employee" => "info",
+            "Customer" => "primary",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleCssClass(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "admin",
+            "Company" => "company", 
+            "Employee" => "employee",
+            "Customer" => "customer",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleIcon(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "fas fa-crown",
+            "Company" => "fas fa-building",
+            "Employee" => "fas fa-user-tie",
+            "Customer" => "fas fa-user",
+            _ => "fas fa-user-tag"
+        };
+    }
+}

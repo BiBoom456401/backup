@@ -1,0 +1,34 @@
+
+:root {
+    --text-color: #6a8d8f;
+}
+body {
+    background-color: #dfeef0;
+}
+.page-title{
+    color: #688c8e ;
+     font-size: 35px;
+}
+.username{
+    font-size: 20px;
+    font-weight: bold;
+}
+.page-title, .username{
+    color: var(--text-color);
+}
+.user-avatar{
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.dash-line{
+    margin-top: 30px;
+    width: 60%;
+    border: 2px dashed black;
+}
+.small-title{
+    color: var(--text-color);
+    font-weight: bold;
+}

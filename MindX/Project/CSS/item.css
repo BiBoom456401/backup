@@ -1,0 +1,45 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+
+.item{
+  width: 100vw;
+  height: 100vh;
+  background-color: #626a67 ;
+  background-size: cover;
+  background-attachment: fixed;
+}  
+
+.item_conten{
+  left: 10vw;
+  width: 80vw;
+  height: 70vh;
+  position: absolute;
+	top: 15%;
+	right: 20%;
+  background-color: white ;
+  background-size: cover;
+  background-attachment: fixed;
+  justify-content: space-between;
+}
+
+img.img-fluid-rounded-start {
+  padding-top: 5vh;
+  padding-left: 5vh;
+  width:30vw;
+  height:65vh;
+}
+
+.item_title{
+  position: absolute;
+  top: 5vh;
+  left: 50%;
+}
+
+.item_button{
+  position: absolute;
+  left: 90%;
+  bottom: 50px;
+}

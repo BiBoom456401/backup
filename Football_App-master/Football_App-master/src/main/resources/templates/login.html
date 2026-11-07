@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="row min-vh-75 align-items-center">
+            <div class="col-md-5 mx-auto">
+                <div class="glass-panel p-5">
+                    <div class="text-center mb-5">
+                        <i class="fas fa-user-circle text-primary fs-1 mb-3"></i>
+                        <h2 class="fw-bold">Chào Mừng <span class="text-gradient">Trở Lại</span></h2>
+                        <p class="text-muted">Đăng nhập để tiếp tục đặt sân</p>
+                    </div>
+
+                    <div th:if="${param.error}" class="alert alert-danger glass-panel border-danger text-danger bg-danger bg-opacity-10 mb-4">
+                        Tài khoản hoặc mật khẩu không chính xác
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-success glass-panel border-success text-success bg-success bg-opacity-10 mb-4">
+                        Bạn đã đăng xuất thành công
+                    </div>
+
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-4">
+                            <label class="form-label">Tài khoản</label>
+                            <input type="text" name="username" class="form-control " placeholder="Tên đăng nhập" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Mật khẩu</label>
+                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-modern btn-primary-modern w-100 py-3 mb-4">Đăng Nhập</button>
+                    </form>
+                    
+                    <div class="text-center">
+                        <p class="mb-0 text-muted ">Chưa có tài khoản? <a href="/register" class="text-gradient fw-bold text-decoration-none">Đăng ký ngay</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

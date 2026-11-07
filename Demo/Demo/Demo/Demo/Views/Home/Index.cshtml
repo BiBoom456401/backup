@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height:60vh;">
+        <h1 class="display-4 fw-bold mb-4 text-primary">Chào mừng đến với hệ thống quản lý sinh viên</h1>
+        <p class="lead mb-4">Đăng nhập để sử dụng các chức năng quản lý, tra cứu thông tin, điểm số, thời khóa biểu...</p>
+        <a class="btn btn-lg btn-primary px-5 py-2" asp-controller="Auth" asp-action="Login"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</a>
+    </div>
+}

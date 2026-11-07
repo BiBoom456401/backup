@@ -1,0 +1,184 @@
+@model ManageUserRolesViewModel
+
+@{
+    ViewData["Title"] = "Phân quyền User";
+}
+
+<div class="page-header-modern">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-user-shield mr-3"></i>Quản lý phân quyền</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-action="Index">Users</a></li>
+                        <li class="breadcrumb-item active">Phân quyền</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="user-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-cog mr-2"></i>
+                        Phân quyền cho: <span class="text-warning">@Model.UserName</span>
+                    </h3>
+                    <div class="card-tools">
+                        <a asp-action="Index" class="action-btn btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left mr-1"></i> Quay lại
+                        </a>
+                    </div>
+                </div>                
+                <form asp-action="ManageRoles" method="post">
+                    <input type="hidden" asp-for="UserId" />
+                    <input type="hidden" asp-for="UserName" />
+                    
+                    <div class="card-body">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert-modern alert alert-danger alert-dismissible fade show">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                <strong>Có lỗi xảy ra!</strong>
+                                <ul class="mb-0 mt-2">
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        }
+
+                        @if (Model.UserRoles.Any())
+                        {
+                            <div class="form-modern">
+                                <div class="form-group">
+                                    <label class="font-weight-bold mb-3">
+                                        <i class="fas fa-key mr-2"></i> Chọn quyền cho người dùng:
+                                    </label>
+                                    <div class="row">
+                                        @for (int i = 0; i < Model.UserRoles.Count; i++)
+                                        {
+                                            <div class="col-md-6 col-lg-4 mb-3">
+                                                <div class="role-checkbox-card">
+                                                    <input type="hidden" asp-for="@Model.UserRoles[i].RoleId" />
+                                                    <input type="hidden" asp-for="@Model.UserRoles[i].RoleName" />
+                                                    
+                                                    <label class="role-checkbox-label @(Model.UserRoles[i].IsSelected ? "selected" : "")" for="role_@i">
+                                                        <input type="checkbox" 
+                                                               asp-for="@Model.UserRoles[i].IsSelected" 
+                                                               class="role-checkbox" 
+                                                               id="role_@i" />
+                                                        <div class="role-content">
+                                                            <div class="role-icon">
+                                                                <i class="@GetRoleIcon(Model.UserRoles[i].RoleName)"></i>
+                                                            </div>
+                                                            <div class="role-name">@Model.UserRoles[i].RoleName</div>
+                                                            <div class="role-description">@GetRoleDescription(Model.UserRoles[i].RoleName)</div>
+                                                            <div class="check-indicator">
+                                                                <i class="fas fa-check"></i>
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="fas fa-user-shield"></i>
+                                <h5>Chưa có roles nào</h5>
+                                <p>Hệ thống chưa có roles nào để phân quyền.</p>
+                                <a asp-action="CreateRole" class="action-btn btn btn-success btn-lg">
+                                    <i class="fas fa-plus-circle mr-2"></i> Tạo role mới
+                                </a>
+                            </div>
+                        }                    </div>
+                    
+                    @if (Model.UserRoles.Any())
+                    {
+                        <div class="text-center mt-4">
+                            <button type="submit" class="action-btn btn btn-success btn-lg mr-3">
+                                <i class="fas fa-save mr-2"></i> Lưu thay đổi
+                            </button>
+                            <a asp-action="Index" class="action-btn btn btn-secondary btn-lg">
+                                <i class="fas fa-times mr-2"></i> Hủy
+                            </a>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Handle checkbox change
+            $('.role-checkbox').change(function() {
+                var label = $(this).closest('.role-checkbox-label');
+                if ($(this).is(':checked')) {
+                    label.addClass('selected');
+                } else {
+                    label.removeClass('selected');
+                }
+            });
+            
+            // Initialize selected state
+            $('.role-checkbox:checked').each(function() {
+                $(this).closest('.role-checkbox-label').addClass('selected');
+            });
+        });
+    </script>
+}
+
+@functions {
+    private string GetRoleBadgeClass(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "danger",
+            "Company" => "warning", 
+            "Employee" => "info",
+            "Customer" => "primary",
+            _ => "secondary"
+        };
+    }
+    
+    private string GetRoleIcon(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "fas fa-crown",
+            "Company" => "fas fa-building",
+            "Employee" => "fas fa-user-tie",
+            "Customer" => "fas fa-user",
+            _ => "fas fa-user-tag"
+        };
+    }
+    
+    private string GetRoleDescription(string roleName)
+    {
+        return roleName switch
+        {
+            "Admin" => "Quản trị viên hệ thống",
+            "Company" => "Đại diện công ty", 
+            "Employee" => "Nhân viên công ty",
+            "Customer" => "Khách hàng",
+            _ => "Quyền tùy chỉnh"
+        };
+    }
+}

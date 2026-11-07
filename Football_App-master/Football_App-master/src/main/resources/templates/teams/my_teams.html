@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: html}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-900 mb-2">
+                    <i class="fas fa-people-group text-primary me-2"></i> Đội Của Tôi
+                </h2>
+                <p class="text-muted mb-0">Quản lý các đội bóng do bạn làm đội trưởng</p>
+            </div>
+            <a href="/teams/add" class="btn btn-modern btn-primary-modern">
+                <i class="fas fa-plus-circle me-2"></i> Tạo đội
+            </a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="glass-panel overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 border-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-primary">ID</th>
+                            <th class="py-3 text-primary">Logo</th>
+                            <th class="py-3 text-primary">Tên đội</th>
+                            <th class="py-3 text-primary">Đội trưởng</th>
+                            <th class="py-3 text-primary">Logo URL</th>
+                            <th class="py-3 px-4 text-center text-primary">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="team : ${teams}" class="border-bottom border-white border-opacity-5 align-middle">
+                            <td class="ps-4 py-3 fw-bold text-primary" th:text="${team.id}">1</td>
+                            <td class="py-3">
+                                <img th:if="${team.logoUrl != null and !#strings.isEmpty(team.logoUrl)}"
+                                     th:src="${team.logoUrl}"
+                                     alt="Logo đội"
+                                     class="rounded-circle border border-white border-opacity-25"
+                                     style="width: 48px; height: 48px; object-fit: cover;">
+                                <div th:if="${team.logoUrl == null or #strings.isEmpty(team.logoUrl)}"
+                                     class="rounded-circle bg-white bg-opacity-10 d-inline-flex align-items-center justify-content-center text-muted"
+                                     style="width: 48px; height: 48px;">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            </td>
+                            <td class="py-3 fw-bold text-white" th:text="${team.name}">FC Example</td>
+                            <td class="py-3 text-muted" th:text="${team.captain != null ? team.captain.username : ''}">user1</td>
+                            <td class="py-3 text-muted">
+                                <a th:if="${team.logoUrl != null and !#strings.isEmpty(team.logoUrl)}" th:href="${team.logoUrl}" target="_blank" class="text-decoration-none">Mở logo</a>
+                                <span th:if="${team.logoUrl == null or #strings.isEmpty(team.logoUrl)}">Chưa có</span>
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a th:href="@{/teams/{teamId}/members(teamId=${team.id})}" class="text-info text-decoration-none hover-scale" title="Thành viên">
+                                        <i class="fas fa-users fs-5"></i>
+                                    </a>
+                                    <a th:href="@{/teams/edit/{id}(id=${team.id})}" class="text-primary text-decoration-none hover-scale" title="Sửa">
+                                        <i class="fas fa-edit fs-5"></i>
+                                    </a>
+                                    <a th:href="@{/teams/delete/{id}(id=${team.id})}" class="text-danger text-decoration-none hover-scale"
+                                       onclick="return confirm('Bạn có chắc muốn xóa đội này?')" title="Xóa">
+                                        <i class="fas fa-trash-alt fs-5"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(teams)}">
+                            <td colspan="6" class="text-center py-4 text-muted">Bạn chưa có đội nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
